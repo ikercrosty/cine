@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tienda — Autocine Antigua</title>
+  <meta name="description" content="Lleva un pedazo de Galaxia contigo. Merch oficial, ropa, accesorios y coleccionables."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+    /* ── SHOP HERO ── */
+    .shop-hero {
+      padding: 140px 0 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .shop-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(245,182,23,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .shop-hero h1 { font-family:'Bebas Neue',sans-serif; font-size: clamp(3rem,8vw,6rem); color: var(--gold); line-height:1; }
+    .shop-hero p { max-width: 480px; margin: 1rem auto 0; color: var(--text-muted); font-size:1.05rem; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex; align-items: center; gap: .75rem;
+      flex-wrap: wrap; justify-content: center;
+      padding: 0 0 2.5rem;
+    }
+    .filter-bar .filter-btn {
+      padding: .45rem 1.2rem; border-radius: 99px;
+      border: 1px solid rgba(245,182,23,.25);
+      background: transparent; color: var(--text-muted);
+      font-family: 'DM Sans',sans-serif; font-size: .85rem; cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-bar .filter-btn:hover,
+    .filter-bar .filter-btn.active {
+      background: var(--gold); border-color: var(--gold);
+      color: var(--noir);
+    }
+
+    /* ── SORT / COUNT ── */
+    .shop-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.8rem; gap: 1rem;
+    }
+    .shop-topbar .count { color: var(--text-muted); font-size:.9rem; }
+    .sort-select {
+      background: var(--glass); border: 1px solid rgba(255,255,255,.1);
+      color: var(--text-light); font-family:'DM Sans',sans-serif; font-size:.85rem;
+      padding:.45rem 1rem; border-radius: 8px; cursor:pointer;
+    }
+
+    /* ── PRODUCTS GRID ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.8rem;
+    }
+    .product-card {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; overflow: hidden;
+      transition: transform .3s, box-shadow .3s;
+      position: relative;
+    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+    .product-card.out-of-stock { opacity:.55; pointer-events:none; }
+
+    .product-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--pink); color: #fff;
+      font-size:.7rem; font-weight:700; letter-spacing:.05em;
+      padding:.25rem .6rem; border-radius:6px; z-index:2; text-transform:uppercase;
+    }
+    .product-badge.new-badge { background: var(--electric); color: var(--noir); }
+    .product-badge.sale-badge { background: var(--pink); }
+    .product-badge.oos-badge { background: rgba(255,255,255,.2); color: var(--text-muted); }
+
+    .product-img {
+      width:100%; aspect-ratio:1/1; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg,rgba(13,204,255,.06),rgba(245,182,23,.06));
+      font-size:5rem; position:relative;
+    }
+    .product-img img { width:100%; height:100%; object-fit:cover; }
+    .product-img .emoji { font-size: 4.5rem; user-select:none; }
+    .wishlist-btn {
+      position:absolute; top:10px; right:10px;
+      background: rgba(7,9,15,.7); border: none; border-radius: 50%;
+      width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+      cursor:pointer; color:var(--text-muted); transition:all .2s; backdrop-filter:blur(4px);
+    }
+    .wishlist-btn:hover,.wishlist-btn.active { color: var(--pink); }
+
+    .product-info { padding: 1.1rem; }
+    .product-name {
+      font-family:'DM Sans',sans-serif; font-weight:600;
+      font-size:.95rem; color:var(--text-light); margin-bottom:.35rem;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .product-category { font-size:.75rem; color:var(--text-muted); margin-bottom:.6rem; }
+    .product-price-row {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:.5rem;
+    }
+    .product-price {
+      font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--gold); letter-spacing:.03em;
+    }
+    .product-price .old-price {
+      font-size:1rem; color:var(--text-muted); text-decoration:line-through; margin-left:.4rem;
+    }
+
+    /* Size selector */
+    .size-row { display:flex; gap:.4rem; margin:.7rem 0 .9rem; flex-wrap:wrap; }
+    .size-chip {
+      padding:.2rem .55rem; border-radius:6px;
+      border:1px solid rgba(255,255,255,.15);
+      font-size:.7rem; color:var(--text-muted); cursor:pointer; transition:all .2s;
+      background:transparent;
+    }
+    .size-chip:hover,.size-chip.sel { border-color:var(--gold); color:var(--gold); background:rgba(245,182,23,.08); }
+
+    .add-cart-btn {
+      width:100%; padding:.6rem; border-radius:10px;
+      background: var(--gold); border:none; color: var(--noir);
+      font-family:'DM Sans',sans-serif; font-weight:700; font-size:.85rem;
+      cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:.4rem;
+    }
+    .add-cart-btn:hover { background: #ffd63d; transform:scale(1.02); }
+    .add-cart-btn:active { transform:scale(.98); }
+
+    /* ── FEATURED BANNER ── */
+    .featured-banner {
+      margin: 4rem 0;
+      border-radius: 20px; overflow: hidden;
+      background: linear-gradient(120deg, rgba(245,182,23,.15), rgba(255,61,107,.12));
+      border: 1px solid rgba(245,182,23,.2);
+      padding: 3rem 3.5rem;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 2rem; align-items: center;
+    }
+    .featured-banner h2 { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--gold); }
+    .featured-banner p { color:var(--text-muted); margin:.5rem 0 1.5rem; max-width: 480px; }
+    .featured-banner .bundle-visual { font-size:5rem; text-align:center; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { text-align:center; padding:4rem 0; color:var(--text-muted); }
+    .empty-state i { font-size:3rem; opacity:.3; display:block; margin-bottom:1rem; }
+
+    @media(max-width:768px){
+      .featured-banner { grid-template-columns:1fr; text-align:center; padding:2rem; }
+      .featured-banner .bundle-visual { display:none; }
+      .shop-topbar { flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+      <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+      <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+    </svg>
+  </div>
+  <div class="loader-bar"><div class="loader-progress"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px">
+        <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+        <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+        <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      </svg>
+      <span class="logo-text">AUTOCINE ANTIGUA</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="snacks.html">Snacks</a></li>
+      <li><a href="tienda.html" class="active">Tienda</a></li>
+      <li><a href="espacio-fiestas.html">Fiestas</a></li>
+      <li><a href="anuncios.html">Anuncios</a></li>
+      <li><a href="quienes-somos.html">Nosotros</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="tickets.html" class="nav-cta">Comprar Tickets</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="cart-toggle" onclick="openCart()">
+        <i class="ph ph-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<aside class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3 class="cart-title"><i class="ph ph-shopping-cart"></i> Tu Carrito</h3>
+    <button class="cart-close" onclick="closeCart()"><i class="ph ph-x"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span class="cart-total-amount" id="cartTotal">Q0.00</span>
+    </div>
+    <a href="tickets.html" class="btn btn-primary" style="width:100%;text-align:center">Ir al Checkout</a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="page-content">
+
+  <!-- HERO -->
+  <section class="shop-hero">
+    <canvas id="starsCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.5"></canvas>
+    <div class="container" style="position:relative;z-index:1">
+      <div class="section-eyebrow reveal">🛍️ MERCH OFICIAL</div>
+      <h1 class="reveal">Tienda</h1>
+      <p class="reveal">Lleva un pedazo de GALAXIA contigo. Merch exclusivo, ropa y coleccionables.</p>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- FEATURED BUNDLE BANNER -->
+    <div class="featured-banner reveal">
+      <div>
+        <h2>Bundle Galaxia Starter 🎁</h2>
+        <p>Playera + Gorra + Vaso Termo + Poster firmado. El kit perfecto para el fanático oficial del cine bajo las estrellas.</p>
+        <button class="btn btn-primary" onclick="Cart.add({id:'bundle-starter',name:'Bundle Galaxia Starter',price:265,category:'Bundle',emoji:'🎁'}); showToast('Bundle agregado','Regálate la experiencia completa.','ph-gift')">
+          Agregar Bundle — <strong>Q265</strong>
+          <span style="text-decoration:line-through;opacity:.6;font-weight:400;margin-left:.4rem">Q340</span>
+        </button>
+      </div>
+      <div class="bundle-visual">🎁</div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="ropa">Ropa</button>
+      <button class="filter-btn" data-filter="accesorios">Accesorios</button>
+      <button class="filter-btn" data-filter="hogar">Hogar</button>
+      <button class="filter-btn" data-filter="coleccionables">Coleccionables</button>
+      <button class="filter-btn" data-filter="sale">Ofertas 🔥</button>
+    </div>
+
+    <!-- TOPBAR -->
+    <div class="shop-topbar">
+      <span class="count" id="productCount">Mostrando 12 productos</span>
+      <select class="sort-select" id="sortSelect">
+        <option value="default">Ordenar por: Destacados</option>
+        <option value="price-asc">Precio: Menor a mayor</option>
+        <option value="price-desc">Precio: Mayor a menor</option>
+        <option value="name">Nombre A→Z</option>
+      </select>
+    </div>
+
+    <!-- PRODUCTS GRID -->
+    <div class="products-grid" id="productsGrid">
+      <!-- JS rendered -->
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:1rem;display:inline-flex">
+          <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:34px">
+            <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+            <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+            <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+          </svg>
+          <span class="logo-text" style="font-size:1.3rem">AUTOCINE ANTIGUA</span>
+        </a>
+        <p style="color:var(--text-muted);font-size:.9rem;line-height:1.7">Cine bajo las Estrellas.<br>Guatemala — Abierto todos los días.</p>
+        <div class="social-links" style="margin-top:1.2rem">
+          <a href="#" class="social-link" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-link" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#" class="social-link" aria-label="TikTok"><i class="ph ph-tiktok-logo"></i></a>
+          <a href="#" class="social-link" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="snacks.html">Snacks</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="espacio-fiestas.html">Fiestas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Info</h4>
+        <ul class="footer-links">
+          <li><a href="quienes-somos.html">Nosotros</a></li>
+          <li><a href="anuncios.html">Anuncios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="politica.html">Política & Términos</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Contacto</h4>
+        <ul class="footer-links">
+          <li><i class="ph ph-map-pin" style="color:var(--gold)"></i> Km 14.5 Carr. al Pacífico, Guatemala</li>
+          <li><i class="ph ph-phone" style="color:var(--gold)"></i> +502 5555-7890</li>
+          <li><i class="ph ph-envelope" style="color:var(--gold)"></i> hola@autocineantiga.gt</li>
+          <li><i class="ph ph-clock" style="color:var(--gold)"></i> Abre: 6:00 PM · Función: 7:30 PM</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Autocine Antigua · Todos los derechos reservados</p>
+      <a href="politica.html" style="color:var(--text-muted);font-size:.8rem;text-decoration:none">Política de Privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<script src="global.js"></script>
+<script>
+  // ── PRODUCT DATA ──
+  const PRODUCTS = [
+    { id:'p1', name:'Playera Galaxia Classic', category:'ropa', price:129, emoji:'👕', badge:'new', sizes:['XS','S','M','L','XL','XXL'], tags:['ropa'] },
+    { id:'p2', name:'Hoodie Starfield', category:'ropa', price:189, emoji:'🧥', badge:null, sizes:['S','M','L','XL'], tags:['ropa'] },
+    { id:'p3', name:'Gorra Galaxia Snapback', category:'accesorios', price:95, emoji:'🧢', badge:'new', sizes:['Única'], tags:['accesorios'] },
+    { id:'p4', name:'Vaso Termo Galaxia 32oz', category:'accesorios', price:115, emoji:'☕', badge:null, sizes:['Única'], tags:['accesorios'] },
+    { id:'p5', name:'Poster Retro A2 Firmado', category:'coleccionables', price:85, emoji:'🖼️', badge:'sale', originalPrice:110, tags:['coleccionables','sale'] },
+    { id:'p6', name:'Pin Set Galaxia (5 pines)', category:'coleccionables', price:55, emoji:'📌', badge:null, sizes:['Única'], tags:['coleccionables'] },
+    { id:'p7', name:'Cojín Pantalla de Cine', category:'hogar', price:130, emoji:'🛋️', badge:null, sizes:['40cm','50cm'], tags:['hogar'] },
+    { id:'p8', name:'Taza Moon Cinema', category:'hogar', price:75, emoji:'🌙', badge:'sale', originalPrice:95, tags:['hogar','sale'] },
+    { id:'p9', name:'Sticker Pack Galaxia (12)', category:'coleccionables', price:40, emoji:'🌟', badge:null, sizes:['Única'], tags:['coleccionables'] },
+    { id:'p10', name:'Playera Couple Set x2', category:'ropa', price:220, emoji:'💑', badge:'sale', originalPrice:258, tags:['ropa','sale'] },
+    { id:'p11', name:'Manta Galaxia Sherpa', category:'hogar', price:175, emoji:'🛏️', badge:'new', tags:['hogar'] },
+    { id:'p12', name:'Llavero Proyector Mini', category:'accesorios', price:35, emoji:'🔑', badge:null, sizes:['Única'], tags:['accesorios'] },
+  ];
+
+  let currentFilter = 'all';
+  let currentSort = 'default';
+  let selectedSizes = {};
+
+  function renderProducts() {
+    let list = [...PRODUCTS];
+    if (currentFilter !== 'all') {
+      list = list.filter(p => p.tags.includes(currentFilter));
+    }
+    if (currentSort === 'price-asc') list.sort((a,b)=>a.price-b.price);
+    else if (currentSort === 'price-desc') list.sort((a,b)=>b.price-a.price);
+    else if (currentSort === 'name') list.sort((a,b)=>a.name.localeCompare(b.name));
+
+    document.getElementById('productCount').textContent = `Mostrando ${list.length} productos`;
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = list.length === 0
+      ? `<div class="empty-state" style="grid-column:1/-1"><i class="ph ph-shopping-bag"></i><p>No hay productos en esta categoría.</p></div>`
+      : list.map(p => {
+        const hasSizes = p.sizes && p.sizes.length > 0;
+        const selSize = selectedSizes[p.id] || (hasSizes ? p.sizes[0] : null);
+        let badgeHTML = '';
+        if (p.badge === 'new') badgeHTML = `<span class="product-badge new-badge">Nuevo</span>`;
+        else if (p.badge === 'sale') badgeHTML = `<span class="product-badge sale-badge">Oferta</span>`;
+        const sizeHTML = hasSizes ? `
+          <div class="size-row">
+            ${p.sizes.map(s=>`<button class="size-chip${selSize===s?' sel':''}" onclick="selectSize('${p.id}','${s}',this)">${s}</button>`).join('')}
+          </div>` : '';
+        return `
+          <div class="product-card reveal" data-tags="${p.tags.join(',')}">
+            ${badgeHTML}
+            <div class="product-img">
+              <span class="emoji">${p.emoji}</span>
+              <button class="wishlist-btn" onclick="toggleWishlist(this)" aria-label="Favorito">
+                <i class="ph ph-heart"></i>
+              </button>
+            </div>
+            <div class="product-info">
+              <div class="product-category">${p.category.charAt(0).toUpperCase()+p.category.slice(1)}</div>
+              <div class="product-name">${p.name}</div>
+              ${sizeHTML}
+              <div class="product-price-row">
+                <div class="product-price">
+                  Q${p.price}
+                  ${p.originalPrice?`<span class="old-price">Q${p.originalPrice}</span>`:''}
+                </div>
+                <button class="add-cart-btn" onclick="addProduct('${p.id}')">
+                  <i class="ph ph-plus"></i> Agregar
+                </button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    // re-trigger reveals
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+  }
+
+  function selectSize(pid, size, btn) {
+    selectedSizes[pid] = size;
+    btn.closest('.size-row').querySelectorAll('.size-chip').forEach(c=>c.classList.remove('sel'));
+    btn.classList.add('sel');
+  }
+
+  function addProduct(id) {
+    const p = PRODUCTS.find(x=>x.id===id);
+    if (!p) return;
+    const size = selectedSizes[id] || (p.sizes ? p.sizes[0] : null);
+    Cart.add({ id: id+(size?'-'+size:''), name: p.name+(size&&size!=='Única'?' ('+size+')':''), price: p.price, category: p.category, emoji: p.emoji });
+    showToast('¡Agregado!', p.name, 'ph-shopping-cart');
+  }
+
+  function toggleWishlist(btn) {
+    btn.classList.toggle('active');
+    const icon = btn.querySelector('i');
+    icon.className = btn.classList.contains('active') ? 'ph-fill ph-heart' : 'ph ph-heart';
+  }
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderProducts();
+    });
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    currentSort = e.target.value;
+    renderProducts();
+  });
+
+  renderProducts();
+  initStars('starsCanvas');
+</script>
+</body>
+</html>

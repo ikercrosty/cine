@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacto — Autocine Antigua</title>
+  <meta name="description" content="Contáctanos para reservas, eventos privados, información o cualquier consulta. Estamos para servirte."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+    /* ── HERO ── */
+    .contact-hero {
+      padding:140px 0 70px;text-align:center;position:relative;overflow:hidden;
+    }
+    .contact-hero::before {
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,61,107,.1) 0%,transparent 70%);
+    }
+    .contact-hero h1 { font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6rem);color:var(--pink);line-height:1; }
+    .contact-hero p { max-width:460px;margin:.8rem auto 0;color:var(--text-muted);font-size:1.05rem; }
+
+    /* ── LAYOUT ── */
+    .contact-layout {
+      display:grid;grid-template-columns:1fr 420px;gap:4rem;
+      padding:0 0 6rem;
+    }
+
+    /* ── FORM ── */
+    .contact-form-wrap {
+      background:var(--glass);border:1px solid rgba(255,255,255,.07);
+      border-radius:20px;padding:2.8rem;
+    }
+    .contact-form-wrap h2 { font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text-light);margin-bottom:1.8rem; }
+
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    .form-group { margin-bottom:1.2rem; }
+    .form-group label {
+      display:block;font-size:.8rem;font-weight:600;
+      color:var(--text-muted);letter-spacing:.05em;text-transform:uppercase;
+      margin-bottom:.45rem;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width:100%;background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);border-radius:10px;
+      color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:.9rem;
+      padding:.75rem 1rem;transition:border-color .2s,box-shadow .2s;
+      box-sizing:border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline:none;border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,61,107,.12);
+    }
+    .form-group select option { background:var(--noir);color:var(--text-light); }
+    .form-group textarea { resize:vertical;min-height:130px; }
+
+    .form-subject-chips { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem; }
+    .subject-chip {
+      padding:.3rem .9rem;border-radius:99px;
+      border:1px solid rgba(255,255,255,.12);
+      background:transparent;color:var(--text-muted);
+      font-family:'DM Sans',sans-serif;font-size:.8rem;cursor:pointer;transition:all .2s;
+    }
+    .subject-chip:hover,.subject-chip.active {
+      border-color:var(--pink);background:rgba(255,61,107,.1);color:var(--pink);
+    }
+
+    .form-privacy { font-size:.78rem;color:var(--text-muted);line-height:1.6;margin:.3rem 0 1.4rem; }
+    .form-privacy a { color:var(--pink); }
+
+    .submit-btn {
+      width:100%;padding:.85rem;border-radius:12px;
+      background:var(--pink);border:none;color:#fff;
+      font-family:'DM Sans',sans-serif;font-weight:700;font-size:1rem;
+      cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.5rem;
+    }
+    .submit-btn:hover { background:#ff5580;transform:translateY(-2px);box-shadow:0 12px 25px rgba(255,61,107,.3); }
+    .submit-btn:active { transform:translateY(0); }
+
+    /* SUCCESS STATE */
+    .form-success {
+      display:none;text-align:center;padding:3rem 1rem;
+    }
+    .form-success.visible { display:block; }
+    .success-icon { font-size:3.5rem;margin-bottom:1rem; }
+    .form-success h3 { font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);margin-bottom:.5rem; }
+    .form-success p { color:var(--text-muted);font-size:.9rem; }
+
+    /* ── SIDEBAR INFO ── */
+    .contact-info-col { display:flex;flex-direction:column;gap:1.4rem; }
+
+    .info-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.07);
+      border-radius:16px;padding:1.8rem;
+    }
+    .info-card h3 {
+      font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--text-light);
+      margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem;
+    }
+    .info-card h3 i { color:var(--pink); }
+
+    .contact-item {
+      display:flex;align-items:flex-start;gap:.9rem;
+      padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.05);
+    }
+    .contact-item:last-child{border-bottom:none;}
+    .contact-item-icon {
+      width:38px;height:38px;border-radius:10px;
+      background:rgba(255,61,107,.1);display:flex;align-items:center;justify-content:center;
+      color:var(--pink);font-size:1.1rem;flex-shrink:0;
+    }
+    .contact-item-text .label { font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem; }
+    .contact-item-text .value { font-size:.9rem;color:var(--text-light);line-height:1.5; }
+    .contact-item-text a { color:var(--text-light);text-decoration:none; }
+    .contact-item-text a:hover { color:var(--pink); }
+
+    /* Hours table */
+    .hours-table { width:100%; }
+    .hours-row { display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.85rem; }
+    .hours-row:last-child{border-bottom:none;}
+    .hours-row .day { color:var(--text-muted); }
+    .hours-row .time { color:var(--text-light);font-weight:500; }
+    .hours-row .badge-hoy { background:rgba(160,255,100,.15);color:#a0e060;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:4px;letter-spacing:.04em; }
+
+    /* Social links big */
+    .social-big { display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem; }
+    .social-big-link {
+      display:flex;align-items:center;gap:.7rem;padding:.9rem 1rem;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+      border-radius:12px;text-decoration:none;transition:all .2s;
+    }
+    .social-big-link:hover { background:rgba(255,255,255,.08);transform:translateY(-2px); }
+    .social-big-link i { font-size:1.3rem; }
+    .social-big-link .sbl-name { font-size:.82rem;font-weight:600;color:var(--text-light); }
+    .social-big-link .sbl-handle { font-size:.7rem;color:var(--text-muted); }
+    .fb-link i { color:#4267B2; }
+    .ig-link i { color:#E1306C; }
+    .tt-link i { color:#fff; }
+    .yt-link i { color:#FF0000; }
+
+    /* Map placeholder */
+    .map-placeholder {
+      border-radius:14px;overflow:hidden;
+      background:linear-gradient(135deg,rgba(255,61,107,.08),rgba(13,204,255,.06));
+      border:1px solid rgba(255,255,255,.07);
+      height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;
+      cursor:pointer;transition:all .2s;
+    }
+    .map-placeholder:hover { background:rgba(255,61,107,.12); }
+    .map-placeholder i { font-size:2.5rem;color:var(--pink); }
+    .map-placeholder span { font-size:.85rem;color:var(--text-muted); }
+
+    /* FAQ section */
+    .faq-section { padding:0 0 5rem; }
+    .faq-item {
+      border-bottom:1px solid rgba(255,255,255,.07);overflow:hidden;
+    }
+    .faq-question {
+      width:100%;background:none;border:none;padding:1.3rem 0;
+      display:flex;align-items:center;justify-content:space-between;
+      color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;
+      cursor:pointer;transition:color .2s;text-align:left;gap:1rem;
+    }
+    .faq-question:hover { color:var(--pink); }
+    .faq-question i { color:var(--pink);flex-shrink:0;transition:transform .3s; }
+    .faq-question.open i { transform:rotate(45deg); }
+    .faq-answer {
+      max-height:0;overflow:hidden;transition:max-height .4s ease;
+    }
+    .faq-answer.open { max-height:300px; }
+    .faq-answer p { padding:0 0 1.2rem;color:var(--text-muted);font-size:.88rem;line-height:1.75; }
+
+    @media(max-width:960px){
+      .contact-layout { grid-template-columns:1fr;gap:2.5rem; }
+      .contact-info-col { order:-1; }
+    }
+    @media(max-width:600px){
+      .form-row { grid-template-columns:1fr; }
+      .contact-form-wrap { padding:1.8rem 1.4rem; }
+      .social-big { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+      <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+      <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+    </svg>
+  </div>
+  <div class="loader-bar"><div class="loader-progress"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px">
+        <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+        <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+        <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      </svg>
+      <span class="logo-text">AUTOCINE ANTIGUA</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="snacks.html">Snacks</a></li>
+      <li><a href="tienda.html">Tienda</a></li>
+      <li><a href="espacio-fiestas.html">Fiestas</a></li>
+      <li><a href="anuncios.html">Anuncios</a></li>
+      <li><a href="quienes-somos.html">Nosotros</a></li>
+      <li><a href="contacto.html" class="active">Contacto</a></li>
+      <li><a href="tickets.html" class="nav-cta">Comprar Tickets</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="cart-toggle" onclick="openCart()">
+        <i class="ph ph-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<aside class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3 class="cart-title"><i class="ph ph-shopping-cart"></i> Tu Carrito</h3>
+    <button class="cart-close" onclick="closeCart()"><i class="ph ph-x"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span class="cart-total-amount" id="cartTotal">Q0.00</span>
+    </div>
+    <a href="tickets.html" class="btn btn-primary" style="width:100%;text-align:center">Ir al Checkout</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="page-content">
+
+  <!-- HERO -->
+  <section class="contact-hero">
+    <canvas id="starsCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.35"></canvas>
+    <div class="container" style="position:relative;z-index:1">
+      <div class="section-eyebrow reveal">💬 ESCRÍBENOS</div>
+      <h1 class="reveal">Contáctanos</h1>
+      <p class="reveal">¿Tienes preguntas, quieres reservar un evento o simplemente saludarnos? Estamos aquí para ti.</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="contact-layout">
+
+      <!-- FORM -->
+      <div class="contact-form-wrap reveal" id="contactFormWrap">
+        <h2>Envíanos un Mensaje</h2>
+
+        <!-- Subject chips -->
+        <div class="form-group">
+          <label>Asunto</label>
+          <div class="form-subject-chips">
+            <button class="subject-chip active" data-subject="Información general" onclick="setSubject(this)">Información general</button>
+            <button class="subject-chip" data-subject="Reserva de evento privado" onclick="setSubject(this)">Reserva de evento</button>
+            <button class="subject-chip" data-subject="Consulta de tickets" onclick="setSubject(this)">Tickets</button>
+            <button class="subject-chip" data-subject="Pedido de snacks" onclick="setSubject(this)">Snacks</button>
+            <button class="subject-chip" data-subject="Tienda / Merch" onclick="setSubject(this)">Tienda / Merch</button>
+            <button class="subject-chip" data-subject="Otro" onclick="setSubject(this)">Otro</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" id="contactName" placeholder="Tu nombre"/>
+          </div>
+          <div class="form-group">
+            <label>Apellido *</label>
+            <input type="text" id="contactLast" placeholder="Tu apellido"/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Correo Electrónico *</label>
+            <input type="email" id="contactEmail" placeholder="tu@correo.com"/>
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="tel" id="contactPhone" placeholder="+502 ____-____"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Asunto detallado</label>
+          <input type="text" id="contactSubject" placeholder="¿En qué te podemos ayudar?"/>
+        </div>
+
+        <div class="form-group">
+          <label>Mensaje *</label>
+          <textarea id="contactMessage" placeholder="Cuéntanos con detalle tu consulta o solicitud..."></textarea>
+        </div>
+
+        <div class="form-privacy">
+          Al enviar este formulario aceptas nuestra <a href="politica.html">Política de Privacidad</a>. Solo usaremos tu información para responder tu consulta.
+        </div>
+
+        <button class="submit-btn" onclick="submitForm()">
+          <i class="ph ph-paper-plane-tilt"></i> Enviar Mensaje
+        </button>
+
+        <!-- SUCCESS -->
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">🎉</div>
+          <h3>¡Mensaje enviado!</h3>
+          <p>Gracias por contactarnos. Te responderemos en menos de 24 horas al correo que nos proporcionaste.</p>
+          <button class="btn btn-outline" style="margin-top:1.5rem" onclick="resetForm()">Enviar otro mensaje</button>
+        </div>
+      </div>
+
+      <!-- INFO SIDEBAR -->
+      <div class="contact-info-col">
+
+        <!-- Contact info -->
+        <div class="info-card reveal">
+          <h3><i class="ph-fill ph-address-book"></i> Información</h3>
+          <div class="contact-item">
+            <div class="contact-item-icon"><i class="ph ph-map-pin"></i></div>
+            <div class="contact-item-text">
+              <div class="label">Dirección</div>
+              <div class="value">Km 14.5 Carretera al Pacífico<br>Guatemala, Guatemala</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon"><i class="ph ph-phone"></i></div>
+            <div class="contact-item-text">
+              <div class="label">Teléfono</div>
+              <div class="value"><a href="tel:+50255557890">+502 5555-7890</a></div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon"><i class="ph ph-envelope"></i></div>
+            <div class="contact-item-text">
+              <div class="label">Correo</div>
+              <div class="value"><a href="mailto:hola@autocineantiga.gt">hola@autocineantiga.gt</a></div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon"><i class="ph ph-whatsapp-logo"></i></div>
+            <div class="contact-item-text">
+              <div class="label">WhatsApp</div>
+              <div class="value"><a href="https://wa.me/50255557890" target="_blank">+502 5555-7890</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hours -->
+        <div class="info-card reveal">
+          <h3><i class="ph-fill ph-clock"></i> Horarios</h3>
+          <div class="hours-table">
+            <div class="hours-row">
+              <span class="day">Lunes – Jueves</span>
+              <span class="time">7:30 PM</span>
+            </div>
+            <div class="hours-row">
+              <span class="day">Viernes</span>
+              <span class="time">7:00 PM</span>
+            </div>
+            <div class="hours-row">
+              <span class="day">Sábado <span class="badge-hoy">HOY</span></span>
+              <span class="time">5:30 PM</span>
+            </div>
+            <div class="hours-row">
+              <span class="day">Domingo</span>
+              <span class="time">6:00 PM</span>
+            </div>
+            <div class="hours-row" style="margin-top:.5rem;padding-top:.7rem;border-top:1px solid rgba(255,255,255,.07)">
+              <span class="day" style="color:var(--text-muted);font-size:.8rem">Taquilla abre 1h antes</span>
+              <span class="time" style="font-size:.8rem;color:var(--gold)">365 días</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div class="info-card reveal" style="padding:1.4rem">
+          <div class="map-placeholder" onclick="window.open('https://maps.google.com/?q=Guatemala+City','_blank')">
+            <i class="ph-fill ph-map-pin"></i>
+            <span>Ver en Google Maps</span>
+            <span style="font-size:.75rem;opacity:.6">Km 14.5 Carretera al Pacífico</span>
+          </div>
+        </div>
+
+        <!-- Social -->
+        <div class="info-card reveal">
+          <h3><i class="ph-fill ph-share-network"></i> Redes Sociales</h3>
+          <div class="social-big">
+            <a href="#" class="social-big-link fb-link">
+              <i class="ph ph-facebook-logo"></i>
+              <div><div class="sbl-name">Facebook</div><div class="sbl-handle">/GalaxiaDriveIn</div></div>
+            </a>
+            <a href="#" class="social-big-link ig-link">
+              <i class="ph ph-instagram-logo"></i>
+              <div><div class="sbl-name">Instagram</div><div class="sbl-handle">@galaxiadrivein</div></div>
+            </a>
+            <a href="#" class="social-big-link tt-link">
+              <i class="ph ph-tiktok-logo"></i>
+              <div><div class="sbl-name">TikTok</div><div class="sbl-handle">@galaxiadrivein</div></div>
+            </a>
+            <a href="#" class="social-big-link yt-link">
+              <i class="ph ph-youtube-logo"></i>
+              <div><div class="sbl-name">YouTube</div><div class="sbl-handle">Autocine Antigua</div></div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+      <div class="section-eyebrow reveal">FAQ</div>
+      <h2 class="section-title reveal">Preguntas <em>Frecuentes</em></h2>
+      <div style="max-width:720px;margin:2.5rem auto 0" id="faqList">
+        <!-- JS rendered -->
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:1rem;display:inline-flex">
+          <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:34px">
+            <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+            <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+            <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+          </svg>
+          <span class="logo-text" style="font-size:1.3rem">AUTOCINE ANTIGUA</span>
+        </a>
+        <p style="color:var(--text-muted);font-size:.9rem;line-height:1.7">Cine bajo las Estrellas.<br>Guatemala — Abierto todos los días.</p>
+        <div class="social-links" style="margin-top:1.2rem">
+          <a href="#" class="social-link"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-tiktok-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="snacks.html">Snacks</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="espacio-fiestas.html">Fiestas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Info</h4>
+        <ul class="footer-links">
+          <li><a href="quienes-somos.html">Nosotros</a></li>
+          <li><a href="anuncios.html">Anuncios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="politica.html">Política & Términos</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Contacto</h4>
+        <ul class="footer-links">
+          <li><i class="ph ph-map-pin" style="color:var(--gold)"></i> Km 14.5 Carr. al Pacífico, Guatemala</li>
+          <li><i class="ph ph-phone" style="color:var(--gold)"></i> +502 5555-7890</li>
+          <li><i class="ph ph-envelope" style="color:var(--gold)"></i> hola@autocineantiga.gt</li>
+          <li><i class="ph ph-clock" style="color:var(--gold)"></i> Abre: 6:00 PM · Función: 7:30 PM</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Autocine Antigua · Todos los derechos reservados</p>
+      <a href="politica.html" style="color:var(--text-muted);font-size:.8rem;text-decoration:none">Política de Privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<script src="global.js"></script>
+<script>
+// Subject chips
+let selectedSubject = 'Información general';
+function setSubject(btn) {
+  document.querySelectorAll('.subject-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedSubject = btn.dataset.subject;
+  document.getElementById('contactSubject').value = selectedSubject;
+}
+
+// Pre-fill subject from URL param
+const urlParams = new URLSearchParams(window.location.search);
+const paqueteParam = urlParams.get('paquete');
+if (paqueteParam) {
+  const names = { basico:'Paquete Básico — Noche Básica', estelar:'Paquete Estelar', vip:'Paquete VIP Antigua' };
+  const sub = 'Reserva de evento privado';
+  document.querySelectorAll('.subject-chip').forEach(b=>{
+    b.classList.remove('active');
+    if(b.dataset.subject===sub){b.classList.add('active');selectedSubject=sub;}
+  });
+  document.getElementById('contactSubject').value = names[paqueteParam]||sub;
+}
+
+// Form submit
+function submitForm() {
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const message = document.getElementById('contactMessage').value.trim();
+  if (!name||!email||!message) {
+    showToast('Campos incompletos','Por favor llena los campos obligatorios.','ph-warning');
+    return;
+  }
+  if (!/\S+@\S+\.\S+/.test(email)) {
+    showToast('Email inválido','Revisa tu correo electrónico.','ph-warning');
+    return;
+  }
+  document.getElementById('contactFormWrap').querySelector('h2').style.display='none';
+  [...document.getElementById('contactFormWrap').querySelectorAll('.form-group,.form-row,.form-privacy,.submit-btn')].forEach(el=>el.style.display='none');
+  document.getElementById('formSuccess').classList.add('visible');
+}
+
+function resetForm() {
+  document.getElementById('contactName').value='';
+  document.getElementById('contactEmail').value='';
+  document.getElementById('contactMessage').value='';
+  document.getElementById('contactSubject').value='';
+  document.getElementById('contactPhone').value='';
+  document.getElementById('contactLast').value='';
+  document.getElementById('formSuccess').classList.remove('visible');
+  document.getElementById('contactFormWrap').querySelector('h2').style.display='';
+  [...document.getElementById('contactFormWrap').querySelectorAll('.form-group,.form-row,.form-privacy,.submit-btn')].forEach(el=>el.style.display='');
+}
+
+// FAQ
+const FAQS = [
+  { q:'¿Puedo llevar mi propia comida?', a:'Puedes llevar snacks ligeros como dulces y galletas. Sin embargo, bebidas en envase de vidrio, alcohol y comida con olores fuertes no están permitidos. Nuestro menú de snacks ofrece una amplia variedad de opciones deliciosas con servicio directo a tu vehículo.' },
+  { q:'¿Cómo funciona el sonido en el drive-in?', a:'El audio de cada película se transmite mediante frecuencia FM a través de tu radio del carro. Al llegar, el personal te indicará la frecuencia de cada pantalla. Recomendamos mantener el motor en "Accesorios" para no gastar batería.' },
+  { q:'¿Puedo comprar entradas en la taquilla?', a:'Sí, puedes comprar tus entradas directamente en taquilla antes de cada función. Sin embargo, para funciones especiales, estrenos y eventos, recomendamos comprar en línea con anticipación ya que se agotan rápido.' },
+  { q:'¿Cuánto tiempo antes debo llegar?', a:'Recomendamos llegar al menos 30-45 minutos antes del inicio de la función para elegir el mejor espacio y tener tiempo de pedir snacks. Los fines de semana y en eventos especiales, llega 1 hora antes.' },
+  { q:'¿Aceptan mascotas?', a:'¡Por supuesto! Las mascotas son bienvenidas siempre que permanezcan dentro del vehículo o en la zona asignada con correa. Contamos con áreas especiales pet-friendly en nuestras instalaciones.' },
+  { q:'¿Cuál es la política de cancelación?', a:'Los tickets comprados en línea pueden cancelarse hasta 2 horas antes de la función para un reembolso completo. Pasado ese tiempo, el ticket puede transferirse a otra función dentro de los próximos 30 días.' },
+  { q:'¿Tienen servicio para grupos grandes y escuelas?', a:'Sí, ofrecemos tarifas especiales para grupos de 10 o más vehículos. Para escuelas, universidades y empresas contamos con paquetes corporativos. Contáctanos directamente para cotizar.' },
+];
+
+const faqList = document.getElementById('faqList');
+faqList.innerHTML = FAQS.map((f,i)=>`
+  <div class="faq-item reveal">
+    <button class="faq-question" onclick="toggleFaq(${i},this)">
+      <span>${f.q}</span>
+      <i class="ph ph-plus-circle"></i>
+    </button>
+    <div class="faq-answer" id="faq-${i}">
+      <p>${f.a}</p>
+    </div>
+  </div>`).join('');
+
+function toggleFaq(i, btn) {
+  const ans = document.getElementById('faq-'+i);
+  const open = ans.classList.toggle('open');
+  btn.classList.toggle('open',open);
+}
+
+initStars('starsCanvas');
+document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+</script>
+</body>
+</html>

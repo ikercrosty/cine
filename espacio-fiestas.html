@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Espacio para Fiestas — Autocine Antigua</title>
+  <meta name="description" content="Celebra tu evento privado bajo las estrellas. Cumpleaños, bodas, corporativos y más en Autocine Antigua."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+    /* ── PARTY HERO ── */
+    .party-hero {
+      min-height: 70vh; display:flex; align-items:center;
+      position:relative; overflow:hidden; padding:140px 0 80px;
+      text-align:center;
+    }
+    .party-hero::before {
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 80% 70% at 50% 0%, rgba(255,61,107,.14) 0%,rgba(245,182,23,.06) 50%, transparent 80%);
+    }
+    .party-hero-content { position:relative;z-index:1; width:100%; }
+    .party-hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,9vw,7rem); color:var(--gold); line-height:.95; }
+    .party-hero h1 span { color:var(--pink); }
+    .party-hero p { max-width:520px;margin:1.2rem auto 0;color:var(--text-muted);font-size:1.1rem; }
+    .hero-cta-row { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem; }
+
+    /* ── FLOATING ELEMENTS ── */
+    .float-elements {
+      position:absolute;inset:0;pointer-events:none;overflow:hidden;
+    }
+    .float-el {
+      position:absolute;font-size:2rem;opacity:.25;
+      animation:floatEl 6s ease-in-out infinite;
+    }
+    @keyframes floatEl {
+      0%,100%{transform:translateY(0) rotate(0deg)}
+      50%{transform:translateY(-20px) rotate(10deg)}
+    }
+
+    /* ── PACKAGES ── */
+    .packages-section { padding:5rem 0; }
+    .packages-grid {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1.8rem;margin-top:3rem;
+    }
+    .package-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.07);
+      border-radius:20px;overflow:hidden;position:relative;
+      transition:transform .3s,box-shadow .3s;
+    }
+    .package-card:hover{transform:translateY(-8px);box-shadow:0 25px 50px rgba(0,0,0,.4);}
+    .package-card.featured {
+      border-color:rgba(245,182,23,.4);
+      box-shadow:0 0 30px rgba(245,182,23,.1);
+    }
+    .package-featured-tag {
+      position:absolute;top:0;right:0;
+      background:var(--gold);color:var(--noir);
+      font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+      padding:.3rem .9rem;border-radius:0 0 0 12px;
+    }
+    .package-header { padding:2rem 2rem 1.5rem; border-bottom:1px solid rgba(255,255,255,.06); }
+    .package-emoji { font-size:2.5rem;margin-bottom:.8rem;display:block; }
+    .package-name { font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text-light); }
+    .package-subtitle { color:var(--text-muted);font-size:.9rem;margin-top:.3rem; }
+    .package-price { padding:1.2rem 2rem;border-bottom:1px solid rgba(255,255,255,.06); }
+    .package-price .price { font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--gold); }
+    .package-price .price-note { color:var(--text-muted);font-size:.8rem;margin-top:.2rem; }
+    .package-features { padding:1.5rem 2rem; }
+    .package-feature {
+      display:flex;align-items:center;gap:.7rem;
+      padding:.45rem 0;font-size:.88rem;color:var(--text-muted);
+      border-bottom:1px solid rgba(255,255,255,.04);
+    }
+    .package-feature:last-child{border-bottom:none;}
+    .package-feature i { color:var(--gold);font-size:1.1rem;flex-shrink:0; }
+    .package-feature.excluded { opacity:.45; }
+    .package-feature.excluded i { color:var(--text-muted); }
+    .package-cta { padding:0 2rem 2rem; }
+    .package-cta .btn { width:100%;text-align:center; }
+
+    /* ── CAPACITY STRIP ── */
+    .capacity-strip {
+      background:var(--glass);border:1px solid rgba(255,255,255,.07);
+      border-radius:16px;padding:2.5rem;
+      display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;
+      text-align:center;margin:1rem 0;
+    }
+    .cap-item .cap-number { font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--gold); }
+    .cap-item .cap-label { color:var(--text-muted);font-size:.85rem;margin-top:.3rem; }
+
+    /* ── HOW IT WORKS ── */
+    .how-section { padding:5rem 0; }
+    .steps-horizontal {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1.5rem;margin-top:3rem;position:relative;
+    }
+    .step-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.06);
+      border-radius:16px;padding:2rem 1.5rem;text-align:center;position:relative;
+    }
+    .step-number {
+      width:44px;height:44px;border-radius:50%;
+      background:linear-gradient(135deg,var(--gold),#ffb300);
+      color:var(--noir);font-family:'Bebas Neue',sans-serif;font-size:1.3rem;
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 1rem;
+    }
+    .step-card h4 { font-family:'DM Sans',sans-serif;font-weight:600;color:var(--text-light);margin-bottom:.5rem; }
+    .step-card p { color:var(--text-muted);font-size:.85rem;line-height:1.6; }
+
+    /* ── GALLERY MOSAIC ── */
+    .gallery-section { padding:5rem 0; }
+    .gallery-mosaic {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      grid-template-rows:auto;
+      gap:1rem;margin-top:2.5rem;
+    }
+    .gallery-item {
+      border-radius:14px;overflow:hidden;
+      background:var(--glass);border:1px solid rgba(255,255,255,.06);
+      aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+      font-size:4rem;transition:transform .3s;cursor:pointer;
+    }
+    .gallery-item:hover{transform:scale(1.03);}
+    .gallery-item.large { grid-column:span 2;aspect-ratio:2/1;font-size:5rem; }
+    .gallery-item .caption {
+      display:none;position:absolute;inset:0;
+      background:rgba(7,9,15,.7);align-items:center;justify-content:center;
+      color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;
+    }
+    .gallery-item { position:relative; }
+    .gallery-item:hover .caption { display:flex; }
+
+    /* ── ADD-ONS ── */
+    .addons-section { padding:4rem 0 5rem; }
+    .addons-grid {
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+      gap:1.2rem;margin-top:2.5rem;
+    }
+    .addon-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.06);
+      border-radius:14px;padding:1.5rem 1.2rem;
+      display:flex;flex-direction:column;align-items:center;text-align:center;gap:.7rem;
+      cursor:pointer;transition:all .3s;user-select:none;
+    }
+    .addon-card:hover,.addon-card.selected {
+      border-color:var(--gold);background:rgba(245,182,23,.07);
+    }
+    .addon-card.selected .addon-check { opacity:1; }
+    .addon-emoji { font-size:2rem; }
+    .addon-name { font-size:.88rem;font-weight:600;color:var(--text-light); }
+    .addon-price { font-size:.8rem;color:var(--gold); }
+    .addon-check { opacity:0;transition:opacity .2s;font-size:1.2rem; }
+
+    /* ── CTA BOOKING ── */
+    .booking-cta {
+      background:linear-gradient(120deg,rgba(245,182,23,.12),rgba(255,61,107,.1));
+      border:1px solid rgba(245,182,23,.2);border-radius:20px;
+      padding:4rem;text-align:center;margin:2rem 0 5rem;
+    }
+    .booking-cta h2 { font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);margin-bottom:1rem; }
+    .booking-cta p { color:var(--text-muted);max-width:480px;margin:0 auto 2rem;font-size:1rem; }
+
+    @media(max-width:768px){
+      .capacity-strip{grid-template-columns:repeat(2,1fr);}
+      .gallery-mosaic{grid-template-columns:repeat(2,1fr);}
+      .gallery-item.large{grid-column:span 2;}
+      .booking-cta{padding:2.5rem 1.5rem;}
+      .booking-cta h2{font-size:2rem;}
+    }
+    @media(max-width:480px){
+      .capacity-strip{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+      <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+      <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+    </svg>
+  </div>
+  <div class="loader-bar"><div class="loader-progress"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px">
+        <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+        <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+        <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      </svg>
+      <span class="logo-text">AUTOCINE ANTIGUA</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="snacks.html">Snacks</a></li>
+      <li><a href="tienda.html">Tienda</a></li>
+      <li><a href="espacio-fiestas.html" class="active">Fiestas</a></li>
+      <li><a href="anuncios.html">Anuncios</a></li>
+      <li><a href="quienes-somos.html">Nosotros</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="tickets.html" class="nav-cta">Comprar Tickets</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="cart-toggle" onclick="openCart()">
+        <i class="ph ph-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<aside class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3 class="cart-title"><i class="ph ph-shopping-cart"></i> Tu Carrito</h3>
+    <button class="cart-close" onclick="closeCart()"><i class="ph ph-x"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span class="cart-total-amount" id="cartTotal">Q0.00</span>
+    </div>
+    <a href="tickets.html" class="btn btn-primary" style="width:100%;text-align:center">Ir al Checkout</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="page-content">
+
+  <!-- HERO -->
+  <section class="party-hero">
+    <canvas id="starsCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.4"></canvas>
+    <div class="float-elements">
+      <span class="float-el" style="top:15%;left:8%;animation-delay:0s">🎉</span>
+      <span class="float-el" style="top:25%;right:10%;animation-delay:1s">🎂</span>
+      <span class="float-el" style="top:60%;left:5%;animation-delay:2s">⭐</span>
+      <span class="float-el" style="top:70%;right:7%;animation-delay:.5s">🎈</span>
+      <span class="float-el" style="top:40%;left:15%;animation-delay:1.5s">🥂</span>
+      <span class="float-el" style="top:50%;right:15%;animation-delay:2.5s">🎊</span>
+    </div>
+    <div class="container party-hero-content">
+      <div class="section-eyebrow reveal">🎉 EVENTOS PRIVADOS</div>
+      <h1 class="reveal">Celebra Bajo<br>las <span>Estrellas</span></h1>
+      <p class="reveal">Cumpleaños, bodas, XV años, corporativos y todo lo que merece ser recordado. Tu evento, tu película, tu noche.</p>
+      <div class="hero-cta-row reveal">
+        <a href="#paquetes" class="btn btn-primary">Ver Paquetes</a>
+        <a href="contacto.html" class="btn btn-outline">Cotizar mi Evento</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- CAPACITY STRIP -->
+    <div class="capacity-strip reveal">
+      <div class="cap-item">
+        <div class="cap-number" data-counter data-target="250">0</div>
+        <div class="cap-label">Autos máximo</div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-number" data-counter data-target="4">0</div>
+        <div class="cap-label">Pantallas disponibles</div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-number" data-counter data-target="150">0</div>
+        <div class="cap-label">Eventos realizados</div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-number" data-counter data-target="98" data-suffix="%">0</div>
+        <div class="cap-label">Satisfacción clientes</div>
+      </div>
+    </div>
+
+    <!-- PACKAGES -->
+    <section class="packages-section" id="paquetes">
+      <div class="section-eyebrow reveal">PAQUETES</div>
+      <h2 class="section-title reveal">Elige tu <em>Experiencia</em></h2>
+      <p class="section-subtitle reveal">Tres paquetes diseñados para que cada tipo de celebración brille como merece.</p>
+
+      <div class="packages-grid">
+
+        <!-- Básico -->
+        <div class="package-card reveal">
+          <div class="package-header">
+            <span class="package-emoji">🌙</span>
+            <div class="package-name">Noche Básica</div>
+            <div class="package-subtitle">Ideal para grupos pequeños y celebraciones íntimas</div>
+          </div>
+          <div class="package-price">
+            <div class="price">Q2,500</div>
+            <div class="price-note">Por evento · hasta 30 autos · 3 horas</div>
+          </div>
+          <div class="package-features">
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Pantalla privada 3 horas</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Hasta 30 vehículos</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Proyección de película elegida</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Sistema de sonido FM privado</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Área de snacks disponible</div>
+            <div class="package-feature excluded"><i class="ph ph-x-circle"></i> Personalización de pantalla</div>
+            <div class="package-feature excluded"><i class="ph ph-x-circle"></i> Decoración especial</div>
+            <div class="package-feature excluded"><i class="ph ph-x-circle"></i> Catering privado</div>
+          </div>
+          <div class="package-cta">
+            <a href="contacto.html?paquete=basico" class="btn btn-outline">Reservar</a>
+          </div>
+        </div>
+
+        <!-- Estelar (featured) -->
+        <div class="package-card featured reveal">
+          <div class="package-featured-tag">⭐ Más Popular</div>
+          <div class="package-header">
+            <span class="package-emoji">⭐</span>
+            <div class="package-name">Noche Estelar</div>
+            <div class="package-subtitle">El equilibrio perfecto entre magia y comodidad</div>
+          </div>
+          <div class="package-price">
+            <div class="price">Q4,800</div>
+            <div class="price-note">Por evento · hasta 80 autos · 4 horas</div>
+          </div>
+          <div class="package-features">
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Pantalla privada 4 horas</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Hasta 80 vehículos</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Película a elección + tráiler personalizado</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Mensaje especial en pantalla gigante</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Decoración temática básica</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Combo snacks para 20 personas</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Coordinador de evento</div>
+            <div class="package-feature excluded"><i class="ph ph-x-circle"></i> Catering gourmet privado</div>
+          </div>
+          <div class="package-cta">
+            <a href="contacto.html?paquete=estelar" class="btn btn-primary">Reservar</a>
+          </div>
+        </div>
+
+        <!-- VIP Antigua -->
+        <div class="package-card reveal">
+          <div class="package-header">
+            <span class="package-emoji">🚀</span>
+            <div class="package-name">VIP Antigua</div>
+            <div class="package-subtitle">Una experiencia sin límites para las celebraciones más grandes</div>
+          </div>
+          <div class="package-price">
+            <div class="price">Q9,500</div>
+            <div class="price-note">Por evento · hasta 200 autos · 6 horas</div>
+          </div>
+          <div class="package-features">
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Pantalla entera 6 horas</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Hasta 200 vehículos</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Película + cortometraje personalizado</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Pantalla completa para imágenes / fotos</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Decoración completa temática</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Catering gourmet privado</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Zona VIP con lounge al aire libre</div>
+            <div class="package-feature"><i class="ph-fill ph-check-circle"></i> Coordinador + staff dedicado</div>
+          </div>
+          <div class="package-cta">
+            <a href="contacto.html?paquete=vip" class="btn btn-outline">Reservar</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+      <div class="section-eyebrow reveal">¿CÓMO FUNCIONA?</div>
+      <h2 class="section-title reveal">4 Pasos para tu <em>Noche Perfecta</em></h2>
+      <div class="steps-horizontal">
+        <div class="step-card reveal">
+          <div class="step-number">1</div>
+          <h4>Elige tu paquete</h4>
+          <p>Selecciona el paquete que se adapte mejor a tu evento y número de invitados.</p>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-number">2</div>
+          <h4>Contáctanos</h4>
+          <p>Llena el formulario o llámanos. Un coordinador te contactará en menos de 24h.</p>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-number">3</div>
+          <h4>Personaliza</h4>
+          <p>Elige tu película, decoración, menú y cualquier detalle especial para tu evento.</p>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-number">4</div>
+          <h4>¡Disfruta!</h4>
+          <p>Llega el día de tu evento y déjate sorprender. Nosotros nos encargamos de todo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery-section">
+      <div class="section-eyebrow reveal">GALERÍA</div>
+      <h2 class="section-title reveal">Momentos <em>Inolvidables</em></h2>
+      <div class="gallery-mosaic">
+        <div class="gallery-item large reveal">
+          🎉
+          <div class="caption">Fiesta de Cumpleaños</div>
+        </div>
+        <div class="gallery-item reveal">
+          💍
+          <div class="caption">Propuesta de Matrimonio</div>
+        </div>
+        <div class="gallery-item reveal">
+          🏢
+          <div class="caption">Evento Corporativo</div>
+        </div>
+        <div class="gallery-item reveal">
+          🎓
+          <div class="caption">Graduación</div>
+        </div>
+        <div class="gallery-item large reveal">
+          👰
+          <div class="caption">Boda Bajo las Estrellas</div>
+        </div>
+        <div class="gallery-item reveal">
+          🌟
+          <div class="caption">XV Años</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADD-ONS -->
+    <section class="addons-section">
+      <div class="section-eyebrow reveal">EXTRAS</div>
+      <h2 class="section-title reveal">Personaliza tu <em>Evento</em></h2>
+      <p class="section-subtitle reveal">Agrega estos extras a cualquier paquete para hacerlo aún más especial.</p>
+      <div class="addons-grid">
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">🎂</span>
+          <div class="addon-name">Pastel Personalizado</div>
+          <div class="addon-price">+Q350</div>
+          <div class="addon-check">✓</div>
+        </div>
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">🎈</span>
+          <div class="addon-name">Decoración de Globos</div>
+          <div class="addon-price">+Q200</div>
+          <div class="addon-check">✓</div>
+        </div>
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">📸</span>
+          <div class="addon-name">Fotógrafo Profesional</div>
+          <div class="addon-price">+Q800</div>
+          <div class="addon-check">✓</div>
+        </div>
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">🎵</span>
+          <div class="addon-name">DJ / Música en Vivo</div>
+          <div class="addon-price">+Q1,200</div>
+          <div class="addon-check">✓</div>
+        </div>
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">🍕</span>
+          <div class="addon-name">Catering Pizzas</div>
+          <div class="addon-price">+Q600</div>
+          <div class="addon-check">✓</div>
+        </div>
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">🥂</span>
+          <div class="addon-name">Barra de Bebidas</div>
+          <div class="addon-price">+Q750</div>
+          <div class="addon-check">✓</div>
+        </div>
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">🎞️</span>
+          <div class="addon-name">Video de Recuerdo</div>
+          <div class="addon-price">+Q950</div>
+          <div class="addon-check">✓</div>
+        </div>
+        <div class="addon-card reveal" onclick="toggleAddon(this)">
+          <span class="addon-emoji">🌹</span>
+          <div class="addon-name">Arreglo Floral</div>
+          <div class="addon-price">+Q400</div>
+          <div class="addon-check">✓</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="booking-cta reveal">
+      <h2>¿Listo para tu Noche Mágica?</h2>
+      <p>Contáctanos hoy y uno de nuestros coordinadores te ayudará a crear el evento de tus sueños bajo las estrellas de Autocine Antigua.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="contacto.html" class="btn btn-primary">Solicitar Cotización</a>
+        <a href="tel:+50255557890" class="btn btn-outline"><i class="ph ph-phone"></i> +502 5555-7890</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:1rem;display:inline-flex">
+          <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:34px">
+            <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+            <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+            <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+          </svg>
+          <span class="logo-text" style="font-size:1.3rem">AUTOCINE ANTIGUA</span>
+        </a>
+        <p style="color:var(--text-muted);font-size:.9rem;line-height:1.7">Cine bajo las Estrellas.<br>Guatemala — Abierto todos los días.</p>
+        <div class="social-links" style="margin-top:1.2rem">
+          <a href="#" class="social-link"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-tiktok-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="snacks.html">Snacks</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="espacio-fiestas.html">Fiestas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Info</h4>
+        <ul class="footer-links">
+          <li><a href="quienes-somos.html">Nosotros</a></li>
+          <li><a href="anuncios.html">Anuncios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="politica.html">Política & Términos</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Contacto</h4>
+        <ul class="footer-links">
+          <li><i class="ph ph-map-pin" style="color:var(--gold)"></i> Km 14.5 Carr. al Pacífico, Guatemala</li>
+          <li><i class="ph ph-phone" style="color:var(--gold)"></i> +502 5555-7890</li>
+          <li><i class="ph ph-envelope" style="color:var(--gold)"></i> hola@autocineantiga.gt</li>
+          <li><i class="ph ph-clock" style="color:var(--gold)"></i> Abre: 6:00 PM · Función: 7:30 PM</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Autocine Antigua · Todos los derechos reservados</p>
+      <a href="politica.html" style="color:var(--text-muted);font-size:.8rem;text-decoration:none">Política de Privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<script src="global.js"></script>
+<script>
+  function toggleAddon(card) {
+    card.classList.toggle('selected');
+  }
+  initStars('starsCanvas');
+</script>
+</body>
+</html>

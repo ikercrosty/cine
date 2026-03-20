@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anuncios — Autocine Antigua</title>
+  <meta name="description" content="Últimas noticias, novedades y anuncios oficiales de Autocine Antigua."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+    /* ── HERO ── */
+    .announce-hero {
+      padding:140px 0 60px;text-align:center;position:relative;overflow:hidden;
+    }
+    .announce-hero::before {
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(13,204,255,.1) 0%,transparent 70%);
+    }
+    .announce-hero h1 { font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6rem);color:var(--electric);line-height:1; }
+
+    /* ── PINNED ALERT ── */
+    .pinned-alert {
+      background:linear-gradient(120deg,rgba(245,182,23,.15),rgba(245,182,23,.05));
+      border:1px solid rgba(245,182,23,.35);border-radius:14px;
+      padding:1.4rem 1.8rem;display:flex;align-items:flex-start;gap:1rem;
+      margin-bottom:3rem;
+    }
+    .pinned-icon { font-size:1.5rem;flex-shrink:0;margin-top:.1rem; }
+    .pinned-label {
+      font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:.35rem;
+    }
+    .pinned-text { color:var(--text-light);font-size:.95rem;line-height:1.6; }
+    .pinned-text strong { color:var(--gold); }
+
+    /* ── FILTERS ── */
+    .announce-filters {
+      display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem;
+    }
+    .cat-btn {
+      padding:.4rem 1.1rem;border-radius:99px;border:1px solid rgba(255,255,255,.12);
+      background:transparent;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:.82rem;
+      cursor:pointer;transition:all .2s;
+    }
+    .cat-btn:hover,.cat-btn.active { background:var(--electric);border-color:var(--electric);color:var(--noir); }
+
+    /* ── LAYOUT: sidebar + feed ── */
+    .announce-layout {
+      display:grid;grid-template-columns:1fr 300px;gap:2.5rem;padding-bottom:5rem;
+    }
+
+    /* ── NEWS FEED ── */
+    .news-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.07);
+      border-radius:16px;overflow:hidden;
+      display:grid;grid-template-columns:auto 1fr;
+      transition:transform .3s,box-shadow .3s;margin-bottom:1.4rem;
+    }
+    .news-card:hover { transform:translateX(4px);box-shadow:0 12px 30px rgba(0,0,0,.3); }
+    .news-card.pinned { border-color:rgba(245,182,23,.3); }
+
+    .news-date-col {
+      width:70px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+      padding:1.5rem .5rem;border-right:1px solid rgba(255,255,255,.06);
+      text-align:center;
+    }
+    .news-day { font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--gold);line-height:1; }
+    .news-month { font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-top:.2rem; }
+
+    .news-body { padding:1.5rem; }
+    .news-meta { display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap; }
+    .news-tag {
+      padding:.2rem .6rem;border-radius:6px;font-size:.68rem;font-weight:700;
+      letter-spacing:.05em;text-transform:uppercase;
+    }
+    .tag-novedad { background:rgba(13,204,255,.15);color:var(--electric); }
+    .tag-evento { background:rgba(245,182,23,.15);color:var(--gold); }
+    .tag-cartelera { background:rgba(255,61,107,.15);color:var(--pink); }
+    .tag-operativo { background:rgba(160,255,100,.12);color:#a0e060; }
+    .tag-oferta { background:rgba(200,130,255,.15);color:#c882ff; }
+    .news-card-time { font-size:.75rem;color:var(--text-muted); }
+
+    .news-title { font-family:'DM Sans',sans-serif;font-weight:600;font-size:1.05rem;color:var(--text-light);margin-bottom:.6rem; }
+    .news-excerpt { font-size:.88rem;color:var(--text-muted);line-height:1.65;margin-bottom:1rem; }
+    .news-read-more {
+      font-size:.82rem;font-weight:600;color:var(--electric);
+      display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;
+      transition:gap .2s;
+    }
+    .news-read-more:hover { gap:.6rem; }
+
+    /* EXPANDED CARD STATE */
+    .news-full { display:none;border-top:1px solid rgba(255,255,255,.06);margin-top:1rem;padding-top:1rem; }
+    .news-full.open { display:block; }
+    .news-full p { font-size:.9rem;color:var(--text-muted);line-height:1.75; }
+    .news-full p+p { margin-top:.8rem; }
+
+    /* ── SIDEBAR ── */
+    .sidebar-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;padding:1.5rem;margin-bottom:1.4rem;
+    }
+    .sidebar-card h4 {
+      font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--text-light);
+      margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;
+    }
+    .sidebar-card h4 i { color:var(--gold); }
+
+    /* Quick news list */
+    .quick-news-item {
+      display:flex;gap:.8rem;align-items:flex-start;
+      padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.05);
+    }
+    .quick-news-item:last-child{border-bottom:none;}
+    .qn-dot { width:8px;height:8px;border-radius:50%;background:var(--electric);flex-shrink:0;margin-top:.4rem; }
+    .qn-text { font-size:.83rem;color:var(--text-muted);line-height:1.5; }
+    .qn-date { font-size:.7rem;color:var(--text-muted);opacity:.6;margin-top:.2rem; }
+
+    /* Now playing mini -->*/
+    .now-playing-mini {
+      display:flex;align-items:center;gap:.9rem;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.05);
+    }
+    .now-playing-mini:last-child{border-bottom:none;}
+    .npm-emoji { font-size:1.8rem;flex-shrink:0; }
+    .npm-info { flex:1; }
+    .npm-title { font-size:.85rem;font-weight:600;color:var(--text-light); }
+    .npm-screen { font-size:.75rem;color:var(--text-muted); }
+    .npm-time { font-size:.75rem;color:var(--gold);margin-top:.15rem; }
+
+    /* Newsletter in sidebar */
+    .sidebar-newsletter-form { display:flex;flex-direction:column;gap:.7rem;margin-top:.5rem; }
+    .sidebar-newsletter-form input {
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+      color:var(--text-light);padding:.6rem .9rem;border-radius:8px;
+      font-family:'DM Sans',sans-serif;font-size:.85rem;
+    }
+    .sidebar-newsletter-form input:focus { outline:none;border-color:var(--electric); }
+    .sidebar-newsletter-form button {
+      background:var(--electric);color:var(--noir);border:none;border-radius:8px;
+      padding:.65rem;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;
+    }
+    .sidebar-newsletter-form button:hover{background:#29e0ff;}
+
+    @media(max-width:900px){
+      .announce-layout{grid-template-columns:1fr;}
+      .sidebar-col{display:none;}
+    }
+    @media(max-width:600px){
+      .news-card{grid-template-columns:1fr;}
+      .news-date-col{flex-direction:row;width:auto;padding:1rem 1.2rem .5rem;border-right:none;border-bottom:1px solid rgba(255,255,255,.06);justify-content:flex-start;gap:.4rem;}
+      .news-day{font-size:1.5rem;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+      <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+      <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+    </svg>
+  </div>
+  <div class="loader-bar"><div class="loader-progress"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px">
+        <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+        <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+        <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+        <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+      </svg>
+      <span class="logo-text">AUTOCINE ANTIGUA</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="snacks.html">Snacks</a></li>
+      <li><a href="tienda.html">Tienda</a></li>
+      <li><a href="espacio-fiestas.html">Fiestas</a></li>
+      <li><a href="anuncios.html" class="active">Anuncios</a></li>
+      <li><a href="quienes-somos.html">Nosotros</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="tickets.html" class="nav-cta">Comprar Tickets</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="cart-toggle" onclick="openCart()">
+        <i class="ph ph-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<aside class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3 class="cart-title"><i class="ph ph-shopping-cart"></i> Tu Carrito</h3>
+    <button class="cart-close" onclick="closeCart()"><i class="ph ph-x"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span class="cart-total-amount" id="cartTotal">Q0.00</span>
+    </div>
+    <a href="tickets.html" class="btn btn-primary" style="width:100%;text-align:center">Ir al Checkout</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="page-content">
+
+  <section class="announce-hero">
+    <div class="container" style="position:relative;z-index:1">
+      <div class="section-eyebrow reveal">📢 TABLÓN OFICIAL</div>
+      <h1 class="reveal">Anuncios</h1>
+      <p class="reveal" style="max-width:440px;margin:.8rem auto 0;color:var(--text-muted)">Todo lo que debes saber: cartelera, eventos especiales, novedades y más.</p>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- PINNED ANNOUNCEMENT -->
+    <div class="pinned-alert reveal">
+      <span class="pinned-icon">📌</span>
+      <div>
+        <div class="pinned-label">📌 Fijado — Importante</div>
+        <div class="pinned-text"><strong>Nueva pantalla #4 ya disponible.</strong> A partir del 1 de diciembre 2024, abrimos nuestra cuarta pantalla de proyección con capacidad para 60 autos adicionales. ¡Más espacio, más películas, más noches bajo las estrellas!</div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="announce-filters">
+      <button class="cat-btn active" data-cat="all">Todos</button>
+      <button class="cat-btn" data-cat="novedad">Novedades</button>
+      <button class="cat-btn" data-cat="evento">Eventos</button>
+      <button class="cat-btn" data-cat="cartelera">Cartelera</button>
+      <button class="cat-btn" data-cat="operativo">Operativo</button>
+      <button class="cat-btn" data-cat="oferta">Ofertas</button>
+    </div>
+
+    <div class="announce-layout">
+
+      <!-- FEED -->
+      <div class="news-feed" id="newsFeed">
+        <!-- JS rendered -->
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar-col">
+
+        <!-- Now Playing -->
+        <div class="sidebar-card">
+          <h4><i class="ph-fill ph-film-slate"></i> En Cartelera Hoy</h4>
+          <div class="now-playing-mini">
+            <span class="npm-emoji">🚀</span>
+            <div class="npm-info">
+              <div class="npm-title">Interstellar</div>
+              <div class="npm-screen">Pantalla 1 · Pantalla 2</div>
+              <div class="npm-time">7:30 PM & 9:00 PM</div>
+            </div>
+          </div>
+          <div class="now-playing-mini">
+            <span class="npm-emoji">🦁</span>
+            <div class="npm-info">
+              <div class="npm-title">El Rey León</div>
+              <div class="npm-screen">Pantalla 3</div>
+              <div class="npm-time">7:00 PM</div>
+            </div>
+          </div>
+          <div class="now-playing-mini">
+            <span class="npm-emoji">🕷️</span>
+            <div class="npm-info">
+              <div class="npm-title">Spider-Man NWH</div>
+              <div class="npm-screen">Pantalla 4</div>
+              <div class="npm-time">8:00 PM</div>
+            </div>
+          </div>
+          <a href="tickets.html" class="btn btn-primary" style="width:100%;text-align:center;margin-top:1.2rem;font-size:.85rem">Comprar Tickets</a>
+        </div>
+
+        <!-- Quick updates -->
+        <div class="sidebar-card">
+          <h4><i class="ph-fill ph-lightning"></i> Últimas Noticias</h4>
+          <div class="quick-news-item">
+            <div class="qn-dot"></div>
+            <div>
+              <div class="qn-text">Combo Halloween disponible esta semana en Snacks</div>
+              <div class="qn-date">Hoy</div>
+            </div>
+          </div>
+          <div class="quick-news-item">
+            <div class="qn-dot" style="background:var(--gold)"></div>
+            <div>
+              <div class="qn-text">Descuento 20% en Martes con carnet estudiantil</div>
+              <div class="qn-date">Nov 15</div>
+            </div>
+          </div>
+          <div class="quick-news-item">
+            <div class="qn-dot" style="background:var(--pink)"></div>
+            <div>
+              <div class="qn-text">Apertura temprana los sábados desde las 5:30 PM</div>
+              <div class="qn-date">Nov 10</div>
+            </div>
+          </div>
+          <div class="quick-news-item">
+            <div class="qn-dot" style="background:#a0e060"></div>
+            <div>
+              <div class="qn-text">Estacionamiento discapacidad ampliado — fila A</div>
+              <div class="qn-date">Nov 5</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="sidebar-card">
+          <h4><i class="ph-fill ph-envelope-simple"></i> Newsletter</h4>
+          <p style="font-size:.83rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.6">Recibe los anuncios en tu correo antes que nadie.</p>
+          <div class="sidebar-newsletter-form">
+            <input type="email" placeholder="tu@correo.com" id="sideEmail"/>
+            <button onclick="sideSubscribe()">Suscribirme</button>
+          </div>
+        </div>
+
+        <!-- Social -->
+        <div class="sidebar-card" style="text-align:center">
+          <h4 style="justify-content:center"><i class="ph-fill ph-share-network"></i> Síguenos</h4>
+          <div class="social-links" style="justify-content:center;margin-top:.5rem">
+            <a href="#" class="social-link"><i class="ph ph-facebook-logo"></i></a>
+            <a href="#" class="social-link"><i class="ph ph-instagram-logo"></i></a>
+            <a href="#" class="social-link"><i class="ph ph-tiktok-logo"></i></a>
+            <a href="#" class="social-link"><i class="ph ph-youtube-logo"></i></a>
+          </div>
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.8rem">@GalaxiaDriveIn en todas las redes</p>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:1rem;display:inline-flex">
+          <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:34px">
+            <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
+            <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
+            <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+            <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
+          </svg>
+          <span class="logo-text" style="font-size:1.3rem">AUTOCINE ANTIGUA</span>
+        </a>
+        <p style="color:var(--text-muted);font-size:.9rem;line-height:1.7">Cine bajo las Estrellas.<br>Guatemala — Abierto todos los días.</p>
+        <div class="social-links" style="margin-top:1.2rem">
+          <a href="#" class="social-link"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-tiktok-logo"></i></a>
+          <a href="#" class="social-link"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="snacks.html">Snacks</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="espacio-fiestas.html">Fiestas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Info</h4>
+        <ul class="footer-links">
+          <li><a href="quienes-somos.html">Nosotros</a></li>
+          <li><a href="anuncios.html">Anuncios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="politica.html">Política & Términos</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Contacto</h4>
+        <ul class="footer-links">
+          <li><i class="ph ph-map-pin" style="color:var(--gold)"></i> Km 14.5 Carr. al Pacífico, Guatemala</li>
+          <li><i class="ph ph-phone" style="color:var(--gold)"></i> +502 5555-7890</li>
+          <li><i class="ph ph-envelope" style="color:var(--gold)"></i> hola@autocineantiga.gt</li>
+          <li><i class="ph ph-clock" style="color:var(--gold)"></i> Abre: 6:00 PM · Función: 7:30 PM</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Autocine Antigua · Todos los derechos reservados</p>
+      <a href="politica.html" style="color:var(--text-muted);font-size:.8rem;text-decoration:none">Política de Privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<script src="global.js"></script>
+<script>
+const NEWS = [
+  {
+    id:1, day:20, month:'NOV', year:2024, cat:'novedad',
+    tag:'Novedad', tagClass:'tag-novedad',
+    title:'¡Pantalla 4 ya está abierta!',
+    excerpt:'Con gran emoción anunciamos la apertura oficial de nuestra cuarta y más moderna pantalla de proyección. Capacidad para 60 autos adicionales con el mejor ángulo de visión del complejo.',
+    full:`Nuestra nueva pantalla #4 cuenta con proyector láser 4K, sistema de sonido FM de alta fidelidad y una ubicación premium que garantiza visibilidad perfecta desde cada ángulo.\n\nPara celebrar la apertura, durante las primeras dos semanas los tickets de pantalla 4 tendrán un descuento especial de Q20. ¡Sé de los primeros en disfrutarla!`,
+    time:'Hace 2 días'
+  },
+  {
+    id:2, day:15, month:'NOV', year:2024, cat:'oferta',
+    tag:'Oferta', tagClass:'tag-oferta',
+    title:'Martes de Estudiante: 20% de descuento',
+    excerpt:'Presenta tu carnet estudiantil vigente todos los martes y obtén 20% de descuento en tu entrada. Aplica para universidades, institutos y colegios de Guatemala.',
+    full:`La promoción aplica de domingo a jueves para portadores de carnet estudiantil vigente. El descuento se aplica directamente en taquilla o en la compra online ingresando el código ESTUDIO2024.\n\nRecuerda que la promoción no es acumulable con otras ofertas ni aplicable en eventos especiales o estrenos nacionales.`,
+    time:'Hace 5 días'
+  },
+  {
+    id:3, day:10, month:'NOV', year:2024, cat:'evento',
+    tag:'Evento', tagClass:'tag-evento',
+    title:'Noche de Halloween: las fotos oficiales ya están disponibles',
+    excerpt:'Fue una noche épica. Gracias a todos los que se disfrazaron, participaron en el concurso y nos ayudaron a crear magia. Revive los mejores momentos.',
+    full:`El evento superó todas nuestras expectativas: más de 180 autos, el mejor concurso de disfraces en la historia del drive-in y una doble función de The Nightmare Before Christmas y Beetlejuice que no olvidaremos.\n\nLas fotos oficiales del evento ya están disponibles en nuestro Instagram @GalaxiaDriveIn. ¡Etiquétate y comparte tus recuerdos!`,
+    time:'Hace 10 días'
+  },
+  {
+    id:4, day:5, month:'NOV', year:2024, cat:'operativo',
+    tag:'Operativo', tagClass:'tag-operativo',
+    title:'Nuevas zonas de estacionamiento para personas con discapacidad',
+    excerpt:'Hemos ampliado y mejorado las zonas preferenciales de estacionamiento. Ahora contamos con 20 espacios reservados en la Fila A, con acceso directo al área de snacks y servicios.',
+    full:`Como parte de nuestro compromiso con la inclusión, las nuevas zonas preferenciales incluyen: rampas de acceso mejoradas, señalización luminosa, asistencia de personal en todo momento y acceso prioritario a snacks y servicios sanitarios.\n\nPara hacer uso de estas zonas, al llegar al ingreso basta con indicarle al personal que necesitas acceso preferencial. No se requiere documentación adicional.`,
+    time:'Hace 15 días'
+  },
+  {
+    id:5, day:1, month:'NOV', year:2024, cat:'cartelera',
+    tag:'Cartelera', tagClass:'tag-cartelera',
+    title:'Cartelera de Noviembre — Descubre lo que viene',
+    excerpt:'Noviembre llega cargado de estrenos y clásicos. Hemos preparado una programación especial que incluye noches temáticas, maratones y proyecciones únicas.',
+    full:`Este mes podrás disfrutar de títulos como Gladiator II, Moana 2, y una noche especial de Bond Marathon el 22 de noviembre.\n\nNuestras noches temáticas incluyen: Noche de Animación (viernes 8), Maratón Sci-Fi (sábado 16), y Noche de Romance (viernes 22). Los tickets para estas noches especiales ya están disponibles en nuestra sección de compra online.`,
+    time:'Hace 20 días'
+  },
+  {
+    id:6, day:25, month:'OCT', year:2024, cat:'novedad',
+    tag:'Novedad', tagClass:'tag-novedad',
+    title:'App GALAXIA disponible pronto en App Store y Google Play',
+    excerpt:'Estamos desarrollando nuestra app oficial. Desde ella podrás comprar tickets, ver la cartelera, hacer pedidos de snacks a tu ventana y acumular puntos de fidelidad.',
+    full:`La app GALAXIA estará disponible para iOS y Android a partir de enero 2025. Entre sus funciones principales destacan: compra de tickets con QR de acceso, menú digital de snacks con entrega a tu vehículo, historial de funciones, sistema de puntos y recompensas, y notificaciones de próximas funciones y eventos.\n\nRegístrate en nuestra lista de espera en contacto@galaxiadrivein.gt para ser de los primeros en acceder y recibir beneficios exclusivos de lanzamiento.`,
+    time:'Hace 26 días'
+  },
+];
+
+let activeCat = 'all';
+
+function renderNews() {
+  const list = activeCat === 'all' ? NEWS : NEWS.filter(n=>n.cat===activeCat);
+  const feed = document.getElementById('newsFeed');
+  feed.innerHTML = list.map(n=>`
+    <div class="news-card${n.id===1?' pinned':''} reveal" data-cat="${n.cat}">
+      <div class="news-date-col">
+        <div class="news-day">${n.day}</div>
+        <div class="news-month">${n.month}</div>
+      </div>
+      <div class="news-body">
+        <div class="news-meta">
+          <span class="news-tag ${n.tagClass}">${n.tag}</span>
+          <span class="news-card-time">${n.time}</span>
+        </div>
+        <div class="news-title">${n.title}</div>
+        <div class="news-excerpt">${n.excerpt}</div>
+        <div class="news-full" id="full-${n.id}">
+          ${n.full.split('\n\n').map(p=>`<p>${p}</p>`).join('')}
+        </div>
+        <a class="news-read-more" href="#" onclick="toggleFull(${n.id},this);return false">
+          <span id="rm-text-${n.id}">Leer más</span> <i class="ph ph-arrow-right" id="rm-icon-${n.id}"></i>
+        </a>
+      </div>
+    </div>`).join('');
+  document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+}
+
+function toggleFull(id, link) {
+  const full = document.getElementById('full-'+id);
+  const txt = document.getElementById('rm-text-'+id);
+  const icon = document.getElementById('rm-icon-'+id);
+  const open = full.classList.toggle('open');
+  txt.textContent = open ? 'Leer menos' : 'Leer más';
+  icon.className = open ? 'ph ph-arrow-up' : 'ph ph-arrow-right';
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    renderNews();
+  });
+});
+
+function sideSubscribe() {
+  const email = document.getElementById('sideEmail').value;
+  if(!email){showToast('Oops','Ingresa tu correo.','ph-warning');return;}
+  showToast('¡Suscrito!','Te avisaremos de los próximos anuncios.','ph-check-circle');
+  document.getElementById('sideEmail').value='';
+}
+
+renderNews();
+</script>
+</body>
+</html>
