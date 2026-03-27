@@ -398,6 +398,7 @@
     else if (currentSort === 'price-desc') list.sort((a,b)=>b.price-a.price);
     else if (currentSort === 'name') list.sort((a,b)=>a.name.localeCompare(b.name));
 
+    if(window.observeReveal)observeReveal();
     document.getElementById('productCount').textContent = `Mostrando ${list.length} productos`;
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = list.length === 0

@@ -470,5 +470,10 @@ function switchTab(id) {
 }
 document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if(window.observeReveal) setTimeout(observeReveal, 100);
+});
+</script>
 </body>
 </html>

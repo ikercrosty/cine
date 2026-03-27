@@ -468,7 +468,7 @@
       <span>Total</span>
       <span class="cart-total-amount" id="cart-total-amount">Q0.00</span>
     </div>
-    <a href="tickets.html" class="btn btn-primary btn-full">PROCEDER AL PAGO</a>
+    <a href="checkout.html" class="btn btn-primary btn-full">PROCEDER AL PAGO</a>
   </div>
 </aside>
 
@@ -862,6 +862,7 @@
 </footer>
 
 <script src="global.js"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>initStars());</script>
 <script>
   // Stars on hero
   window.addEventListener('DOMContentLoaded', () => {
@@ -886,5 +887,11 @@
     });
   });
 </script>
+
+<!-- FLOATING CART FAB -->
+<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
+  <i class="ph ph-shopping-cart"></i>
+  <span class="cart-fab-count hidden">0</span>
+</button>
 </body>
 </html>

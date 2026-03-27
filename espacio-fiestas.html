@@ -600,5 +600,10 @@
   }
   initStars('starsCanvas');
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if(window.observeReveal) setTimeout(observeReveal, 100);
+});
+</script>
 </body>
 </html>

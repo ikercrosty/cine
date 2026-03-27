@@ -185,12 +185,28 @@ function showToast(title, msg, icon = '✨', duration = 3500) {
 }
 
 /* ===== SCROLL REVEAL ===== */
-document.addEventListener('DOMContentLoaded', () => {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-});
+// Add 'js' class to html so CSS can scope reveal styles
+document.documentElement.classList.add('js');
+
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('is-visible');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
+
+function observeReveal(root) {
+  (root || document).querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
+    revealObserver.observe(el);
+  });
+}
+
+// Initial observe on DOM ready
+document.addEventListener('DOMContentLoaded', observeReveal);
+// Expose globally so dynamic renderers can call it after adding content
+window.observeReveal = observeReveal;
 
 /* ===== COUNTER ANIMATION ===== */
 function animateCounter(el) {

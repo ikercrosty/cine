@@ -1,4 +1,4 @@
-/* ============================================================
+ /* ============================================================
    AUTOCINE ANTIGUA — GLOBAL CSS
    Paleta: Noir profundo + Oro cálido + Rosa neón + Azul eléctrico
    ============================================================ */
@@ -455,14 +455,15 @@ body::after{
 .toast-msg{font-size:13px;color:var(--text-2)}
 
 /* ===== REVEAL ANIMATIONS ===== */
-.reveal,.reveal-up,.reveal-left,.reveal-right{
-  opacity:0;transition:opacity .75s ease,transform .75s ease;
+/* Reveal: only hidden when JS is active */
+.js .reveal,.js .reveal-up,.js .reveal-left,.js .reveal-right{
+  opacity:0;transition:opacity .7s ease,transform .7s ease;
 }
-.reveal{transform:translateY(28px)}
-.reveal-up{transform:translateY(40px)}
-.reveal-left{transform:translateX(-30px)}
-.reveal-right{transform:translateX(30px)}
-.reveal.is-visible,.reveal-up.is-visible,.reveal-left.is-visible,.reveal-right.is-visible{
+.js .reveal{transform:translateY(24px)}
+.js .reveal-up{transform:translateY(36px)}
+.js .reveal-left{transform:translateX(-28px)}
+.js .reveal-right{transform:translateX(28px)}
+.js .reveal.is-visible,.js .reveal-up.is-visible,.js .reveal-left.is-visible,.js .reveal-right.is-visible{
   opacity:1;transform:none;
 }
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}

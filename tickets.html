@@ -831,5 +831,10 @@ buildDates(); renderMovies(); updateSummary();
 initStars('starsCanvas');
 document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if(window.observeReveal) setTimeout(observeReveal, 100);
+});
+</script>
 </body>
 </html>
