@@ -106,24 +106,17 @@
 <body>
 
 <!-- LOADER -->
-<div class="page-loader" id="pageLoader">
-  <div class="loader-logo">
-    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
-      <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
-      <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-      <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-      <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-      <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-      <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-    </svg>
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-inner">
+    <div class="loader-logo">AUTOCINE ANTIGUA</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
   </div>
-  <div class="loader-bar"><div class="loader-progress"></div></div>
 </div>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
-  <div class="nav-container">
+  <div class="nav-inner">
     <a href="index.html" class="nav-logo">
       <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px">
         <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
@@ -134,45 +127,71 @@
         <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
         <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
       </svg>
-      <span class="logo-text">AUTOCINE ANTIGUA</span>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">AUTOCINE ANTIGUA</span>
+        <span class="nav-logo-sub">Cine bajo las Estrellas</span>
+      </div>
     </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="eventos.html">Eventos</a></li>
-      <li><a href="snacks.html">Snacks</a></li>
-      <li><a href="tienda.html">Tienda</a></li>
-      <li><a href="espacio-fiestas.html">Fiestas</a></li>
-      <li><a href="anuncios.html">Anuncios</a></li>
-      <li><a href="quienes-somos.html">Nosotros</a></li>
-      <li><a href="contacto.html">Contacto</a></li>
-      <li><a href="tickets.html" class="nav-cta">Comprar Tickets</a></li>
-    </ul>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Inicio</a>
+      <a href="eventos.html" class="nav-link">Eventos</a>
+      <a href="snacks.html" class="nav-link">Snacks</a>
+      <a href="tienda.html" class="nav-link">Tienda</a>
+      <a href="espacio-fiestas.html" class="nav-link">Fiestas</a>
+      <a href="anuncios.html" class="nav-link">Anuncios</a>
+      <a href="quienes-somos.html" class="nav-link">Nosotros</a>
+      <a href="contacto.html" class="nav-link">Contacto</a>
+    </div>
     <div class="nav-actions">
-      <button class="cart-toggle" onclick="openCart()">
-        <i class="ph ph-shopping-cart"></i>
-        <span class="cart-count" id="cartCount">0</span>
+      <button class="cart-btn" onclick="openCart()" aria-label="Carrito">
+        <i class="ph ph-shopping-cart" style="font-size:20px"></i>
+        <span class="cart-count hidden">0</span>
       </button>
-      <button class="hamburger" id="hamburger" aria-label="Menú">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="tickets.html" class="btn-nav-ticket">TICKETS</a>
+      <button class="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
+<div class="nav-mobile">
+  <a href="index.html" class="nav-link">🏠 Inicio</a>
+  <a href="eventos.html" class="nav-link">🎬 Eventos</a>
+  <a href="snacks.html" class="nav-link">🍿 Snacks</a>
+  <a href="tienda.html" class="nav-link">🛍️ Tienda</a>
+  <a href="espacio-fiestas.html" class="nav-link">🎉 Fiestas</a>
+  <a href="anuncios.html" class="nav-link">📢 Anuncios</a>
+  <a href="quienes-somos.html" class="nav-link">⭐ Nosotros</a>
+  <a href="contacto.html" class="nav-link">📬 Contacto</a>
+  <a href="tickets.html" class="btn-nav-ticket">🎟️ COMPRAR TICKETS</a>
+</div>
 
-<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-<aside class="cart-sidebar" id="cartSidebar">
+<!-- CART OVERLAY & SIDEBAR -->
+<div class="cart-overlay"></div>
+<aside class="cart-sidebar">
   <div class="cart-header">
-    <h3 class="cart-title"><i class="ph ph-shopping-cart"></i> Tu Carrito</h3>
-    <button class="cart-close" onclick="closeCart()"><i class="ph ph-x"></i></button>
+    <h3>MI CARRITO</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
   </div>
-  <div class="cart-items" id="cartItems"></div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-total-row"><span>Total</span><span class="cart-total-amount" id="cartTotal">Q0.00</span></div>
-    <a href="tickets.html" class="btn btn-primary" style="width:100%;text-align:center">Ir al Checkout</a>
+  <div class="cart-items" id="cart-items-list"></div>
+  <div class="cart-empty" id="cart-empty" style="display:flex">
+    <div class="cart-empty-icon">🎬</div>
+    <p>Tu carrito está vacío</p>
+    <a href="tickets.html" class="btn btn-outline btn-sm" onclick="closeCart()">Ver Tickets</a>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span class="cart-total-amount" id="cart-total-amount">Q0.00</span>
+    </div>
+    <button id="checkout-btn" class="btn btn-primary btn-full" onclick="window.location.href='checkout.html'">PROCEDER AL PAGO</button>
   </div>
 </aside>
 
-<!-- MAIN -->
+<!-- FLOATING CART FAB -->
+<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
+  <i class="ph ph-shopping-cart"></i>
+  <span class="cart-fab-count hidden">0</span>
+</button>
+
 <main class="page-content">
 
   <section class="policy-hero">

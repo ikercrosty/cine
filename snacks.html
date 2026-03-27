@@ -59,7 +59,7 @@
   <div class="cart-header"><h3>MI CARRITO</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
   <div class="cart-items" id="cart-items-list"></div>
   <div class="cart-empty" id="cart-empty" style="display:flex"><div class="cart-empty-icon">🍿</div><p>Tu carrito está vacío</p></div>
-  <div class="cart-footer" id="cart-footer" style="display:none"><div class="cart-total-row"><span>Total</span><span class="cart-total-amount" id="cart-total-amount">Q0.00</span></div><a href="tickets.html" class="btn btn-primary btn-full">PROCEDER AL PAGO</a></div>
+  <div class="cart-footer" id="cart-footer" style="display:none"><div class="cart-total-row"><span>Total</span><span class="cart-total-amount" id="cart-total-amount">Q0.00</span></div><a href="checkout.html" class="btn btn-primary btn-full">PROCEDER AL PAGO</a></div>
 </aside>
 
 <main class="page-content">
@@ -213,6 +213,7 @@
 </div><div class="footer-bottom"><p>© 2025 Autocine Antigua. Todos los derechos reservados.</p><p>Hecho con ❤️ en Guatemala · <a href="politica.html">Privacidad</a></p></div></div></footer>
 
 <script src="global.js"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>initStars());</script>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
   initStars('stars-canvas');
@@ -234,4 +235,10 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
+<!-- FLOATING CART FAB -->
+<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
+  <i class="ph ph-shopping-cart"></i>
+  <span class="cart-fab-count hidden">0</span>
+</button>
 </body></html>

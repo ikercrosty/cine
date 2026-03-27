@@ -1,38 +1,38 @@
 /* ============================================================
-   GALAXIA DRIVE-IN — GLOBAL JS
-   Navbar · Cart · Animations · Toast · Stars · Loader
+   AUTOCINE ANTIGUA — GLOBAL JS
+   Navbar · Cart · FAB · Animations · Toast · Stars · Loader
    ============================================================ */
-
 'use strict';
 
 /* ===== PAGE LOADER ===== */
 window.addEventListener('load', () => {
   setTimeout(() => {
     const loader = document.getElementById('page-loader');
-    if (loader) loader.classList.add('hidden');
+    if (loader) { loader.classList.add('hidden'); loader.addEventListener('transitionend', () => loader.remove(), {once:true}); }
   }, 900);
 });
 
 /* ===== NAVBAR ===== */
-const navbar   = document.querySelector('.navbar');
+const navbar    = document.querySelector('.navbar');
 const hamburger = document.querySelector('.hamburger');
 const navMobile = document.querySelector('.nav-mobile');
 
 window.addEventListener('scroll', () => {
-  if (!navbar) return;
-  navbar.classList.toggle('scrolled', window.scrollY > 30);
+  if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30);
 }, { passive: true });
 
-if (hamburger && navMobile) {
+if (hamburger) {
   hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
-    navMobile.classList.toggle('open');
-    document.body.style.overflow = navMobile.classList.contains('open') ? 'hidden' : '';
+    const isOpen = hamburger.classList.toggle('open');
+    if (navMobile) {
+      navMobile.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
   });
 }
 
 // Close mobile menu on link click
-document.querySelectorAll('.nav-mobile .nav-link').forEach(link => {
+document.querySelectorAll('.nav-mobile a').forEach(link => {
   link.addEventListener('click', () => {
     hamburger?.classList.remove('open');
     navMobile?.classList.remove('open');
@@ -52,17 +52,14 @@ document.querySelectorAll('.nav-mobile .nav-link').forEach(link => {
 })();
 
 /* ===== CART SYSTEM ===== */
-const CART_KEY = 'galaxia_cart';
+const CART_KEY = 'autocine_cart';
 
 const Cart = {
   items: [],
 
   load() {
-    try {
-      this.items = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    } catch {
-      this.items = [];
-    }
+    try { this.items = JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch { this.items = []; }
     this.render();
   },
 
@@ -73,11 +70,8 @@ const Cart = {
 
   add(product) {
     const existing = this.items.find(i => i.id === product.id);
-    if (existing) {
-      existing.qty += product.qty || 1;
-    } else {
-      this.items.push({ ...product, qty: product.qty || 1 });
-    }
+    if (existing) { existing.qty += product.qty || 1; }
+    else { this.items.push({ ...product, qty: product.qty || 1 }); }
     this.save();
     this.bump();
     showToast('¡Añadido!', `${product.name} en tu carrito`, '🛒');
@@ -92,39 +86,33 @@ const Cart = {
     const item = this.items.find(i => i.id === id);
     if (!item) return;
     item.qty = Math.max(1, item.qty + delta);
+    if (item.qty === 0) { this.remove(id); return; }
     this.save();
   },
 
-  clear() {
-    this.items = [];
-    this.save();
-  },
+  clear() { this.items = []; this.save(); },
 
-  total() {
-    return this.items.reduce((s, i) => s + i.price * i.qty, 0);
-  },
+  total() { return this.items.reduce((s, i) => s + i.price * i.qty, 0); },
 
-  count() {
-    return this.items.reduce((s, i) => s + i.qty, 0);
-  },
+  count() { return this.items.reduce((s, i) => s + i.qty, 0); },
 
   bump() {
-    const el = document.querySelector('.cart-count');
-    if (!el) return;
-    el.classList.remove('bump');
-    void el.offsetWidth;
-    el.classList.add('bump');
+    document.querySelectorAll('.cart-count, .cart-fab-count').forEach(el => {
+      el.classList.remove('bump');
+      void el.offsetWidth;
+      el.classList.add('bump');
+    });
   },
 
   render() {
-    // Update counter badge
     const count = this.count();
-    document.querySelectorAll('.cart-count').forEach(el => {
+    // Update all count badges (navbar + FAB)
+    document.querySelectorAll('.cart-count, .cart-fab-count').forEach(el => {
       el.textContent = count;
       el.classList.toggle('hidden', count === 0);
     });
 
-    // Render sidebar items
+    // Sidebar items
     const container = document.getElementById('cart-items-list');
     const emptyEl   = document.getElementById('cart-empty');
     const footerEl  = document.getElementById('cart-footer');
@@ -132,12 +120,12 @@ const Cart = {
 
     if (this.items.length === 0) {
       container.innerHTML = '';
-      if (emptyEl)  emptyEl.style.display  = 'flex';
+      if (emptyEl)  emptyEl.style.display = 'flex';
       if (footerEl) footerEl.style.display = 'none';
       return;
     }
 
-    if (emptyEl)  emptyEl.style.display  = 'none';
+    if (emptyEl)  emptyEl.style.display = 'none';
     if (footerEl) footerEl.style.display = 'block';
 
     container.innerHTML = this.items.map(item => `
@@ -153,16 +141,14 @@ const Cart = {
             <button class="cart-item-del" onclick="Cart.remove('${item.id}')" title="Eliminar">✕</button>
           </div>
         </div>
-      </div>
-    `).join('');
+      </div>`).join('');
 
-    // Update total
     const totalEl = document.getElementById('cart-total-amount');
     if (totalEl) totalEl.textContent = `Q${this.total().toFixed(2)}`;
   }
 };
 
-// Cart open/close
+/* ===== CART OPEN/CLOSE ===== */
 function openCart() {
   document.querySelector('.cart-overlay')?.classList.add('open');
   document.querySelector('.cart-sidebar')?.classList.add('open');
@@ -174,11 +160,12 @@ function closeCart() {
   document.body.style.overflow = '';
 }
 
-document.querySelector('.cart-btn')?.addEventListener('click', openCart);
-document.querySelector('.cart-overlay')?.addEventListener('click', closeCart);
-document.querySelector('.cart-close')?.addEventListener('click', closeCart);
-document.getElementById('checkout-btn')?.addEventListener('click', () => {
-  window.location.href = 'tickets.html';
+document.addEventListener('DOMContentLoaded', () => {
+  // Wire overlay click
+  document.querySelector('.cart-overlay')?.addEventListener('click', closeCart);
+  document.querySelector('.cart-close')?.addEventListener('click', closeCart);
+  // Load cart
+  Cart.load();
 });
 
 /* ===== TOAST ===== */
@@ -191,143 +178,70 @@ function showToast(title, msg, icon = '✨', duration = 3500) {
   }
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `
-    <div class="toast-icon">${icon}</div>
-    <div class="toast-body">
-      <div class="toast-title">${title}</div>
-      <div class="toast-msg">${msg}</div>
-    </div>
-  `;
+  toast.innerHTML = `<div class="toast-icon">${icon}</div><div class="toast-body"><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div>`;
   container.appendChild(toast);
-  setTimeout(() => {
-    toast.classList.add('removing');
-    toast.addEventListener('animationend', () => toast.remove());
-  }, duration);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, duration);
 }
 
 /* ===== SCROLL REVEAL ===== */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+});
 
-function initReveal() {
-  document.querySelectorAll('.reveal, .reveal-up, .reveal-left, .reveal-right').forEach(el => {
-    revealObserver.observe(el);
-  });
+/* ===== COUNTER ANIMATION ===== */
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target || 0);
+  const suffix = el.dataset.suffix || '';
+  const prefix = el.dataset.prefix || '';
+  const duration = 1600;
+  const start = performance.now();
+  function tick(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const val = Math.round(target * ease);
+    el.textContent = prefix + val.toLocaleString() + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
+const cObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); cObserver.unobserve(e.target); } });
+}, { threshold: 0.3 });
+document.querySelectorAll('[data-counter]').forEach(el => cObserver.observe(el));
 
-/* ===== STARFIELD CANVAS ===== */
+/* ===== STARFIELD ===== */
 function initStars(canvasId = 'stars-canvas') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let stars = [], raf;
-
+  let stars = [];
   function resize() {
-    canvas.width  = canvas.offsetWidth;
+    canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    stars = Array.from({ length: 120 }, () => ({
+    stars = Array.from({length: 140}, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       r: Math.random() * 1.4 + .3,
-      speed: Math.random() * .15 + .05,
-      alpha: Math.random(),
-      dir: Math.random() > .5 ? 1 : -1
+      a: Math.random(),
+      s: Math.random() * .006 + .002
     }));
   }
-
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     stars.forEach(s => {
-      s.alpha += s.speed * s.dir * .012;
-      if (s.alpha >= 1 || s.alpha <= 0) s.dir *= -1;
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, s.alpha);
-      ctx.fillStyle = '#ffffff';
+      s.a += s.s; if (s.a > 1 || s.a < 0) s.s *= -1;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${s.a * .8})`;
       ctx.fill();
-      ctx.restore();
     });
-    raf = requestAnimationFrame(draw);
+    requestAnimationFrame(draw);
   }
-
   resize();
+  window.addEventListener('resize', resize);
   draw();
-  window.addEventListener('resize', resize, { passive: true });
 }
-
-/* ===== COUNTER ANIMATION ===== */
-function animateCounter(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const duration = 1800;
-  const start = performance.now();
-  const from = 0;
-  (function step(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(from + (target - from) * eased).toLocaleString() + (el.dataset.suffix || '');
-    if (progress < 1) requestAnimationFrame(step);
-  })(start);
-}
-
-const counterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      animateCounter(entry.target);
-      counterObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.5 });
-
-function initCounters() {
-  document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
-}
-
-/* ===== SMOOTH ANCHOR SCROLL ===== */
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', e => {
-    const target = document.querySelector(link.getAttribute('href'));
-    if (!target) return;
-    e.preventDefault();
-    const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) + 16;
-    window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
-  });
-});
-
-/* ===== PARALLAX (subtle) ===== */
-function initParallax() {
-  const elements = document.querySelectorAll('[data-parallax]');
-  if (!elements.length) return;
-  window.addEventListener('scroll', () => {
-    const sy = window.scrollY;
-    elements.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax) || 0.3;
-      el.style.transform = `translateY(${sy * speed}px)`;
-    });
-  }, { passive: true });
-}
-
-/* ===== INIT ===== */
-document.addEventListener('DOMContentLoaded', () => {
-  Cart.load();
-  initReveal();
-  initCounters();
-  initParallax();
-
-  // Trigger scrolled state if already scrolled on load
-  if (window.scrollY > 30) navbar?.classList.add('scrolled');
-});
-
-// Expose globals
-window.Cart = Cart;
-window.openCart = openCart;
-window.closeCart = closeCart;
-window.showToast = showToast;
-window.initStars = initStars;
