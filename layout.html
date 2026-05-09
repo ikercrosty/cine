@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!--
   ============================================================
-  AUTOCINE ANTIGUA — LAYOUT TEMPLATE
+  AUTOCINE ANTIGUA — LAYOUT TEMPLATE v2.0
+  Sin emojis. Usa íconos Phosphor en todos los elementos UI.
   Copia este archivo para crear nuevas páginas.
-  Reemplaza: [TITULO_PAGINA], [DESCRIPCION] y el bloque
-  <main class="page-content"> con el contenido de cada página.
+  Reemplaza [TITULO_PAGINA], [DESCRIPCION] y el bloque <main>.
   ============================================================
 -->
 <html lang="es">
@@ -14,15 +14,11 @@
   <title>[TITULO_PAGINA] — Autocine Antigua</title>
   <meta name="description" content="[DESCRIPCION]">
   <meta name="theme-color" content="#07090f">
-  <!-- Open Graph -->
-  <meta property="og:title" content="[TITULO_PAGINA] | Autocine Antigua">
+  <meta property="og:title"       content="[TITULO_PAGINA] | Autocine Antigua">
   <meta property="og:description" content="[DESCRIPCION]">
-  <meta property="og:type" content="website">
-  <!-- Favicon inline SVG via data URI -->
+  <meta property="og:type"        content="website">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23f5b617'/%3E%3Cpath d='M20 20h24v24H20z' fill='%2307090f'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23f5b617'/%3E%3C/svg%3E">
-  <!-- Global CSS -->
   <link rel="stylesheet" href="global.css">
-  <!-- Iconos (Phosphor Icons CDN) -->
   <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
 </head>
 <body>
@@ -38,23 +34,15 @@
 <!-- =========== NAVBAR =========== -->
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
-
-    <!-- Logo -->
     <a href="index.html" class="nav-logo">
-      <!-- SVG Logo -->
-      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Outer ring / orbit -->
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="32" cy="32" r="29" stroke="#f5b617" stroke-width="1.5" stroke-dasharray="4 3" opacity=".5"/>
-        <!-- Moon crescent -->
         <path d="M38 20 A14 14 0 1 0 38 44 A10 10 0 1 1 38 20Z" fill="#f5b617"/>
-        <!-- Film strip dots -->
         <rect x="26" y="26" width="5" height="4" rx="1" fill="#07090f"/>
         <rect x="33" y="26" width="5" height="4" rx="1" fill="#07090f"/>
         <rect x="26" y="33" width="5" height="4" rx="1" fill="#07090f"/>
         <rect x="33" y="33" width="5" height="4" rx="1" fill="#07090f"/>
-        <!-- Star -->
         <path d="M52 12 L53.3 15.8 L57.3 15.8 L54.2 18 L55.5 22 L52 19.6 L48.5 22 L49.8 18 L46.7 15.8 L50.7 15.8Z" fill="#f5b617" opacity=".8"/>
-        <path d="M12 8 L12.8 10.3 L15.2 10.3 L13.3 11.7 L14.1 14 L12 12.6 L9.9 14 L10.7 11.7 L8.8 10.3 L11.2 10.3Z" fill="#f5b617" opacity=".5"/>
       </svg>
       <div class="nav-logo-text">
         <span class="nav-logo-name">AUTOCINE ANTIGUA</span>
@@ -62,29 +50,24 @@
       </div>
     </a>
 
-    <!-- Desktop Links -->
     <div class="nav-links">
-      <a href="index.html"            class="nav-link">Inicio</a>
-      <a href="eventos.html"          class="nav-link">Eventos</a>
-      <a href="snacks.html"           class="nav-link">Snacks</a>
-      <a href="tienda.html"           class="nav-link">Tienda</a>
-      <a href="espacio-fiestas.html"  class="nav-link">Fiestas</a>
-      <a href="anuncios.html"         class="nav-link">Anuncios</a>
-      <a href="quienes-somos.html"    class="nav-link">Nosotros</a>
-      <a href="contacto.html"         class="nav-link">Contacto</a>
+      <a href="index.html"           class="nav-link">Inicio</a>
+      <a href="eventos.html"         class="nav-link">Eventos</a>
+      <a href="snacks.html"          class="nav-link">Snacks</a>
+      <a href="tienda.html"          class="nav-link">Tienda</a>
+      <a href="espacio-fiestas.html" class="nav-link">Fiestas</a>
+      <a href="anuncios.html"        class="nav-link">Anuncios</a>
+      <a href="quienes-somos.html"   class="nav-link">Nosotros</a>
+      <a href="contacto.html"        class="nav-link">Contacto</a>
     </div>
 
-    <!-- Actions -->
     <div class="nav-actions">
-      <!-- Cart button -->
       <button class="cart-btn" onclick="openCart()" aria-label="Carrito de compras">
-        <i class="ph ph-shopping-cart" style="font-size:20px"></i>
-        <span class="cart-count hidden">0</span>
+        <i class="ph ph-shopping-cart" aria-hidden="true" style="font-size:20px"></i>
+        <span class="cart-count hidden" aria-live="polite">0</span>
       </button>
-      <!-- Tickets CTA -->
       <a href="tickets.html" class="btn-nav-ticket">TICKETS</a>
-      <!-- Mobile hamburger -->
-      <button class="hamburger" aria-label="Menú">
+      <button class="hamburger" aria-label="Abrir menú" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -92,49 +75,54 @@
 </nav>
 
 <!-- Mobile Menu -->
-<div class="nav-mobile">
-  <a href="index.html"           class="nav-link">🏠 Inicio</a>
-  <a href="eventos.html"         class="nav-link">🎬 Eventos</a>
-  <a href="snacks.html"          class="nav-link">🍿 Snacks</a>
-  <a href="tienda.html"          class="nav-link">🛍️ Tienda</a>
-  <a href="espacio-fiestas.html" class="nav-link">🎉 Fiestas</a>
-  <a href="anuncios.html"        class="nav-link">📢 Anuncios</a>
-  <a href="quienes-somos.html"   class="nav-link">⭐ Nosotros</a>
-  <a href="contacto.html"        class="nav-link">📬 Contacto</a>
-  <a href="tickets.html"         class="btn-nav-ticket">🎟️ COMPRAR TICKETS</a>
-</div>
+<nav class="nav-mobile" aria-label="Menú móvil">
+  <a href="index.html"           class="nav-link"><i class="ph ph-house" aria-hidden="true"></i> Inicio</a>
+  <a href="eventos.html"         class="nav-link"><i class="ph ph-film-strip" aria-hidden="true"></i> Eventos</a>
+  <a href="snacks.html"          class="nav-link"><i class="ph ph-popcorn" aria-hidden="true"></i> Snacks</a>
+  <a href="tienda.html"          class="nav-link"><i class="ph ph-shopping-bag" aria-hidden="true"></i> Tienda</a>
+  <a href="espacio-fiestas.html" class="nav-link"><i class="ph ph-confetti" aria-hidden="true"></i> Fiestas</a>
+  <a href="anuncios.html"        class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Anuncios</a>
+  <a href="quienes-somos.html"   class="nav-link"><i class="ph ph-users" aria-hidden="true"></i> Nosotros</a>
+  <a href="contacto.html"        class="nav-link"><i class="ph ph-envelope" aria-hidden="true"></i> Contacto</a>
+  <a href="tickets.html"         class="btn-nav-ticket"><i class="ph ph-ticket" aria-hidden="true"></i> COMPRAR TICKETS</a>
+</nav>
 
 <!-- =========== CART OVERLAY + SIDEBAR =========== -->
-<div class="cart-overlay"></div>
-<aside class="cart-sidebar">
+<div class="cart-overlay" role="presentation"></div>
+<aside class="cart-sidebar" aria-label="Carrito de compras">
   <div class="cart-header">
     <h3>MI CARRITO</h3>
-    <button class="cart-close" onclick="closeCart()">✕</button>
+    <button class="cart-close" onclick="closeCart()" aria-label="Cerrar carrito">
+      <i class="ph ph-x" aria-hidden="true"></i>
+    </button>
   </div>
-  <!-- Items -->
-  <div class="cart-items" id="cart-items-list"></div>
-  <!-- Empty state -->
-  <div class="cart-empty" id="cart-empty" style="display:flex">
-    <div class="cart-empty-icon">🎬</div>
+
+  <div class="cart-items" id="cart-items-list" aria-live="polite"></div>
+
+  <div class="cart-empty" id="cart-empty" style="display:flex" aria-label="Carrito vacío">
+    <i class="ph ph-film-slate" style="font-size:3rem;color:var(--text-muted)" aria-hidden="true"></i>
     <p>Tu carrito está vacío</p>
     <a href="tickets.html" class="btn btn-outline btn-sm" onclick="closeCart()">Ver Tickets</a>
   </div>
-  <!-- Footer -->
+
   <div class="cart-footer" id="cart-footer" style="display:none">
     <div class="cart-total-row">
       <span>Total</span>
       <span class="cart-total-amount" id="cart-total-amount">Q0.00</span>
     </div>
-    <a href="tickets.html" class="btn btn-primary btn-full" id="checkout-btn">
-      PROCEDER AL PAGO
-    </a>
+    <a href="checkout.html" class="btn btn-primary btn-full">PROCEDER AL PAGO</a>
   </div>
 </aside>
 
+<!-- =========== FLOATING CART FAB =========== -->
+<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
+  <i class="ph ph-shopping-cart" aria-hidden="true"></i>
+  <span class="cart-fab-count hidden" aria-hidden="true">0</span>
+</button>
+
 <!-- =========== MAIN CONTENT =========== -->
 <main class="page-content">
-  <!-- ⬇ PEGA EL CONTENIDO DE CADA PÁGINA AQUÍ ⬇ -->
-
+  <!-- Contenido de la página aquí -->
 </main>
 
 <!-- =========== FOOTER =========== -->
@@ -142,10 +130,9 @@
   <div class="container">
     <div class="footer-grid">
 
-      <!-- Brand -->
       <div class="footer-about">
         <a href="index.html" class="nav-logo footer-brand-logo">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px" aria-hidden="true">
             <circle cx="32" cy="32" r="29" stroke="#f5b617" stroke-width="1.5" stroke-dasharray="4 3" opacity=".5"/>
             <path d="M38 20 A14 14 0 1 0 38 44 A10 10 0 1 1 38 20Z" fill="#f5b617"/>
             <rect x="26" y="26" width="5" height="4" rx="1" fill="#07090f"/>
@@ -160,25 +147,16 @@
         </a>
         <p>La experiencia cinematográfica más espectacular bajo las estrellas de Guatemala. Desde 2019, creando recuerdos inolvidables.</p>
         <div class="social-row">
-          <a href="#" class="social-link" aria-label="Instagram" title="Instagram">
-            <i class="ph ph-instagram-logo"></i>
-          </a>
-          <a href="#" class="social-link" aria-label="Facebook" title="Facebook">
-            <i class="ph ph-facebook-logo"></i>
-          </a>
-          <a href="#" class="social-link" aria-label="TikTok" title="TikTok">
-            <i class="ph ph-tiktok-logo"></i>
-          </a>
-          <a href="#" class="social-link" aria-label="YouTube" title="YouTube">
-            <i class="ph ph-youtube-logo"></i>
-          </a>
+          <a href="#" class="social-link" aria-label="Instagram"><i class="ph ph-instagram-logo" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook"><i class="ph ph-facebook-logo" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="TikTok"><i class="ph ph-tiktok-logo" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="YouTube"><i class="ph ph-youtube-logo" aria-hidden="true"></i></a>
         </div>
       </div>
 
-      <!-- Explore -->
       <div class="footer-col">
         <h4>EXPLORA</h4>
-        <nav class="footer-links">
+        <nav class="footer-links" aria-label="Explorar">
           <a href="index.html"><span class="arrow">›</span> Inicio</a>
           <a href="eventos.html"><span class="arrow">›</span> Eventos</a>
           <a href="anuncios.html"><span class="arrow">›</span> Anuncios</a>
@@ -188,10 +166,9 @@
         </nav>
       </div>
 
-      <!-- Info -->
       <div class="footer-col">
         <h4>INFORMACIÓN</h4>
-        <nav class="footer-links">
+        <nav class="footer-links" aria-label="Información">
           <a href="quienes-somos.html"><span class="arrow">›</span> Quiénes Somos</a>
           <a href="contacto.html"><span class="arrow">›</span> Contacto</a>
           <a href="tickets.html"><span class="arrow">›</span> Comprar Tickets</a>
@@ -200,39 +177,36 @@
         </nav>
       </div>
 
-      <!-- Contact -->
       <div class="footer-col">
         <h4>CONTACTO</h4>
-        <div class="footer-contact-item">
-          <span class="footer-contact-icon">📍</span>
-          <span>Km 15, Carretera a El Salvador, Guatemala City</span>
-        </div>
-        <div class="footer-contact-item">
-          <span class="footer-contact-icon">📞</span>
-          <span>+502 2345-6789</span>
-        </div>
-        <div class="footer-contact-item">
-          <span class="footer-contact-icon">✉️</span>
-          <span>hola@autocineantiga.gt</span>
-        </div>
-        <div class="footer-contact-item">
-          <span class="footer-contact-icon">🕐</span>
-          <span>Jue–Dom: 6:00 PM – 12:00 AM</span>
-        </div>
+        <address style="font-style:normal">
+          <div class="footer-contact-item">
+            <i class="ph ph-map-pin footer-contact-icon" aria-hidden="true"></i>
+            <span>Km 15, Carretera a El Salvador, Guatemala City</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="ph ph-phone footer-contact-icon" aria-hidden="true"></i>
+            <a href="tel:+50223456789">+502 2345-6789</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="ph ph-envelope footer-contact-icon" aria-hidden="true"></i>
+            <a href="mailto:hola@autocineantiga.gt">hola@autocineantiga.gt</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="ph ph-clock footer-contact-icon" aria-hidden="true"></i>
+            <span>Jue–Dom: 6:00 PM – 12:00 AM</span>
+          </div>
+        </address>
       </div>
     </div>
 
-    <!-- Bottom bar -->
     <div class="footer-bottom">
-      <p>© 2025 Autocine Antigua. Todos los derechos reservados.</p>
-      <p>Hecho con ❤️ en Guatemala · <a href="politica.html">Privacidad</a></p>
+      <p>&copy; 2025 Autocine Antigua. Todos los derechos reservados.</p>
+      <p>Hecho con pasión en Guatemala &middot; <a href="politica.html">Privacidad</a></p>
     </div>
   </div>
 </footer>
 
-<!-- Global JS -->
 <script src="global.js"></script>
-<!-- Page-specific JS goes here if needed -->
-
 </body>
 </html>

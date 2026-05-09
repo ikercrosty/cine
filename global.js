@@ -1,6 +1,6 @@
 /* ============================================================
-   AUTOCINE ANTIGUA — GLOBAL JS
-   Navbar · Cart · FAB · Animations · Toast · Stars · Loader
+   AUTOCINE ANTIGUA — GLOBAL JS  v2.0
+   Navbar · Cart · Toast · Scroll Reveal · Stars · Loader
    ============================================================ */
 'use strict';
 
@@ -8,8 +8,10 @@
 window.addEventListener('load', () => {
   setTimeout(() => {
     const loader = document.getElementById('page-loader');
-    if (loader) { loader.classList.add('hidden'); loader.addEventListener('transitionend', () => loader.remove(), {once:true}); }
-  }, 900);
+    if (!loader) return;
+    loader.classList.add('hidden');
+    loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+  }, 800);
 });
 
 /* ===== NAVBAR ===== */
@@ -31,7 +33,6 @@ if (hamburger) {
   });
 }
 
-// Close mobile menu on link click
 document.querySelectorAll('.nav-mobile a').forEach(link => {
   link.addEventListener('click', () => {
     hamburger?.classList.remove('open');
@@ -40,7 +41,7 @@ document.querySelectorAll('.nav-mobile a').forEach(link => {
   });
 });
 
-// Active nav link
+/* Mark active nav link */
 (function setActiveNav() {
   const path = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-link[href]').forEach(link => {
@@ -70,11 +71,14 @@ const Cart = {
 
   add(product) {
     const existing = this.items.find(i => i.id === product.id);
-    if (existing) { existing.qty += product.qty || 1; }
-    else { this.items.push({ ...product, qty: product.qty || 1 }); }
+    if (existing) {
+      existing.qty += product.qty || 1;
+    } else {
+      this.items.push({ ...product, qty: product.qty || 1 });
+    }
     this.save();
     this.bump();
-    showToast('¡Añadido!', `${product.name} en tu carrito`, '🛒');
+    showToast('Añadido al carrito', product.name, 'shopping-cart-simple');
   },
 
   remove(id) {
@@ -86,33 +90,52 @@ const Cart = {
     const item = this.items.find(i => i.id === id);
     if (!item) return;
     item.qty = Math.max(1, item.qty + delta);
-    if (item.qty === 0) { this.remove(id); return; }
     this.save();
   },
 
-  clear() { this.items = []; this.save(); },
+  clear() {
+    this.items = [];
+    this.save();
+  },
 
-  total() { return this.items.reduce((s, i) => s + i.price * i.qty, 0); },
+  total() {
+    return this.items.reduce((sum, i) => sum + i.price * i.qty, 0);
+  },
 
-  count() { return this.items.reduce((s, i) => s + i.qty, 0); },
+  count() {
+    return this.items.reduce((sum, i) => sum + i.qty, 0);
+  },
 
   bump() {
     document.querySelectorAll('.cart-count, .cart-fab-count').forEach(el => {
       el.classList.remove('bump');
-      void el.offsetWidth;
+      void el.offsetWidth; // reflow
       el.classList.add('bump');
     });
   },
 
+  /* Returns category icon class (Phosphor) */
+  _iconFor(category) {
+    const map = {
+      ticket: 'ticket',
+      snack:  'popcorn',
+      combo:  'bowl-food',
+      merch:  'shopping-bag',
+      bebida: 'cup',
+    };
+    const key = (category || '').toLowerCase();
+    return map[key] || 'package';
+  },
+
   render() {
     const count = this.count();
-    // Update all count badges (navbar + FAB)
+
+    /* Badge updates */
     document.querySelectorAll('.cart-count, .cart-fab-count').forEach(el => {
       el.textContent = count;
       el.classList.toggle('hidden', count === 0);
     });
 
-    // Sidebar items
     const container = document.getElementById('cart-items-list');
     const emptyEl   = document.getElementById('cart-empty');
     const footerEl  = document.getElementById('cart-footer');
@@ -130,15 +153,19 @@ const Cart = {
 
     container.innerHTML = this.items.map(item => `
       <div class="cart-item" data-id="${item.id}">
-        <div class="cart-item-emoji">${item.emoji || '🎬'}</div>
+        <div class="cart-item-icon">
+          <i class="ph ph-${this._iconFor(item.category)}"></i>
+        </div>
         <div class="cart-item-info">
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-price">Q${(item.price * item.qty).toFixed(2)}</div>
           <div class="cart-item-qty">
-            <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)">−</button>
+            <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)" aria-label="Reducir cantidad">−</button>
             <span>${item.qty}</span>
-            <button class="qty-btn" onclick="Cart.updateQty('${item.id}', 1)">+</button>
-            <button class="cart-item-del" onclick="Cart.remove('${item.id}')" title="Eliminar">✕</button>
+            <button class="qty-btn" onclick="Cart.updateQty('${item.id}', 1)" aria-label="Aumentar cantidad">+</button>
+            <button class="cart-item-del" onclick="Cart.remove('${item.id}')" title="Eliminar" aria-label="Eliminar producto">
+              <i class="ph ph-x"></i>
+            </button>
           </div>
         </div>
       </div>`).join('');
@@ -148,7 +175,7 @@ const Cart = {
   }
 };
 
-/* ===== CART OPEN/CLOSE ===== */
+/* ===== CART OPEN / CLOSE ===== */
 function openCart() {
   document.querySelector('.cart-overlay')?.classList.add('open');
   document.querySelector('.cart-sidebar')?.classList.add('open');
@@ -161,15 +188,19 @@ function closeCart() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Wire overlay click
   document.querySelector('.cart-overlay')?.addEventListener('click', closeCart);
   document.querySelector('.cart-close')?.addEventListener('click', closeCart);
-  // Load cart
   Cart.load();
 });
 
-/* ===== TOAST ===== */
-function showToast(title, msg, icon = '✨', duration = 3500) {
+/* ===== TOAST NOTIFICATIONS ===== */
+/**
+ * @param {string} title   - Toast title
+ * @param {string} msg     - Toast message
+ * @param {string} icon    - Phosphor icon name (e.g. 'check-circle', 'warning')
+ * @param {number} duration - ms to display
+ */
+function showToast(title, msg, icon = 'bell', duration = 3500) {
   let container = document.querySelector('.toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -178,14 +209,21 @@ function showToast(title, msg, icon = '✨', duration = 3500) {
   }
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `<div class="toast-icon">${icon}</div><div class="toast-body"><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div>`;
+  toast.innerHTML = `
+    <div class="toast-icon"><i class="ph ph-${icon}"></i></div>
+    <div class="toast-body">
+      <div class="toast-title">${title}</div>
+      <div class="toast-msg">${msg}</div>
+    </div>`;
   container.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add('show'));
-  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, duration);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+  }, duration);
 }
 
 /* ===== SCROLL REVEAL ===== */
-// Add 'js' class to html so CSS can scope reveal styles
 document.documentElement.classList.add('js');
 
 const revealObserver = new IntersectionObserver(entries => {
@@ -195,7 +233,7 @@ const revealObserver = new IntersectionObserver(entries => {
       revealObserver.unobserve(e.target);
     }
   });
-}, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
+}, { threshold: 0.05 });
 
 function observeReveal(root) {
   (root || document).querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
@@ -203,61 +241,77 @@ function observeReveal(root) {
   });
 }
 
-// Initial observe on DOM ready
 document.addEventListener('DOMContentLoaded', observeReveal);
-// Expose globally so dynamic renderers can call it after adding content
 window.observeReveal = observeReveal;
 
 /* ===== COUNTER ANIMATION ===== */
 function animateCounter(el) {
-  const target = parseFloat(el.dataset.target || 0);
-  const suffix = el.dataset.suffix || '';
-  const prefix = el.dataset.prefix || '';
+  const target   = parseFloat(el.dataset.target || 0);
+  const suffix   = el.dataset.suffix || '';
+  const prefix   = el.dataset.prefix || '';
   const duration = 1600;
-  const start = performance.now();
+  const start    = performance.now();
   function tick(now) {
     const progress = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    const val = Math.round(target * ease);
-    el.textContent = prefix + val.toLocaleString() + suffix;
+    const ease     = 1 - Math.pow(1 - progress, 3);
+    el.textContent = prefix + Math.round(target * ease).toLocaleString() + suffix;
     if (progress < 1) requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
 }
-const cObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); cObserver.unobserve(e.target); } });
-}, { threshold: 0.3 });
-document.querySelectorAll('[data-counter]').forEach(el => cObserver.observe(el));
 
-/* ===== STARFIELD ===== */
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(e.target);
+      counterObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+
+/* ===== STARFIELD CANVAS ===== */
 function initStars(canvasId = 'stars-canvas') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let stars = [];
+
   function resize() {
-    canvas.width = canvas.offsetWidth;
+    canvas.width  = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    stars = Array.from({length: 140}, () => ({
+    stars = Array.from({ length: 140 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      r: Math.random() * 1.4 + .3,
+      r: Math.random() * 1.4 + 0.3,
       a: Math.random(),
-      s: Math.random() * .006 + .002
+      s: Math.random() * 0.006 + 0.002,
     }));
   }
+
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     stars.forEach(s => {
-      s.a += s.s; if (s.a > 1 || s.a < 0) s.s *= -1;
+      s.a += s.s;
+      if (s.a > 1 || s.a < 0) s.s *= -1;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${s.a * .8})`;
+      ctx.fillStyle = `rgba(255,255,255,${s.a * 0.8})`;
       ctx.fill();
     });
     requestAnimationFrame(draw);
   }
+
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, { passive: true });
   draw();
 }
+
+/* ===== UTILITY: Generate order code ===== */
+function generateOrderCode(prefix = 'AC') {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const rand  = Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  return `${prefix}-${rand}`;
+}
+window.generateOrderCode = generateOrderCode;
