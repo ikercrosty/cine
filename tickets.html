@@ -286,15 +286,15 @@
   </div>
 </nav>
 <div class="nav-mobile">
-  <a href="index.html" class="nav-link">🏠 Inicio</a>
-  <a href="eventos.html" class="nav-link">🎬 Eventos</a>
-  <a href="snacks.html" class="nav-link">🍿 Snacks</a>
-  <a href="tienda.html" class="nav-link">🛍️ Tienda</a>
-  <a href="espacio-fiestas.html" class="nav-link">🎉 Fiestas</a>
-  <a href="anuncios.html" class="nav-link">📢 Anuncios</a>
-  <a href="quienes-somos.html" class="nav-link">⭐ Nosotros</a>
-  <a href="contacto.html" class="nav-link">📬 Contacto</a>
-  <a href="tickets.html" class="btn-nav-ticket">🎟️ COMPRAR TICKETS</a>
+  <a href="index.html" class="nav-link">Inicio</a>
+  <a href="eventos.html" class="nav-link">Eventos</a>
+  <a href="snacks.html" class="nav-link">Snacks</a>
+  <a href="tienda.html" class="nav-link">Tienda</a>
+  <a href="espacio-fiestas.html" class="nav-link">Fiestas</a>
+  <a href="anuncios.html" class="nav-link">Anuncios</a>
+  <a href="quienes-somos.html" class="nav-link">Nosotros</a>
+  <a href="contacto.html" class="nav-link">Contacto</a>
+  <a href="tickets.html" class="btn-nav-ticket">COMPRAR TICKETS</a>
 </div>
 
 <!-- CART OVERLAY & SIDEBAR -->
@@ -306,7 +306,7 @@
   </div>
   <div class="cart-items" id="cart-items-list"></div>
   <div class="cart-empty" id="cart-empty" style="display:flex">
-    <div class="cart-empty-icon">🎬</div>
+    <div class="cart-empty-icon"><i class="ph ph-film-strip" style="font-size:64px;opacity:.25;color:var(--gold)"></i></div>
     <p>Tu carrito está vacío</p>
     <a href="tickets.html" class="btn btn-outline btn-sm" onclick="closeCart()">Ver Tickets</a>
   </div>
@@ -330,7 +330,7 @@
   <section class="tickets-hero">
     <canvas id="starsCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.35"></canvas>
     <div class="container" style="position:relative;z-index:1">
-      <div class="section-eyebrow reveal">🎟️ RESERVA EN LÍNEA</div>
+      <div class="section-eyebrow reveal">RESERVA EN LÍNEA</div>
       <h1 class="reveal">Comprar Tickets</h1>
       <p class="reveal">Elige tu película, función y paga en línea. Sin filas, sin esperas.</p>
     </div>
@@ -373,13 +373,9 @@
           <!-- Date scroller -->
           <div class="date-scroller" id="dateScroller"></div>
 
-          <!-- Screen tabs -->
+          <!-- Pantalla única -->
           <div class="screen-tabs">
-            <button class="screen-tab active" onclick="setScreen(this,'all')">Todas las pantallas</button>
-            <button class="screen-tab" onclick="setScreen(this,'1')">Pantalla 1</button>
-            <button class="screen-tab" onclick="setScreen(this,'2')">Pantalla 2</button>
-            <button class="screen-tab" onclick="setScreen(this,'3')">Pantalla 3</button>
-            <button class="screen-tab" onclick="setScreen(this,'4')">Pantalla 4</button>
+            <button class="screen-tab active" style="cursor:default">Pantalla Principal</button>
           </div>
 
           <div class="movie-cards-grid" id="movieGrid"></div>
@@ -395,11 +391,15 @@
         <div class="step-panel" id="panel-2">
           <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--text-light);margin-bottom:1.5rem">Cantidad de Tickets</h3>
           <div class="quantity-section">
+            <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1rem;padding:.8rem 1rem;background:rgba(245,182,23,.06);border:1px solid rgba(245,182,23,.15);border-radius:10px">
+              <i class="ph ph-info" style="color:var(--gold)"></i>
+              Los precios varían por película y tipo de entrada. El precio base es <strong style="color:var(--gold)">Desde Q80.00</strong> por vehículo.
+            </p>
             <div class="qty-card">
               <div class="qty-info">
-                <div class="qty-type">🚗 Entrada por Vehículo</div>
+                <div class="qty-type">Entrada por Vehículo</div>
                 <div class="qty-desc">Entrada estándar — 1 vehículo, hasta 5 personas</div>
-                <div class="qty-price" id="standardPrice">Q75.00</div>
+                <div class="qty-price" id="standardPrice">Desde Q80.00</div>
               </div>
               <div class="qty-controls">
                 <button class="qty-btn" onclick="changeQty('standard',-1)">−</button>
@@ -409,9 +409,9 @@
             </div>
             <div class="qty-card">
               <div class="qty-info">
-                <div class="qty-type">⭐ Entrada VIP</div>
+                <div class="qty-type">Entrada VIP</div>
                 <div class="qty-desc">Zona premium — fila frontal con mejor ángulo</div>
-                <div class="qty-price" id="vipPrice">Q110.00</div>
+                <div class="qty-price" id="vipPrice">Desde Q115.00</div>
               </div>
               <div class="qty-controls">
                 <button class="qty-btn" onclick="changeQty('vip',-1)">−</button>
@@ -421,9 +421,9 @@
             </div>
             <div class="qty-card">
               <div class="qty-info">
-                <div class="qty-type">🎓 Estudiante</div>
+                <div class="qty-type">Entrada Estudiante</div>
                 <div class="qty-desc">Con carnet estudiantil válido</div>
-                <div class="qty-price" id="studentPrice">Q55.00</div>
+                <div class="qty-price" id="studentPrice">Desde Q65.00</div>
               </div>
               <div class="qty-controls">
                 <button class="qty-btn" onclick="changeQty('student',-1)">−</button>
@@ -559,17 +559,17 @@
 
         <!-- SUCCESS -->
         <div class="booking-success" id="bookingSuccess">
-          <div class="bs-icon">🎉</div>
-          <h2 style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);margin:.5rem 0">¡Reserva Confirmada!</h2>
+          <div class="bs-icon"><i class="ph-fill ph-check-circle" style="font-size:4rem;color:var(--gold)"></i></div>
+          <h2 style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);margin:.5rem 0">Reserva Confirmada</h2>
           <p style="color:var(--text-muted);max-width:420px;margin:0 auto 1.5rem;font-size:.95rem">Tu compra fue procesada exitosamente. Te hemos enviado los tickets a tu correo electrónico.</p>
           <div class="bs-code">
             <div class="code-label">Código de Reserva</div>
-            <div class="code-val" id="bookingCode">GX-00000</div>
+            <div class="code-val" id="bookingCode">AC-00000</div>
           </div>
-          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:2rem">Presenta este código o el QR que enviamos a tu correo al llegar al drive-in.</p>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:2rem">Presenta este código o el QR que enviamos a tu correo al llegar al autocine.</p>
           <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
             <a href="index.html" class="btn btn-outline">Volver al Inicio</a>
-            <a href="snacks.html" class="btn btn-primary">Agregar Snacks 🍿</a>
+            <a href="snacks.html" class="btn btn-primary"><i class="ph ph-bowl-food"></i> Agregar Snacks</a>
           </div>
         </div>
 
@@ -660,13 +660,17 @@
 <script>
 // ── DATA ──
 const MOVIES = [
-  { id:'m1', title:'Interstellar', emoji:'🚀', genre:'Ciencia Ficción', rating:'PG-13', duration:'169 min', screen:'1', price:75, times:['7:30 PM','9:00 PM'], soldOut:[] },
-  { id:'m2', title:'Moana 2', emoji:'🌊', genre:'Animación', rating:'G', duration:'100 min', screen:'2', price:65, times:['7:00 PM','8:30 PM'], soldOut:['8:30 PM'] },
-  { id:'m3', title:'Gladiator II', emoji:'⚔️', genre:'Acción', rating:'R', duration:'148 min', screen:'3', price:75, times:['7:30 PM'], soldOut:[] },
-  { id:'m4', title:'Spider-Man NWH', emoji:'🕷️', genre:'Superhéroes', rating:'PG-13', duration:'148 min', screen:'4', price:80, times:['8:00 PM','10:00 PM'], soldOut:[] },
+  { id:'m1', title:'Cosmos: Fin del Universo', icon:'ph-rocket-launch', genre:'Ciencia Ficción', rating:'+13', duration:'2h 18min', screen:'1', price:80, times:['7:00 PM','10:00 PM'], soldOut:[] },
+  { id:'m2', title:'Selva Eterna', icon:'ph-tree', genre:'Aventura Familiar', rating:'Apta', duration:'1h 54min', screen:'1', price:80, times:['6:30 PM','9:15 PM'], soldOut:['9:15 PM'] },
+  { id:'m1', title:'Cosmos: Fin del Universo', icon:'ph-rocket-launch', genre:'Ciencia Ficción', rating:'+13', duration:'2h 18min', price:80, times:['7:00 PM','10:00 PM'], soldOut:[] },
+  { id:'m2', title:'Selva Eterna', icon:'ph-tree', genre:'Aventura Familiar', rating:'Apta', duration:'1h 54min', price:80, times:['6:30 PM','9:15 PM'], soldOut:['9:15 PM'] },
+  { id:'m3', title:'Sombras', icon:'ph-skull', genre:'Terror', rating:'+18', duration:'1h 42min', price:85, times:['9:00 PM','11:30 PM'], soldOut:[] },
+  { id:'m4', title:'Amor Eterno', icon:'ph-heart', genre:'Romance', rating:'+13', duration:'2h 05min', price:80, times:['7:30 PM','10:30 PM'], soldOut:[] },
 ];
 const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+// Días de operación: 3=Mié, 4=Jue, 5=Vie, 6=Sáb, 0=Dom
+const OPEN_DAYS = [0, 3, 4, 5, 6];
 
 let currentStep = 1;
 let selectedMovie = null;
@@ -674,20 +678,28 @@ let selectedTime = null;
 let selectedDate = 0;
 let filterScreen = 'all';
 let qty = { standard:1, vip:0, student:0 };
-const PRICES = { standard:75, vip:110, student:55 };
+const PRICES = { standard:80, vip:115, student:65 };
 
-// ── DATE SCROLLER ──
+// ── DATE SCROLLER (solo Mié-Dom) ──
 function buildDates() {
   const scroller = document.getElementById('dateScroller');
   const today = new Date();
-  scroller.innerHTML = Array.from({length:7},(_,i)=>{
-    const d = new Date(today); d.setDate(today.getDate()+i);
-    return `<div class="date-chip${i===0?' active':''}" onclick="selectDate(${i},this)">
+  const chips = [];
+  let firstActive = true;
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(today); d.setDate(today.getDate() + i);
+    const dow = d.getDay();
+    if (!OPEN_DAYS.includes(dow)) continue;
+    const isFirst = firstActive;
+    if (firstActive) { firstActive = false; selectedDate = i; }
+    chips.push(`<div class="date-chip${isFirst?' active':''}" onclick="selectDate(${i},this)">
       <div class="dc-day">${DAYS[d.getDay()]}</div>
       <div class="dc-num">${d.getDate()}</div>
       <div class="dc-mon">${MONTHS[d.getMonth()]}</div>
-    </div>`;
-  }).join('');
+    </div>`);
+    if (chips.length >= 7) break;
+  }
+  scroller.innerHTML = chips.join('');
 }
 function selectDate(i,el) {
   selectedDate=i;
@@ -698,17 +710,17 @@ function selectDate(i,el) {
 
 // ── MOVIE GRID ──
 function renderMovies() {
-  const filtered = filterScreen==='all' ? MOVIES : MOVIES.filter(m=>m.screen===filterScreen);
+  const filtered = MOVIES; // una sola pantalla, se muestran todas
   document.getElementById('movieGrid').innerHTML = filtered.map(m=>`
     <div class="movie-select-card${selectedMovie===m.id?' selected':''}" id="mcard-${m.id}" onclick="selectMovie('${m.id}')">
-      <div class="movie-poster-mini">${m.emoji}</div>
+      <div class="movie-poster-mini"><i class="ph ph-${m.icon}" style="font-size:2.2rem;color:var(--gold);opacity:.7"></i></div>
       <div class="movie-select-info">
         <div class="movie-title-sm">${m.title}</div>
         <div class="movie-meta-sm">
           <span class="movie-meta-badge">${m.genre}</span>
           <span class="movie-meta-badge rating">${m.rating}</span>
           <span class="movie-meta-badge">${m.duration}</span>
-          <span class="movie-meta-badge">Pantalla ${m.screen}</span>
+          <span class="movie-meta-badge">Pantalla Principal</span>
         </div>
         <div class="showtimes-list">
           ${m.times.map(t=>{
@@ -719,7 +731,7 @@ function renderMovies() {
         </div>
       </div>
       <div class="movie-select-right">
-        <div class="movie-price-sm">Q${m.price}</div>
+        <div class="movie-price-sm">Desde Q${m.price}</div>
         <div class="movie-price-note">por vehículo</div>
       </div>
     </div>`).join('');
@@ -734,12 +746,8 @@ function selectTime(e,movieId,time) {
   selectedMovie=movieId;selectedTime=time;
   document.getElementById('step1next').disabled=false;
   const movie = MOVIES.find(m=>m.id===movieId);
-  if(movie){ PRICES.standard=movie.price; PRICES.vip=movie.price+35; PRICES.student=movie.price-20; }
+  if(movie){ PRICES.standard=movie.price; PRICES.vip=movie.price+35; PRICES.student=movie.price-15; }
   renderMovies(); updateSummary();
-}
-function setScreen(btn,s) {
-  document.querySelectorAll('.screen-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); filterScreen=s; renderMovies();
 }
 
 // ── QUANTITY ──
@@ -756,7 +764,7 @@ function updateSummary() {
   const poster = document.getElementById('summaryPoster');
   const title = document.getElementById('summaryTitle');
   const detail = document.getElementById('summaryDetail');
-  if(movie){ poster.textContent=movie.emoji; title.textContent=movie.title; detail.textContent=`Pantalla ${movie.screen} · ${selectedTime||'—'}`; }
+  if(movie){ poster.innerHTML=`<i class="ph ph-${movie.icon}" style="font-size:1.8rem;color:var(--gold);opacity:.8"></i>`; title.textContent=movie.title; detail.textContent=`Pantalla Principal · ${selectedTime||'—'}`; }
   const lines = document.getElementById('summaryLines');
   let total=0,html='';
   if(qty.standard>0){ const s=qty.standard*PRICES.standard; html+=`<div class="order-line"><span class="lbl">Entrada Normal x${qty.standard}</span><span class="val">Q${s}</span></div>`; total+=s; }
@@ -814,22 +822,22 @@ function formatExp(input) {
 
 // ── CONFIRM ──
 function confirmPurchase() {
-  const code='GX-'+Math.floor(10000+Math.random()*90000);
+  const code = generateOrderCode ? generateOrderCode('AC') : 'AC-'+Math.floor(10000+Math.random()*90000);
   document.querySelector('.tickets-layout').style.display='none';
   document.querySelector('.checkout-steps').style.display='none';
   const s=document.getElementById('bookingSuccess');
   s.classList.add('visible');
   document.getElementById('bookingCode').textContent=code;
-  showToast('¡Compra exitosa!','Revisa tu correo para los tickets.','ph-check-circle',6000);
+  showToast('Compra exitosa','Revisa tu correo para los tickets.','check-circle',6000);
   // add to cart record
   const movie=MOVIES.find(m=>m.id===selectedMovie);
-  if(movie) Cart.add({id:'ticket-'+Date.now(),name:'Ticket: '+movie.title,price:parseInt(document.getElementById('summaryTotal').textContent.replace('Q','')),category:'Ticket',emoji:'🎟️'});
+  if(movie) Cart.add({id:'ticket-'+Date.now(),name:'Ticket: '+movie.title,price:PRICES.standard,category:'ticket'});
 }
 
 // ── INIT ──
 buildDates(); renderMovies(); updateSummary();
 initStars('starsCanvas');
-document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+document.addEventListener('DOMContentLoaded', () => { if(window.observeReveal) setTimeout(observeReveal, 50); });
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {

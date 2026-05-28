@@ -1,20 +1,20 @@
-/* ============================================================
-   AUTOCINE ANTIGUA — GLOBAL JS  v2.0
-   Navbar · Cart · Toast · Scroll Reveal · Stars · Loader
-   ============================================================ */
-'use strict';
 
 /* ===== PAGE LOADER ===== */
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    const loader = document.getElementById('page-loader');
-    if (!loader) return;
-    loader.classList.add('hidden');
-    loader.addEventListener('transitionend', () => loader.remove(), { once: true });
-  }, 800);
+  hideLoader();
 });
+// Safety fallback — hide loader after 2s even if external CDN is slow
+setTimeout(hideLoader, 2000);
 
-/* ===== NAVBAR ===== */
+function hideLoader() {
+  const loader = document.getElementById('page-loader');
+  if (!loader || loader._hidden) return;
+  loader._hidden = true;
+  loader.classList.add('hidden');
+  loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+}
+
+
 const navbar    = document.querySelector('.navbar');
 const hamburger = document.querySelector('.hamburger');
 const navMobile = document.querySelector('.nav-mobile');
@@ -236,12 +236,17 @@ const revealObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.05 });
 
 function observeReveal(root) {
-  (root || document).querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
+  (root || document).querySelectorAll(
+    '.reveal:not(.is-visible), .reveal-right:not(.is-visible), .reveal-left:not(.is-visible), .reveal-up:not(.is-visible)'
+  ).forEach(el => {
     revealObserver.observe(el);
   });
 }
 
-document.addEventListener('DOMContentLoaded', observeReveal);
+document.addEventListener('DOMContentLoaded', () => {
+  // Small delay ensures DOM is fully painted before observing
+  setTimeout(observeReveal, 50);
+});
 window.observeReveal = observeReveal;
 
 /* ===== COUNTER ANIMATION ===== */

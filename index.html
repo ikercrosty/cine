@@ -148,9 +148,6 @@
       animation: screenGlow 3s ease-in-out infinite;
       z-index: 1;
     }
-    .screen-stars {
-      position: absolute; inset: 0; z-index: 0;
-    }
     .screen-label {
       text-align: center;
       margin-top: 12px;
@@ -173,7 +170,7 @@
       gap: 6px;
     }
     .car-icon {
-      font-size: 36px;
+      font-size: 32px;
       filter: drop-shadow(0 0 10px rgba(245,182,23,.3));
     }
     .car-light {
@@ -200,7 +197,7 @@
     }
     .badge-now { top: -20px; right: -20px; }
     .badge-rating { bottom: 40px; left: -30px; animation-delay: 1.5s; }
-    .badge-emoji { font-size: 24px; }
+    .badge-icon { font-size: 20px; display: flex; align-items: center; justify-content: center; width: 32px; }
     .badge-text .label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
     .badge-text .value { font-family: var(--font-display); font-size: 18px; color: var(--gold); letter-spacing: 1px; }
 
@@ -222,13 +219,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 80px;
       position: relative;
       overflow: hidden;
     }
     .movie-poster-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, var(--bg-2) 0%, transparent 50%);
+    }
+    .movie-poster-icon {
+      font-size: 64px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      opacity: .6;
     }
     .movie-info { padding: 20px; }
     .movie-rating {
@@ -281,8 +286,11 @@
       overflow: hidden;
     }
     .exp-scene {
-      font-size: 120px;
+      font-size: 100px;
       animation: float 5s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .exp-content {
       padding: 60px 48px;
@@ -311,6 +319,7 @@
       justify-content: center;
       font-size: 22px;
       flex-shrink: 0;
+      color: var(--gold);
     }
     .feature-text h4 {
       font-family: var(--font-display);
@@ -334,13 +343,11 @@
       overflow: hidden;
     }
     .cta-banner::before {
-      content: '🌙';
+      content: '';
       position: absolute;
-      right: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 180px;
-      opacity: .04;
+      right: 0; top: 0; bottom: 0;
+      width: 300px;
+      background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(245,182,23,.08), transparent);
       pointer-events: none;
     }
     .cta-content .section-title { margin-bottom: 12px; }
@@ -442,15 +449,15 @@
   </div>
 </nav>
 <div class="nav-mobile">
-  <a href="index.html"           class="nav-link">🏠 Inicio</a>
-  <a href="eventos.html"         class="nav-link">🎬 Eventos</a>
-  <a href="snacks.html"          class="nav-link">🍿 Snacks</a>
-  <a href="tienda.html"          class="nav-link">🛍️ Tienda</a>
-  <a href="espacio-fiestas.html" class="nav-link">🎉 Fiestas</a>
-  <a href="anuncios.html"        class="nav-link">📢 Anuncios</a>
-  <a href="quienes-somos.html"   class="nav-link">⭐ Nosotros</a>
-  <a href="contacto.html"        class="nav-link">📬 Contacto</a>
-  <a href="tickets.html"         class="btn-nav-ticket">🎟️ COMPRAR TICKETS</a>
+  <a href="index.html"           class="nav-link">Inicio</a>
+  <a href="eventos.html"         class="nav-link">Eventos</a>
+  <a href="snacks.html"          class="nav-link">Snacks</a>
+  <a href="tienda.html"          class="nav-link">Tienda</a>
+  <a href="espacio-fiestas.html" class="nav-link">Fiestas</a>
+  <a href="anuncios.html"        class="nav-link">Anuncios</a>
+  <a href="quienes-somos.html"   class="nav-link">Nosotros</a>
+  <a href="contacto.html"        class="nav-link">Contacto</a>
+  <a href="tickets.html"         class="btn-nav-ticket">COMPRAR TICKETS</a>
 </div>
 
 <!-- CART -->
@@ -459,7 +466,7 @@
   <div class="cart-header"><h3>MI CARRITO</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
   <div class="cart-items" id="cart-items-list"></div>
   <div class="cart-empty" id="cart-empty" style="display:flex">
-    <div class="cart-empty-icon">🎬</div>
+    <div class="cart-empty-icon"><i class="ph ph-film-strip" style="font-size:64px;opacity:.25;color:var(--gold)"></i></div>
     <p>Tu carrito está vacío</p>
     <a href="tickets.html" class="btn btn-outline btn-sm" onclick="closeCart()">Ver Tickets</a>
   </div>
@@ -500,8 +507,8 @@
         </div>
         <div class="hero-info reveal d4">
           <div class="hero-info-item">
-            <div class="num" data-counter data-target="4" data-suffix=" pantallas"></div>
-            <div class="label">Pantallas HD</div>
+            <div class="num" data-counter data-target="1" data-suffix=" pantalla"></div>
+            <div class="label">Pantalla HD</div>
           </div>
           <div class="hero-info-item">
             <div class="num" data-counter data-target="250" data-suffix="+ autos"></div>
@@ -515,7 +522,7 @@
       </div>
 
       <!-- Right visual -->
-      <div class="hero-visual reveal-right d2">
+      <div class="hero-visual reveal d2">
         <div class="drive-in-scene">
           <div class="screen-frame">
             <div class="screen-inner">
@@ -526,21 +533,21 @@
             <div class="screen-label">PANTALLA PRINCIPAL · FM 88.5</div>
           </div>
           <div class="cars-row">
-            <div class="car-item"><div class="car-icon">🚗</div><div class="car-light"></div></div>
-            <div class="car-item"><div class="car-icon">🚙</div><div class="car-light"></div></div>
-            <div class="car-item"><div class="car-icon">🚕</div><div class="car-light"></div></div>
-            <div class="car-item"><div class="car-icon">🚗</div><div class="car-light"></div></div>
+            <div class="car-item"><i class="ph-fill ph-car" style="font-size:32px;color:var(--gold);opacity:.7"></i><div class="car-light"></div></div>
+            <div class="car-item"><i class="ph-fill ph-car" style="font-size:32px;color:var(--text-muted);opacity:.5"></i><div class="car-light"></div></div>
+            <div class="car-item"><i class="ph-fill ph-car" style="font-size:32px;color:var(--gold);opacity:.6"></i><div class="car-light"></div></div>
+            <div class="car-item"><i class="ph-fill ph-car" style="font-size:32px;color:var(--text-muted);opacity:.4"></i><div class="car-light"></div></div>
           </div>
           <!-- Floating badges -->
           <div class="floating-badge badge-now">
-            <div class="badge-emoji">🎬</div>
+            <div class="badge-icon"><i class="ph ph-film-clapper" style="font-size:22px;color:var(--gold)"></i></div>
             <div class="badge-text">
               <div class="label">ESTA NOCHE</div>
               <div class="value">8:30 PM</div>
             </div>
           </div>
           <div class="floating-badge badge-rating">
-            <div class="badge-emoji">⭐</div>
+            <div class="badge-icon"><i class="ph-fill ph-star" style="font-size:22px;color:var(--gold)"></i></div>
             <div class="badge-text">
               <div class="label">RATING</div>
               <div class="value">4.9 / 5</div>
@@ -557,8 +564,8 @@
   <div class="container">
     <div class="stats-strip-inner">
       <div class="stat-item reveal">
-        <div class="stat-num" data-counter data-target="4" data-suffix="+">4+</div>
-        <div class="stat-label">Pantallas activas</div>
+        <div class="stat-num" data-counter data-target="1" data-suffix="">1</div>
+        <div class="stat-label">Pantalla activa</div>
       </div>
       <div class="stat-item reveal d1">
         <div class="stat-num" data-counter data-target="250" data-suffix="+">250+</div>
@@ -593,14 +600,14 @@
       <!-- Movie 1 -->
       <div class="movie-card reveal d1">
         <div class="movie-poster" style="background:linear-gradient(135deg,#1a0a2e,#2d1040)">
-          <div style="font-size:80px;z-index:1">🚀</div>
+          <div class="movie-poster-icon"><i class="ph ph-rocket-launch" style="font-size:70px;color:#7b5ea7;opacity:.7"></i></div>
           <div class="movie-poster-overlay"></div>
           <div style="position:absolute;top:12px;right:12px;z-index:2">
             <span class="badge badge-blue">ESTRENO</span>
           </div>
         </div>
         <div class="movie-info">
-          <div class="movie-rating">⭐ 4.8</div>
+          <div class="movie-rating"><i class="ph-fill ph-star" style="font-size:13px"></i> 4.8</div>
           <div class="movie-title">COSMOS: FIN</div>
           <div class="movie-meta">SCI-FI · 2h 18min · +13</div>
           <div class="movie-schedule">
@@ -614,14 +621,14 @@
       <!-- Movie 2 -->
       <div class="movie-card reveal d2">
         <div class="movie-poster" style="background:linear-gradient(135deg,#0a1a10,#0d2e18)">
-          <div style="font-size:80px;z-index:1">🌿</div>
+          <div class="movie-poster-icon"><i class="ph ph-tree" style="font-size:70px;color:#2e8b57;opacity:.7"></i></div>
           <div class="movie-poster-overlay"></div>
           <div style="position:absolute;top:12px;right:12px;z-index:2">
             <span class="badge badge-green">FAMILIAR</span>
           </div>
         </div>
         <div class="movie-info">
-          <div class="movie-rating">⭐ 4.6</div>
+          <div class="movie-rating"><i class="ph-fill ph-star" style="font-size:13px"></i> 4.6</div>
           <div class="movie-title">SELVA ETERNA</div>
           <div class="movie-meta">AVENTURA · 1h 54min · Apta</div>
           <div class="movie-schedule">
@@ -635,14 +642,14 @@
       <!-- Movie 3 -->
       <div class="movie-card reveal d3">
         <div class="movie-poster" style="background:linear-gradient(135deg,#1a0a0a,#2e1010)">
-          <div style="font-size:80px;z-index:1">💀</div>
+          <div class="movie-poster-icon"><i class="ph ph-skull" style="font-size:70px;color:#8b0000;opacity:.7"></i></div>
           <div class="movie-poster-overlay"></div>
           <div style="position:absolute;top:12px;right:12px;z-index:2">
             <span class="badge badge-pink">+18</span>
           </div>
         </div>
         <div class="movie-info">
-          <div class="movie-rating">⭐ 4.7</div>
+          <div class="movie-rating"><i class="ph-fill ph-star" style="font-size:13px"></i> 4.7</div>
           <div class="movie-title">SOMBRAS</div>
           <div class="movie-meta">TERROR · 1h 42min · +18</div>
           <div class="movie-schedule">
@@ -656,14 +663,14 @@
       <!-- Movie 4 -->
       <div class="movie-card reveal d4">
         <div class="movie-poster" style="background:linear-gradient(135deg,#0a1428,#101e3e)">
-          <div style="font-size:80px;z-index:1">❤️</div>
+          <div class="movie-poster-icon"><i class="ph ph-heart" style="font-size:70px;color:#c0392b;opacity:.7"></i></div>
           <div class="movie-poster-overlay"></div>
           <div style="position:absolute;top:12px;right:12px;z-index:2">
             <span class="badge badge-gold">DESTACADA</span>
           </div>
         </div>
         <div class="movie-info">
-          <div class="movie-rating">⭐ 4.9</div>
+          <div class="movie-rating"><i class="ph-fill ph-star" style="font-size:13px"></i> 4.9</div>
           <div class="movie-title">AMOR ETERNO</div>
           <div class="movie-meta">ROMANCE · 2h 05min · +13</div>
           <div class="movie-schedule">
@@ -689,7 +696,7 @@
     <div class="experience-grid reveal">
       <div class="exp-visual">
         <canvas id="exp-stars" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-        <div class="exp-scene">🌙</div>
+        <div class="exp-scene"><i class="ph ph-moon-stars" style="font-size:110px;color:var(--gold);opacity:.7"></i></div>
       </div>
       <div class="exp-content">
         <div class="section-eyebrow">Nuestra Experiencia</div>
@@ -697,28 +704,28 @@
         <p class="section-sub">Más que una película, una aventura completa para ti y tu familia.</p>
         <div class="features-list">
           <div class="feature-item reveal d1">
-            <div class="feature-icon">📡</div>
+            <div class="feature-icon"><i class="ph ph-broadcast"></i></div>
             <div class="feature-text">
               <h4>SONIDO FM HD</h4>
               <p>Audio envolvente directamente en tu auto vía FM 88.5 MHz, sin cables ni bocinas externas.</p>
             </div>
           </div>
           <div class="feature-item reveal d2">
-            <div class="feature-icon">🎥</div>
+            <div class="feature-icon"><i class="ph ph-projector-screen"></i></div>
             <div class="feature-text">
               <h4>PANTALLA 4K</h4>
               <p>Proyección laser 4K de 20 metros de ancho para una imagen cristalina incluso a distancia.</p>
             </div>
           </div>
           <div class="feature-item reveal d3">
-            <div class="feature-icon">🍿</div>
+            <div class="feature-icon"><i class="ph ph-bowl-food"></i></div>
             <div class="feature-text">
               <h4>SNACK BAR PREMIUM</h4>
               <p>Palomitas artesanales, combos gourmet y bebidas frías entregados directo a tu ventana.</p>
             </div>
           </div>
           <div class="feature-item reveal d4">
-            <div class="feature-icon">🛡️</div>
+            <div class="feature-icon"><i class="ph ph-shield-check"></i></div>
             <div class="feature-text">
               <h4>ZONA SEGURA</h4>
               <p>Estacionamiento vigilado 24/7, baños limpios y personal de seguridad en toda la instalación.</p>
@@ -742,37 +749,46 @@
     </div>
     <div class="grid-3">
       <div class="card reveal d1">
-        <div class="card-img" style="background:linear-gradient(135deg,#1a1a0a,#2e2a08);font-size:64px">🎃</div>
+        <div class="card-img" style="background:linear-gradient(135deg,#1a1a0a,#2e2a08)"><i class="ph ph-ghost" style="font-size:64px;color:#c4a000;opacity:.7"></i></div>
         <div class="card-body">
           <span class="badge badge-pink" style="margin-bottom:12px">28 Oct</span>
           <div class="card-title">NOCHE DE TERROR</div>
           <p class="card-text">Maratón de películas de terror clásicas. Disfraces premiados, decoración especial y sorpresas.</p>
           <div style="display:flex;align-items:center;justify-content:space-between">
-            <span class="card-price">Q150</span>
+            <div>
+              <span class="card-price">Desde Q80.00</span>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Ver variaciones al reservar</div>
+            </div>
             <a href="tickets.html" class="btn btn-pink btn-sm">TICKETS</a>
           </div>
         </div>
       </div>
       <div class="card reveal d2">
-        <div class="card-img" style="background:linear-gradient(135deg,#0a1a1a,#0d2e28);font-size:64px">🎄</div>
+        <div class="card-img" style="background:linear-gradient(135deg,#0a1a1a,#0d2e28)"><i class="ph ph-tree-evergreen" style="font-size:64px;color:#2e8b57;opacity:.7"></i></div>
         <div class="card-body">
           <span class="badge badge-green" style="margin-bottom:12px">20 Dic</span>
           <div class="card-title">GALAXIA NAVIDEÑA</div>
           <p class="card-text">Especial de Navidad con películas clásicas, chocolatada y la visita de Santa Claus.</p>
           <div style="display:flex;align-items:center;justify-content:space-between">
-            <span class="card-price">Q120</span>
+            <div>
+              <span class="card-price">Desde Q80.00</span>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Ver variaciones al reservar</div>
+            </div>
             <a href="tickets.html" class="btn btn-pink btn-sm">TICKETS</a>
           </div>
         </div>
       </div>
       <div class="card reveal d3">
-        <div class="card-img" style="background:linear-gradient(135deg,#1a0a1a,#2e0e2e);font-size:64px">💝</div>
+        <div class="card-img" style="background:linear-gradient(135deg,#1a0a1a,#2e0e2e)"><i class="ph ph-heart" style="font-size:64px;color:#c0392b;opacity:.7"></i></div>
         <div class="card-body">
           <span class="badge badge-gold" style="margin-bottom:12px">14 Feb</span>
           <div class="card-title">SAN VALENTÍN</div>
           <p class="card-text">La noche más romántica del año. Doble función, champagne y decoración especial para parejas.</p>
           <div style="display:flex;align-items:center;justify-content:space-between">
-            <span class="card-price">Q200</span>
+            <div>
+              <span class="card-price">Desde Q80.00</span>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Ver variaciones al reservar</div>
+            </div>
             <a href="tickets.html" class="btn btn-pink btn-sm">TICKETS</a>
           </div>
         </div>
@@ -786,14 +802,14 @@
   <div class="container">
     <div class="cta-banner reveal">
       <div class="cta-content">
-        <div class="section-eyebrow">¿Lista tu noche?</div>
+        <div class="section-eyebrow">Lista tu noche?</div>
         <h2 class="section-title">RESERVA <span class="accent">HOY</span></h2>
         <p style="color:var(--text-muted);font-size:16px;margin-bottom:32px;max-width:480px">
           No pierdas tu lugar. Los mejores espacios se agotan rápido cada fin de semana.
         </p>
         <div style="display:flex;gap:16px;flex-wrap:wrap">
           <a href="tickets.html"  class="btn btn-primary"><i class="ph ph-ticket"></i> COMPRAR TICKETS</a>
-          <a href="espacio-fiestas.html" class="btn btn-outline">🎉 CELEBRAR AQUÍ</a>
+          <a href="espacio-fiestas.html" class="btn btn-outline"><i class="ph ph-confetti"></i> CELEBRAR AQUÍ</a>
         </div>
       </div>
     </div>
@@ -848,23 +864,21 @@
         <a href="politica.html"><span class="arrow">›</span> Política de Privacidad</a>
       </nav></div>
       <div class="footer-col"><h4>CONTACTO</h4>
-        <div class="footer-contact-item"><span class="footer-contact-icon">📍</span><span>Km 15, Carretera a El Salvador, Guatemala</span></div>
-        <div class="footer-contact-item"><span class="footer-contact-icon">📞</span><span>+502 2345-6789</span></div>
-        <div class="footer-contact-item"><span class="footer-contact-icon">✉️</span><span>hola@autocineantiga.gt</span></div>
-        <div class="footer-contact-item"><span class="footer-contact-icon">🕐</span><span>Jue–Dom: 6PM – 12AM</span></div>
+        <div class="footer-contact-item"><i class="ph ph-map-pin footer-contact-icon"></i><span>Km 15, Carretera a El Salvador, Guatemala</span></div>
+        <div class="footer-contact-item"><i class="ph ph-phone footer-contact-icon"></i><span>+502 2345-6789</span></div>
+        <div class="footer-contact-item"><i class="ph ph-envelope footer-contact-icon"></i><span>hola@autocineantiga.gt</span></div>
+        <div class="footer-contact-item"><i class="ph ph-clock footer-contact-icon"></i><span>Mié–Dom: 6PM – 12AM</span></div>
       </div>
     </div>
     <div class="footer-bottom">
       <p>© 2025 Autocine Antigua. Todos los derechos reservados.</p>
-      <p>Hecho con ❤️ en Guatemala · <a href="politica.html">Privacidad</a></p>
+      <p>Hecho con dedicación en Guatemala · <a href="politica.html">Privacidad</a></p>
     </div>
   </div>
 </footer>
 
 <script src="global.js"></script>
-<script>document.addEventListener("DOMContentLoaded",()=>initStars());</script>
 <script>
-  // Stars on hero
   window.addEventListener('DOMContentLoaded', () => {
     initStars('stars-canvas');
     initStars('screen-stars');
@@ -874,7 +888,7 @@
   // Newsletter
   function handleNewsletter(e) {
     e.preventDefault();
-    showToast('¡Suscrito!', 'Bienvenido a la familia Autocine Antigua 🌟', '✨');
+    showToast('Suscrito', 'Bienvenido a la familia Autocine Antigua', 'check-circle');
     e.target.reset();
   }
 
