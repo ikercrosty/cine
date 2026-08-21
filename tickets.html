@@ -1,840 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Comprar Tickets — Autocine Antigua</title>
-  <meta name="description" content="Compra tus tickets en línea para Autocine Antigua. Elige tu función, pantalla y cantidad de entradas."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
-  <link rel="stylesheet" href="global.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comprar Tickets · Autocine Antigua</title>
+  <link rel="stylesheet" href="global.css" />
   <style>
-    /* ── HERO ── */
-    .tickets-hero {
-      padding:130px 0 50px;text-align:center;position:relative;
+    .ticket-form { max-width: 34rem; margin: 0 auto; }
+    .field { margin-top: 1.5rem; }
+    .field label {
+      display: block; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted-dim); margin-bottom: 0.6rem;
     }
-    .tickets-hero::before {
-      content:'';position:absolute;inset:0;
-      background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(245,182,23,.12) 0%,transparent 70%);
+    .field select, .field input[type="date"] {
+      width: 100%; padding: 0.85rem 1rem; border-radius: 0.9rem;
+      background: var(--glass); border: 1px solid var(--line-strong);
+      color: var(--ink); font-family: inherit; font-size: 0.9rem;
     }
-    .tickets-hero h1 { font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,5rem);color:var(--gold);line-height:1; }
-    .tickets-hero p { color:var(--text-muted);margin:.6rem 0 0; }
-
-    /* ── CHECKOUT STEPS ── */
-    .checkout-steps {
-      display:flex;align-items:center;justify-content:center;
-      gap:0;margin:2.5rem 0 3rem;
+    .stepper {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 1rem; border-radius: 0.9rem; background: var(--glass);
+      border: 1px solid var(--line-strong);
     }
-    .step {
-      display:flex;align-items:center;gap:.6rem;
-      padding:.6rem 1.4rem;position:relative;
+    .stepper button {
+      width: 2.25rem; height: 2.25rem; border-radius: 50%; border: 1px solid var(--line-strong);
+      background: transparent; color: var(--ink); font-size: 1.1rem; transition: all 0.3s var(--ease);
     }
-    .step-num {
-      width:32px;height:32px;border-radius:50%;
-      display:flex;align-items:center;justify-content:center;
-      font-size:.85rem;font-weight:700;border:2px solid rgba(255,255,255,.15);
-      color:var(--text-muted);transition:all .3s;flex-shrink:0;
+    .stepper button:hover { border-color: rgba(242,182,75,0.4); color: var(--amber); }
+    .summary {
+      margin-top: 2rem; padding: 1.5rem; border-radius: var(--radius-lg);
+      background: var(--glass); border: 1px solid var(--line);
     }
-    .step-label { font-size:.8rem;font-weight:500;color:var(--text-muted);white-space:nowrap;transition:color .3s; }
-    .step.active .step-num { background:var(--gold);border-color:var(--gold);color:var(--noir); }
-    .step.active .step-label { color:var(--text-light); }
-    .step.done .step-num { background:rgba(160,255,100,.15);border-color:#a0e060;color:#a0e060; }
-    .step.done .step-label { color:#a0e060; }
-    .step-line { width:60px;height:2px;background:rgba(255,255,255,.1);flex-shrink:0; }
-    .step-line.done { background:rgba(160,255,100,.4); }
-
-    /* ── MAIN LAYOUT ── */
-    .tickets-layout {
-      display:grid;grid-template-columns:1fr 340px;gap:2.5rem;
-      padding-bottom:6rem;align-items:start;
-    }
-
-    /* ── STEP PANELS ── */
-    .step-panel { display:none; }
-    .step-panel.active { display:block; }
-
-    /* ── MOVIE SELECTION ── */
-    .date-scroller {
-      display:flex;gap:.6rem;overflow-x:auto;padding-bottom:.5rem;margin-bottom:2rem;
-      scrollbar-width:none;
-    }
-    .date-scroller::-webkit-scrollbar{display:none;}
-    .date-chip {
-      min-width:65px;padding:.7rem .5rem;border-radius:12px;
-      background:var(--glass);border:1px solid rgba(255,255,255,.07);
-      text-align:center;cursor:pointer;transition:all .2s;flex-shrink:0;
-    }
-    .date-chip:hover { border-color:rgba(245,182,23,.3); }
-    .date-chip.active { background:rgba(245,182,23,.15);border-color:var(--gold); }
-    .date-chip .dc-day { font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted); }
-    .date-chip .dc-num { font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--text-light);line-height:1.1; }
-    .date-chip .dc-mon { font-size:.65rem;color:var(--text-muted); }
-    .date-chip.active .dc-num { color:var(--gold); }
-
-    .screen-tabs { display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap; }
-    .screen-tab {
-      padding:.4rem 1rem;border-radius:8px;border:1px solid rgba(255,255,255,.1);
-      background:transparent;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;
-    }
-    .screen-tab.active { background:rgba(245,182,23,.12);border-color:var(--gold);color:var(--gold); }
-
-    .movie-cards-grid { display:flex;flex-direction:column;gap:1rem; }
-    .movie-select-card {
-      background:var(--glass);border:1px solid rgba(255,255,255,.07);
-      border-radius:14px;padding:1.4rem;display:grid;
-      grid-template-columns:80px 1fr auto;gap:1.2rem;align-items:center;
-      cursor:pointer;transition:all .25s;
-    }
-    .movie-select-card:hover { border-color:rgba(245,182,23,.3);transform:translateX(4px); }
-    .movie-select-card.selected { border-color:var(--gold);background:rgba(245,182,23,.07); }
-    .movie-poster-mini {
-      aspect-ratio:2/3;border-radius:8px;overflow:hidden;
-      background:linear-gradient(135deg,rgba(13,204,255,.1),rgba(245,182,23,.08));
-      display:flex;align-items:center;justify-content:center;font-size:2.5rem;
-    }
-    .movie-select-info .movie-title-sm { font-weight:600;color:var(--text-light);font-size:.95rem;margin-bottom:.3rem; }
-    .movie-select-info .movie-meta-sm { display:flex;gap:.6rem;flex-wrap:wrap; }
-    .movie-meta-badge {
-      font-size:.68rem;padding:.15rem .5rem;border-radius:5px;
-      background:rgba(255,255,255,.07);color:var(--text-muted);
-    }
-    .movie-meta-badge.rating { background:rgba(245,182,23,.12);color:var(--gold); }
-    .showtimes-list { display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.7rem; }
-    .showtime-pill {
-      padding:.3rem .7rem;border-radius:6px;border:1px solid rgba(255,255,255,.12);
-      font-size:.77rem;color:var(--text-muted);cursor:pointer;transition:all .15s;background:transparent;
-    }
-    .showtime-pill:hover { border-color:var(--gold);color:var(--gold); }
-    .showtime-pill.active { background:var(--gold);border-color:var(--gold);color:var(--noir);font-weight:700; }
-    .sold-out-pill { opacity:.4;cursor:default !important;pointer-events:none;text-decoration:line-through; }
-    .movie-select-right { text-align:right; }
-    .movie-price-sm { font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold); }
-    .movie-price-note { font-size:.68rem;color:var(--text-muted); }
-
-    /* ── TICKET QUANTITY ── */
-    .quantity-section { margin-top:2rem; }
-    .qty-card {
-      background:var(--glass);border:1px solid rgba(255,255,255,.07);
-      border-radius:14px;padding:1.4rem;display:flex;align-items:center;justify-content:space-between;
-      gap:1rem;margin-bottom:.8rem;
-    }
-    .qty-info .qty-type { font-weight:600;color:var(--text-light);font-size:.9rem; }
-    .qty-info .qty-desc { font-size:.78rem;color:var(--text-muted);margin-top:.2rem; }
-    .qty-info .qty-price { font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold);margin-top:.3rem; }
-    .qty-controls { display:flex;align-items:center;gap:.8rem; }
-    .qty-btn {
-      width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.15);
-      background:transparent;color:var(--text-light);font-size:1.2rem;
-      cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;
-    }
-    .qty-btn:hover { border-color:var(--gold);color:var(--gold); }
-    .qty-num { font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--text-light);min-width:24px;text-align:center; }
-
-    /* ── PASSENGER INFO ── */
-    .passenger-form { background:var(--glass);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:2rem; }
-    .passenger-form h3 { font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--text-light);margin-bottom:1.5rem; }
-    .pf-row { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem; }
-    .pf-group label { display:block;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem; }
-    .pf-group input, .pf-group select {
-      width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-      border-radius:9px;color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:.88rem;
-      padding:.7rem .95rem;box-sizing:border-box;transition:border-color .2s;
-    }
-    .pf-group input:focus,.pf-group select:focus { outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(245,182,23,.1); }
-
-    /* Vehicle info */
-    .vehicle-info { background:rgba(13,204,255,.06);border:1px solid rgba(13,204,255,.15);border-radius:12px;padding:1.2rem 1.5rem;margin-top:1.5rem; }
-    .vehicle-info p { font-size:.85rem;color:var(--text-muted);display:flex;align-items:center;gap:.5rem; }
-    .vehicle-info p i { color:var(--electric); }
-
-    /* ── PAYMENT ── */
-    .payment-section { background:var(--glass);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:2rem; }
-    .payment-section h3 { font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--text-light);margin-bottom:1.5rem; }
-    .payment-methods { display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1.8rem; }
-    .pay-method {
-      border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:1rem;
-      text-align:center;cursor:pointer;transition:all .2s;
-    }
-    .pay-method:hover,.pay-method.active { border-color:var(--gold);background:rgba(245,182,23,.06); }
-    .pay-method i { font-size:1.8rem;color:var(--text-muted);display:block;margin-bottom:.4rem; }
-    .pay-method.active i { color:var(--gold); }
-    .pay-method span { font-size:.78rem;color:var(--text-muted); }
-    .pay-method.active span { color:var(--gold); }
-
-    .card-form { display:flex;flex-direction:column;gap:1rem; }
-    .card-input-row { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
-    .card-input-group label { display:block;font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem; }
-    .card-input-group input {
-      width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-      border-radius:9px;color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:.88rem;
-      padding:.7rem .95rem;box-sizing:border-box;transition:border-color .2s;
-    }
-    .card-input-group input:focus { outline:none;border-color:var(--gold); }
-
-    /* secure badge */
-    .secure-badge {
-      display:flex;align-items:center;gap:.5rem;
-      font-size:.75rem;color:var(--text-muted);margin-top:.8rem;
-    }
-    .secure-badge i { color:#a0e060;font-size:1rem; }
-
-    /* confirm btn */
-    .confirm-btn {
-      width:100%;padding:1rem;border-radius:12px;
-      background:linear-gradient(135deg,var(--gold),#f5c442);
-      border:none;color:var(--noir);
-      font-family:'DM Sans',sans-serif;font-weight:700;font-size:1.05rem;
-      cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:.6rem;
-    }
-    .confirm-btn:hover { box-shadow:0 15px 35px rgba(245,182,23,.35);transform:translateY(-2px); }
-
-    /* ── ORDER SUMMARY SIDEBAR ── */
-    .order-summary {
-      background:var(--glass);border:1px solid rgba(255,255,255,.07);
-      border-radius:16px;padding:1.8rem;position:sticky;top:100px;
-    }
-    .order-summary h3 { font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--text-light);margin-bottom:1.4rem; }
-    .order-movie-preview {
-      display:flex;gap:1rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:1.2rem;
-    }
-    .omp-poster { width:55px;aspect-ratio:2/3;border-radius:8px;background:linear-gradient(135deg,rgba(13,204,255,.1),rgba(245,182,23,.08));display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0; }
-    .omp-title { font-weight:600;color:var(--text-light);font-size:.9rem; }
-    .omp-detail { font-size:.78rem;color:var(--text-muted);margin-top:.3rem;line-height:1.5; }
-    .order-line { display:flex;justify-content:space-between;font-size:.85rem;padding:.4rem 0; }
-    .order-line .lbl { color:var(--text-muted); }
-    .order-line .val { color:var(--text-light); }
-    .order-divider { height:1px;background:rgba(255,255,255,.07);margin:.8rem 0; }
-    .order-total-row { display:flex;justify-content:space-between;align-items:center;padding-top:.5rem; }
-    .order-total-row .total-lbl { font-size:.9rem;font-weight:600;color:var(--text-light); }
-    .order-total-row .total-val { font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold); }
-    .order-note { font-size:.75rem;color:var(--text-muted);margin-top:1rem;line-height:1.6;padding-top:.8rem;border-top:1px solid rgba(255,255,255,.07); }
-
-    /* ── SUCCESS STATE ── */
-    .booking-success {
-      display:none;text-align:center;padding:4rem 2rem;
-    }
-    .booking-success.visible { display:block; }
-    .bs-icon { font-size:4rem;animation:popIn .5s ease; }
-    @keyframes popIn { 0%{transform:scale(0)}80%{transform:scale(1.15)}100%{transform:scale(1)} }
-    .bs-code {
-      background:rgba(245,182,23,.1);border:1px solid rgba(245,182,23,.3);
-      border-radius:12px;padding:1.2rem;margin:1.5rem auto;max-width:280px;
-    }
-    .bs-code .code-label { font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted); }
-    .bs-code .code-val { font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--gold);letter-spacing:.1em; }
-
-    @media(max-width:900px){.tickets-layout{grid-template-columns:1fr;}}
-    @media(max-width:600px){
-      .checkout-steps{gap:0;overflow-x:auto;justify-content:flex-start;padding:0 .5rem;}
-      .step{padding:.5rem .8rem;}
-      .step-line{width:30px;}
-      .pf-row,.card-input-row{grid-template-columns:1fr;}
-      .payment-methods{grid-template-columns:1fr 1fr;}
-      .movie-select-card{grid-template-columns:60px 1fr;}
-      .movie-select-right{display:none;}
-    }
+    .summary-row { display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--muted); padding: 0.4rem 0; }
+    .summary-row.total { color: var(--ink); font-size: 1.1rem; border-top: 1px solid var(--line); margin-top: 0.5rem; padding-top: 0.9rem; }
+    .summary-row.total span:last-child { color: var(--amber); font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.03em; }
   </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<!-- PAGE LOADER -->
-<div id="page-loader">
-  <div class="loader-inner">
-    <div class="loader-logo">AUTOCINE ANTIGUA</div>
-    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-  </div>
-</div>
-
-<!-- NAVBAR -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px">
-        <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
-        <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
-        <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-      </svg>
-      <div class="nav-logo-text">
-        <span class="nav-logo-name">AUTOCINE ANTIGUA</span>
-        <span class="nav-logo-sub">Cine bajo las Estrellas</span>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Inicio</a>
-      <a href="eventos.html" class="nav-link">Eventos</a>
-      <a href="snacks.html" class="nav-link">Snacks</a>
-      <a href="tienda.html" class="nav-link">Tienda</a>
-      <a href="espacio-fiestas.html" class="nav-link">Fiestas</a>
-      <a href="anuncios.html" class="nav-link">Anuncios</a>
-      <a href="quienes-somos.html" class="nav-link">Nosotros</a>
-      <a href="contacto.html" class="nav-link">Contacto</a>
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="brand"><i data-lucide="film"></i> Autocine Antigua</a>
+      <nav class="nav-links">
+        <a href="index.html#cartelera">Cartelera</a>
+        <a href="snacks.html">Snack Bar</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="tickets.html" class="btn btn-primary" aria-current="page">Comprar Tickets</a>
+      </nav>
+      <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú"><i data-lucide="menu"></i></button>
     </div>
-    <div class="nav-actions">
-      <button class="cart-btn" onclick="openCart()" aria-label="Carrito">
-        <i class="ph ph-shopping-cart" style="font-size:20px"></i>
-        <span class="cart-count hidden">0</span>
-      </button>
-      <a href="tickets.html" class="btn-nav-ticket">TICKETS</a>
-      <button class="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-</nav>
-<div class="nav-mobile">
-  <a href="index.html" class="nav-link">🏠 Inicio</a>
-  <a href="eventos.html" class="nav-link">🎬 Eventos</a>
-  <a href="snacks.html" class="nav-link">🍿 Snacks</a>
-  <a href="tienda.html" class="nav-link">🛍️ Tienda</a>
-  <a href="espacio-fiestas.html" class="nav-link">🎉 Fiestas</a>
-  <a href="anuncios.html" class="nav-link">📢 Anuncios</a>
-  <a href="quienes-somos.html" class="nav-link">⭐ Nosotros</a>
-  <a href="contacto.html" class="nav-link">📬 Contacto</a>
-  <a href="tickets.html" class="btn-nav-ticket">🎟️ COMPRAR TICKETS</a>
-</div>
+    <nav class="nav-mobile" data-nav-mobile>
+      <a href="index.html#cartelera">Cartelera</a>
+      <a href="snacks.html">Snack Bar</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="tickets.html" class="btn btn-primary" aria-current="page">Comprar Tickets</a>
+    </nav>
+  </header>
 
-<!-- CART OVERLAY & SIDEBAR -->
-<div class="cart-overlay"></div>
-<aside class="cart-sidebar">
-  <div class="cart-header">
-    <h3>MI CARRITO</h3>
-    <button class="cart-close" onclick="closeCart()">✕</button>
-  </div>
-  <div class="cart-items" id="cart-items-list"></div>
-  <div class="cart-empty" id="cart-empty" style="display:flex">
-    <div class="cart-empty-icon">🎬</div>
-    <p>Tu carrito está vacío</p>
-    <a href="tickets.html" class="btn btn-outline btn-sm" onclick="closeCart()">Ver Tickets</a>
-  </div>
-  <div class="cart-footer" id="cart-footer" style="display:none">
-    <div class="cart-total-row">
-      <span>Total</span>
-      <span class="cart-total-amount" id="cart-total-amount">Q0.00</span>
-    </div>
-    <button id="checkout-btn" class="btn btn-primary btn-full" onclick="window.location.href='checkout.html'">PROCEDER AL PAGO</button>
-  </div>
-</aside>
-
-<!-- FLOATING CART FAB -->
-<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
-  <i class="ph ph-shopping-cart"></i>
-  <span class="cart-fab-count hidden">0</span>
-</button>
-
-<main class="page-content">
-
-  <section class="tickets-hero">
-    <canvas id="starsCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.35"></canvas>
-    <div class="container" style="position:relative;z-index:1">
-      <div class="section-eyebrow reveal">🎟️ RESERVA EN LÍNEA</div>
-      <h1 class="reveal">Comprar Tickets</h1>
-      <p class="reveal">Elige tu película, función y paga en línea. Sin filas, sin esperas.</p>
+  <section class="page-hero">
+    <div class="wrap reveal">
+      <span class="eyebrow">Reserva tu Espacio</span>
+      <h1 class="h1" style="font-size: clamp(2.2rem, 5vw, 3.5rem);">Comprar Tickets</h1>
+      <p class="lead" style="max-width: 28rem; margin: 1rem auto 0;">
+        Elegí función, fecha y cantidad de autos. Confirmás el pago en el siguiente paso.
+      </p>
     </div>
   </section>
 
-  <div class="container">
+  <section class="section">
+    <div class="wrap">
+      <form class="ticket-form reveal" id="ticket-form">
+        <div class="field">
+          <label for="funcion">Función</label>
+          <select id="funcion">
+            <option value="45">Cosmos: Fin — Q45</option>
+            <option value="45">Selva Eterna — Q45</option>
+            <option value="45">Sombras — Q45</option>
+            <option value="150">Evento: Noche de Terror — Q150</option>
+            <option value="120">Evento: Galaxia Navideña — Q120</option>
+          </select>
+        </div>
 
-    <!-- STEPS INDICATOR -->
-    <div class="checkout-steps" id="checkoutSteps">
-      <div class="step active" data-step="1">
-        <div class="step-num">1</div>
-        <span class="step-label">Película</span>
-      </div>
-      <div class="step-line" id="line-1-2"></div>
-      <div class="step active" data-step="2" style="opacity:.4" id="step2indicator">
-        <div class="step-num">2</div>
-        <span class="step-label">Cantidad</span>
-      </div>
-      <div class="step-line" id="line-2-3"></div>
-      <div class="step" data-step="3" style="opacity:.4" id="step3indicator">
-        <div class="step-num">3</div>
-        <span class="step-label">Datos</span>
-      </div>
-      <div class="step-line" id="line-3-4"></div>
-      <div class="step" data-step="4" style="opacity:.4" id="step4indicator">
-        <div class="step-num">4</div>
-        <span class="step-label">Pago</span>
-      </div>
-    </div>
+        <div class="field">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" />
+        </div>
 
-    <div class="tickets-layout">
-
-      <!-- MAIN COLUMN -->
-      <div>
-
-        <!-- STEP 1: Movie Selection -->
-        <div class="step-panel active" id="panel-1">
-          <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--text-light);margin-bottom:1.5rem">Selecciona tu Película</h3>
-
-          <!-- Date scroller -->
-          <div class="date-scroller" id="dateScroller"></div>
-
-          <!-- Screen tabs -->
-          <div class="screen-tabs">
-            <button class="screen-tab active" onclick="setScreen(this,'all')">Todas las pantallas</button>
-            <button class="screen-tab" onclick="setScreen(this,'1')">Pantalla 1</button>
-            <button class="screen-tab" onclick="setScreen(this,'2')">Pantalla 2</button>
-            <button class="screen-tab" onclick="setScreen(this,'3')">Pantalla 3</button>
-            <button class="screen-tab" onclick="setScreen(this,'4')">Pantalla 4</button>
-          </div>
-
-          <div class="movie-cards-grid" id="movieGrid"></div>
-
-          <div style="margin-top:2rem;text-align:right">
-            <button class="btn btn-primary" id="step1next" onclick="goStep(2)" disabled>
-              Continuar <i class="ph ph-arrow-right"></i>
-            </button>
+        <div class="field">
+          <label>Cantidad de autos</label>
+          <div class="stepper">
+            <button type="button" id="minus" aria-label="Restar">−</button>
+            <span id="qty">1</span>
+            <button type="button" id="plus" aria-label="Sumar">+</button>
           </div>
         </div>
 
-        <!-- STEP 2: Quantity -->
-        <div class="step-panel" id="panel-2">
-          <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--text-light);margin-bottom:1.5rem">Cantidad de Tickets</h3>
-          <div class="quantity-section">
-            <div class="qty-card">
-              <div class="qty-info">
-                <div class="qty-type">🚗 Entrada por Vehículo</div>
-                <div class="qty-desc">Entrada estándar — 1 vehículo, hasta 5 personas</div>
-                <div class="qty-price" id="standardPrice">Q75.00</div>
-              </div>
-              <div class="qty-controls">
-                <button class="qty-btn" onclick="changeQty('standard',-1)">−</button>
-                <span class="qty-num" id="standardQty">1</span>
-                <button class="qty-btn" onclick="changeQty('standard',1)">+</button>
-              </div>
-            </div>
-            <div class="qty-card">
-              <div class="qty-info">
-                <div class="qty-type">⭐ Entrada VIP</div>
-                <div class="qty-desc">Zona premium — fila frontal con mejor ángulo</div>
-                <div class="qty-price" id="vipPrice">Q110.00</div>
-              </div>
-              <div class="qty-controls">
-                <button class="qty-btn" onclick="changeQty('vip',-1)">−</button>
-                <span class="qty-num" id="vipQty">0</span>
-                <button class="qty-btn" onclick="changeQty('vip',1)">+</button>
-              </div>
-            </div>
-            <div class="qty-card">
-              <div class="qty-info">
-                <div class="qty-type">🎓 Estudiante</div>
-                <div class="qty-desc">Con carnet estudiantil válido</div>
-                <div class="qty-price" id="studentPrice">Q55.00</div>
-              </div>
-              <div class="qty-controls">
-                <button class="qty-btn" onclick="changeQty('student',-1)">−</button>
-                <span class="qty-num" id="studentQty">0</span>
-                <button class="qty-btn" onclick="changeQty('student',1)">+</button>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:2rem">
-            <button class="btn btn-outline" onclick="goStep(1)"><i class="ph ph-arrow-left"></i> Atrás</button>
-            <button class="btn btn-primary" onclick="goStep(3)">Continuar <i class="ph ph-arrow-right"></i></button>
-          </div>
+        <div class="summary">
+          <div class="summary-row"><span>Precio por auto</span><span id="unit-price">Q45</span></div>
+          <div class="summary-row"><span>Cantidad</span><span id="unit-qty">1</span></div>
+          <div class="summary-row total"><span>Total</span><span id="total-price">Q45</span></div>
         </div>
 
-        <!-- STEP 3: Passenger Info -->
-        <div class="step-panel" id="panel-3">
-          <div class="passenger-form">
-            <h3>Datos del Comprador</h3>
-            <div class="pf-row">
-              <div class="pf-group"><label>Nombre *</label><input type="text" id="pName" placeholder="Tu nombre"/></div>
-              <div class="pf-group"><label>Apellido *</label><input type="text" id="pLast" placeholder="Tu apellido"/></div>
-            </div>
-            <div class="pf-row">
-              <div class="pf-group"><label>Correo *</label><input type="email" id="pEmail" placeholder="tu@correo.com"/></div>
-              <div class="pf-group"><label>Teléfono</label><input type="tel" id="pPhone" placeholder="+502 ____-____"/></div>
-            </div>
-            <div class="pf-row">
-              <div class="pf-group">
-                <label>Modelo de Vehículo</label>
-                <input type="text" id="pVehicle" placeholder="Toyota Corolla, Honda Civic..."/>
-              </div>
-              <div class="pf-group">
-                <label>Color de Vehículo</label>
-                <input type="text" id="pColor" placeholder="Blanco, Negro, Rojo..."/>
-              </div>
-            </div>
-            <div class="vehicle-info">
-              <p><i class="ph ph-info"></i> El modelo y color de tu vehículo ayudan al personal a identificarte rápidamente al ingresar.</p>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:1.5rem">
-            <button class="btn btn-outline" onclick="goStep(2)"><i class="ph ph-arrow-left"></i> Atrás</button>
-            <button class="btn btn-primary" onclick="validateStep3()">Continuar <i class="ph ph-arrow-right"></i></button>
-          </div>
-        </div>
-
-        <!-- STEP 4: Payment -->
-        <div class="step-panel" id="panel-4">
-          <div class="payment-section">
-            <h3>Método de Pago</h3>
-            <div class="payment-methods">
-              <div class="pay-method active" onclick="setPayMethod(this,'card')">
-                <i class="ph ph-credit-card"></i>
-                <span>Tarjeta</span>
-              </div>
-              <div class="pay-method" onclick="setPayMethod(this,'transfer')">
-                <i class="ph ph-bank"></i>
-                <span>Transferencia</span>
-              </div>
-              <div class="pay-method" onclick="setPayMethod(this,'cash')">
-                <i class="ph ph-money"></i>
-                <span>En Taquilla</span>
-              </div>
-            </div>
-
-            <!-- Card form -->
-            <div id="cardForm" class="card-form">
-              <div class="card-input-group">
-                <label>Número de Tarjeta</label>
-                <input type="text" id="cardNum" placeholder="•••• •••• •••• ••••" maxlength="19" oninput="formatCard(this)"/>
-              </div>
-              <div class="card-input-row">
-                <div class="card-input-group">
-                  <label>Nombre en Tarjeta</label>
-                  <input type="text" id="cardName" placeholder="NOMBRE APELLIDO"/>
-                </div>
-                <div class="card-input-group">
-                  <label>Vencimiento</label>
-                  <input type="text" id="cardExp" placeholder="MM/AA" maxlength="5" oninput="formatExp(this)"/>
-                </div>
-              </div>
-              <div class="card-input-row">
-                <div class="card-input-group">
-                  <label>CVV</label>
-                  <input type="password" id="cardCvv" placeholder="•••" maxlength="4"/>
-                </div>
-                <div class="card-input-group">
-                  <label>Cuotas</label>
-                  <select id="cardCuotas">
-                    <option>1 cuota (sin interés)</option>
-                    <option>3 cuotas</option>
-                    <option>6 cuotas</option>
-                    <option>12 cuotas</option>
-                  </select>
-                </div>
-              </div>
-              <div class="secure-badge"><i class="ph-fill ph-lock-key"></i> Pago seguro con cifrado SSL 256-bit</div>
-            </div>
-
-            <!-- Transfer form -->
-            <div id="transferForm" style="display:none">
-              <div style="background:rgba(13,204,255,.07);border:1px solid rgba(13,204,255,.15);border-radius:12px;padding:1.5rem">
-                <p style="font-size:.9rem;color:var(--text-light);margin-bottom:.8rem;font-weight:600">Datos para Transferencia</p>
-                <p style="font-size:.85rem;color:var(--text-muted);line-height:1.8">
-                  Banco Industrial<br>
-                  Cuenta: 123-456789-0<br>
-                  A nombre de: Autocine Antigua S.A.<br>
-                  <br>
-                  Después de transferir, envía el comprobante a <strong style="color:var(--electric)">pagos@galaxiadrivein.gt</strong> con tu nombre y la función elegida.
-                </p>
-              </div>
-            </div>
-
-            <!-- Cash form -->
-            <div id="cashForm" style="display:none">
-              <div style="background:rgba(160,255,100,.07);border:1px solid rgba(160,255,100,.15);border-radius:12px;padding:1.5rem">
-                <p style="font-size:.9rem;color:var(--text-light);margin-bottom:.8rem;font-weight:600">Pago en Taquilla</p>
-                <p style="font-size:.85rem;color:var(--text-muted);line-height:1.8">
-                  Al seleccionar esta opción, recibirás una reserva provisional. Debes presentarte en taquilla al menos <strong style="color:#a0e060">30 minutos antes</strong> de la función para confirmar y pagar tu reserva.<br><br>
-                  Aceptamos: Efectivo (Q y USD), Tarjetas de débito/crédito.
-                </p>
-              </div>
-            </div>
-
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:1.5rem">
-            <button class="btn btn-outline" onclick="goStep(3)"><i class="ph ph-arrow-left"></i> Atrás</button>
-            <button class="confirm-btn" style="max-width:240px" onclick="confirmPurchase()">
-              <i class="ph ph-check-circle"></i> Confirmar Compra
-            </button>
-          </div>
-        </div>
-
-        <!-- SUCCESS -->
-        <div class="booking-success" id="bookingSuccess">
-          <div class="bs-icon">🎉</div>
-          <h2 style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);margin:.5rem 0">¡Reserva Confirmada!</h2>
-          <p style="color:var(--text-muted);max-width:420px;margin:0 auto 1.5rem;font-size:.95rem">Tu compra fue procesada exitosamente. Te hemos enviado los tickets a tu correo electrónico.</p>
-          <div class="bs-code">
-            <div class="code-label">Código de Reserva</div>
-            <div class="code-val" id="bookingCode">GX-00000</div>
-          </div>
-          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:2rem">Presenta este código o el QR que enviamos a tu correo al llegar al drive-in.</p>
-          <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-            <a href="index.html" class="btn btn-outline">Volver al Inicio</a>
-            <a href="snacks.html" class="btn btn-primary">Agregar Snacks 🍿</a>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ORDER SUMMARY -->
-      <div class="order-summary" id="orderSummary">
-        <h3>Resumen de Orden</h3>
-        <div class="order-movie-preview" id="summaryMovie">
-          <div class="omp-poster" id="summaryPoster">🎬</div>
-          <div>
-            <div class="omp-title" id="summaryTitle">Selecciona una película</div>
-            <div class="omp-detail" id="summaryDetail">—</div>
-          </div>
-        </div>
-        <div id="summaryLines"></div>
-        <div class="order-divider"></div>
-        <div class="order-total-row">
-          <span class="total-lbl">Total a pagar</span>
-          <span class="total-val" id="summaryTotal">Q0.00</span>
-        </div>
-        <div class="order-note">
-          <i class="ph ph-shield-check" style="color:#a0e060"></i> Compra segura. Los tickets se envían al correo que proporciones.
-        </div>
-      </div>
-
-    </div>
-  </div>
-</main>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" class="nav-logo" style="margin-bottom:1rem;display:inline-flex">
-          <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:34px">
-            <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
-            <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
-            <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-            <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-            <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-            <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-            <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-          </svg>
-          <span class="logo-text" style="font-size:1.3rem">AUTOCINE ANTIGUA</span>
+        <a href="checkout.html" class="btn btn-primary" style="width:100%; margin-top:1.75rem;" data-buy>
+          Continuar al Pago
         </a>
-        <p style="color:var(--text-muted);font-size:.9rem;line-height:1.7">Cine bajo las Estrellas.</p>
-        <div class="social-links" style="margin-top:1.2rem">
-          <a href="#" class="social-link"><i class="ph ph-facebook-logo"></i></a>
-          <a href="#" class="social-link"><i class="ph ph-instagram-logo"></i></a>
-          <a href="#" class="social-link"><i class="ph ph-tiktok-logo"></i></a>
-          <a href="#" class="social-link"><i class="ph ph-youtube-logo"></i></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-heading">Navegación</h4>
-        <ul class="footer-links">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="eventos.html">Eventos</a></li>
-          <li><a href="snacks.html">Snacks</a></li>
-          <li><a href="tienda.html">Tienda</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-heading">Info</h4>
-        <ul class="footer-links">
-          <li><a href="quienes-somos.html">Nosotros</a></li>
-          <li><a href="contacto.html">Contacto</a></li>
-          <li><a href="politica.html">Política</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-heading">Contacto</h4>
-        <ul class="footer-links">
-          <li><i class="ph ph-phone" style="color:var(--gold)"></i> +502 5555-7890</li>
-          <li><i class="ph ph-envelope" style="color:var(--gold)"></i> hola@autocineantiga.gt</li>
-        </ul>
+      </form>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand"><i data-lucide="film"></i> Autocine Antigua · 2026</div>
+      <div class="footer-loc"><i data-lucide="map-pin"></i> Antigua Guatemala</div>
+      <div class="footer-social">
+        <i data-lucide="instagram"></i>
+        <i data-lucide="facebook"></i>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 Autocine Antigua</p>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<script src="global.js"></script>
-<script>
-// ── DATA ──
-const MOVIES = [
-  { id:'m1', title:'Interstellar', emoji:'🚀', genre:'Ciencia Ficción', rating:'PG-13', duration:'169 min', screen:'1', price:75, times:['7:30 PM','9:00 PM'], soldOut:[] },
-  { id:'m2', title:'Moana 2', emoji:'🌊', genre:'Animación', rating:'G', duration:'100 min', screen:'2', price:65, times:['7:00 PM','8:30 PM'], soldOut:['8:30 PM'] },
-  { id:'m3', title:'Gladiator II', emoji:'⚔️', genre:'Acción', rating:'R', duration:'148 min', screen:'3', price:75, times:['7:30 PM'], soldOut:[] },
-  { id:'m4', title:'Spider-Man NWH', emoji:'🕷️', genre:'Superhéroes', rating:'PG-13', duration:'148 min', screen:'4', price:80, times:['8:00 PM','10:00 PM'], soldOut:[] },
-];
-const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  <div class="toast" data-toast>Redirigiendo a boletería…</div>
 
-let currentStep = 1;
-let selectedMovie = null;
-let selectedTime = null;
-let selectedDate = 0;
-let filterScreen = 'all';
-let qty = { standard:1, vip:0, student:0 };
-const PRICES = { standard:75, vip:110, student:55 };
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="global.js"></script>
+  <script>
+    (function () {
+      const select = document.getElementById("funcion");
+      const qtyEl = document.getElementById("qty");
+      const unitPriceEl = document.getElementById("unit-price");
+      const unitQtyEl = document.getElementById("unit-qty");
+      const totalEl = document.getElementById("total-price");
+      let qty = 1;
 
-// ── DATE SCROLLER ──
-function buildDates() {
-  const scroller = document.getElementById('dateScroller');
-  const today = new Date();
-  scroller.innerHTML = Array.from({length:7},(_,i)=>{
-    const d = new Date(today); d.setDate(today.getDate()+i);
-    return `<div class="date-chip${i===0?' active':''}" onclick="selectDate(${i},this)">
-      <div class="dc-day">${DAYS[d.getDay()]}</div>
-      <div class="dc-num">${d.getDate()}</div>
-      <div class="dc-mon">${MONTHS[d.getMonth()]}</div>
-    </div>`;
-  }).join('');
-}
-function selectDate(i,el) {
-  selectedDate=i;
-  document.querySelectorAll('.date-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderMovies();
-}
+      function update() {
+        const price = parseInt(select.value, 10);
+        unitPriceEl.textContent = `Q${price}`;
+        unitQtyEl.textContent = qty;
+        totalEl.textContent = `Q${price * qty}`;
+      }
 
-// ── MOVIE GRID ──
-function renderMovies() {
-  const filtered = filterScreen==='all' ? MOVIES : MOVIES.filter(m=>m.screen===filterScreen);
-  document.getElementById('movieGrid').innerHTML = filtered.map(m=>`
-    <div class="movie-select-card${selectedMovie===m.id?' selected':''}" id="mcard-${m.id}" onclick="selectMovie('${m.id}')">
-      <div class="movie-poster-mini">${m.emoji}</div>
-      <div class="movie-select-info">
-        <div class="movie-title-sm">${m.title}</div>
-        <div class="movie-meta-sm">
-          <span class="movie-meta-badge">${m.genre}</span>
-          <span class="movie-meta-badge rating">${m.rating}</span>
-          <span class="movie-meta-badge">${m.duration}</span>
-          <span class="movie-meta-badge">Pantalla ${m.screen}</span>
-        </div>
-        <div class="showtimes-list">
-          ${m.times.map(t=>{
-            const so = m.soldOut.includes(t);
-            const active = selectedMovie===m.id && selectedTime===t;
-            return `<button class="showtime-pill${active?' active':''}${so?' sold-out-pill':''}" onclick="selectTime(event,'${m.id}','${t}')">${so?'Agotado':t}</button>`;
-          }).join('')}
-        </div>
-      </div>
-      <div class="movie-select-right">
-        <div class="movie-price-sm">Q${m.price}</div>
-        <div class="movie-price-note">por vehículo</div>
-      </div>
-    </div>`).join('');
-}
-function selectMovie(id) {
-  selectedMovie=id;selectedTime=null;
-  document.getElementById('step1next').disabled=true;
-  renderMovies(); updateSummary();
-}
-function selectTime(e,movieId,time) {
-  e.stopPropagation();
-  selectedMovie=movieId;selectedTime=time;
-  document.getElementById('step1next').disabled=false;
-  const movie = MOVIES.find(m=>m.id===movieId);
-  if(movie){ PRICES.standard=movie.price; PRICES.vip=movie.price+35; PRICES.student=movie.price-20; }
-  renderMovies(); updateSummary();
-}
-function setScreen(btn,s) {
-  document.querySelectorAll('.screen-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); filterScreen=s; renderMovies();
-}
-
-// ── QUANTITY ──
-function changeQty(type,delta) {
-  qty[type]=Math.max(0,qty[type]+delta);
-  if(type==='standard') qty.standard=Math.max(1,qty.standard);
-  document.getElementById(type+'Qty').textContent=qty[type];
-  updateSummary();
-}
-
-// ── SUMMARY ──
-function updateSummary() {
-  const movie = MOVIES.find(m=>m.id===selectedMovie);
-  const poster = document.getElementById('summaryPoster');
-  const title = document.getElementById('summaryTitle');
-  const detail = document.getElementById('summaryDetail');
-  if(movie){ poster.textContent=movie.emoji; title.textContent=movie.title; detail.textContent=`Pantalla ${movie.screen} · ${selectedTime||'—'}`; }
-  const lines = document.getElementById('summaryLines');
-  let total=0,html='';
-  if(qty.standard>0){ const s=qty.standard*PRICES.standard; html+=`<div class="order-line"><span class="lbl">Entrada Normal x${qty.standard}</span><span class="val">Q${s}</span></div>`; total+=s; }
-  if(qty.vip>0){ const s=qty.vip*PRICES.vip; html+=`<div class="order-line"><span class="lbl">Entrada VIP x${qty.vip}</span><span class="val">Q${s}</span></div>`; total+=s; }
-  if(qty.student>0){ const s=qty.student*PRICES.student; html+=`<div class="order-line"><span class="lbl">Estudiante x${qty.student}</span><span class="val">Q${s}</span></div>`; total+=s; }
-  const fee = Math.round(total*.05);
-  html+=`<div class="order-line"><span class="lbl" style="font-size:.78rem;opacity:.7">Cargo por servicio (5%)</span><span class="val" style="font-size:.8rem">Q${fee}</span></div>`;
-  lines.innerHTML=html;
-  document.getElementById('summaryTotal').textContent=`Q${(total+fee).toFixed(2)}`;
-}
-
-// ── STEPS ──
-function goStep(n) {
-  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
-  const panel=document.getElementById('panel-'+n);
-  if(panel){ panel.classList.add('active'); currentStep=n; updateStepUI(); }
-  updateSummary();
-  window.scrollTo({top:document.querySelector('.tickets-layout').offsetTop-80,behavior:'smooth'});
-}
-function updateStepUI() {
-  for(let i=1;i<=4;i++){
-    const stepEl=document.querySelector(`.step[data-step="${i}"]`);
-    if(!stepEl)continue;
-    if(i<currentStep){stepEl.classList.add('done');stepEl.style.opacity='1';}
-    else if(i===currentStep){stepEl.classList.remove('done');stepEl.style.opacity='1';}
-    else{stepEl.classList.remove('done');stepEl.style.opacity='.4';}
-    const line=document.getElementById(`line-${i}-${i+1}`);
-    if(line) line.classList.toggle('done',i<currentStep);
-  }
-}
-function validateStep3() {
-  const name=document.getElementById('pName').value.trim();
-  const email=document.getElementById('pEmail').value.trim();
-  if(!name||!email){ showToast('Campos requeridos','Nombre y correo son obligatorios.','ph-warning'); return; }
-  goStep(4);
-}
-
-// ── PAYMENT ──
-function setPayMethod(btn,method) {
-  document.querySelectorAll('.pay-method').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('cardForm').style.display=method==='card'?'flex':'none';
-  document.getElementById('transferForm').style.display=method==='transfer'?'block':'none';
-  document.getElementById('cashForm').style.display=method==='cash'?'block':'none';
-}
-function formatCard(input) {
-  let v=input.value.replace(/\D/g,'').substring(0,16);
-  input.value=v.replace(/(.{4})/g,'$1 ').trim();
-}
-function formatExp(input) {
-  let v=input.value.replace(/\D/g,'');
-  if(v.length>2) v=v.substring(0,2)+'/'+v.substring(2,4);
-  input.value=v;
-}
-
-// ── CONFIRM ──
-function confirmPurchase() {
-  const code='GX-'+Math.floor(10000+Math.random()*90000);
-  document.querySelector('.tickets-layout').style.display='none';
-  document.querySelector('.checkout-steps').style.display='none';
-  const s=document.getElementById('bookingSuccess');
-  s.classList.add('visible');
-  document.getElementById('bookingCode').textContent=code;
-  showToast('¡Compra exitosa!','Revisa tu correo para los tickets.','ph-check-circle',6000);
-  // add to cart record
-  const movie=MOVIES.find(m=>m.id===selectedMovie);
-  if(movie) Cart.add({id:'ticket-'+Date.now(),name:'Ticket: '+movie.title,price:parseInt(document.getElementById('summaryTotal').textContent.replace('Q','')),category:'Ticket',emoji:'🎟️'});
-}
-
-// ── INIT ──
-buildDates(); renderMovies(); updateSummary();
-initStars('starsCanvas');
-document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  if(window.observeReveal) setTimeout(observeReveal, 100);
-});
-</script>
+      document.getElementById("minus").addEventListener("click", () => {
+        qty = Math.max(1, qty - 1);
+        qtyEl.textContent = qty;
+        update();
+      });
+      document.getElementById("plus").addEventListener("click", () => {
+        qty = Math.min(10, qty + 1);
+        qtyEl.textContent = qty;
+        update();
+      });
+      select.addEventListener("change", update);
+      update();
+    })();
+  </script>
 </body>
 </html>

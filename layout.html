@@ -1,212 +1,52 @@
-<!DOCTYPE html>
 <!--
-  ============================================================
-  AUTOCINE ANTIGUA — LAYOUT TEMPLATE v2.0
-  Sin emojis. Usa íconos Phosphor en todos los elementos UI.
-  Copia este archivo para crear nuevas páginas.
-  Reemplaza [TITULO_PAGINA], [DESCRIPCION] y el bloque <main>.
-  ============================================================
+  layout.html — Referencia del header y footer compartidos.
+
+  Nota: este proyecto no usa un bundler, así que HTML no puede "incluir"
+  este archivo de forma nativa. Si lo cargás con fetch() desde global.js,
+  funciona perfecto una vez desplegado (Render), pero falla por CORS si
+  abrís los archivos directo con doble clic (file://). Por eso, en
+  index.html / snacks.html / eventos.html / tickets.html el mismo bloque
+  de header y footer está pegado directamente en cada página — así
+  cualquiera puede abrir el sitio local sin servidor y ver todo bien.
+
+  Este archivo queda como la fuente de verdad: si cambiás el menú o el
+  footer, actualizá aquí primero y despues replicá el cambio en cada
+  página. Si en algún momento agregan un build step (Vite, 11ty, etc.)
+  esto se puede convertir en un partial real.
 -->
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[TITULO_PAGINA] — Autocine Antigua</title>
-  <meta name="description" content="[DESCRIPCION]">
-  <meta name="theme-color" content="#07090f">
-  <meta property="og:title"       content="[TITULO_PAGINA] | Autocine Antigua">
-  <meta property="og:description" content="[DESCRIPCION]">
-  <meta property="og:type"        content="website">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23f5b617'/%3E%3Cpath d='M20 20h24v24H20z' fill='%2307090f'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23f5b617'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="global.css">
-  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
-</head>
-<body>
 
-<!-- =========== PAGE LOADER =========== -->
-<div id="page-loader">
-  <div class="loader-inner">
-    <div class="loader-logo">AUTOCINE ANTIGUA</div>
-    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+<!-- ===== HEADER ===== -->
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="brand"><i data-lucide="film"></i> Autocine Antigua</a>
+    <nav class="nav-links">
+      <a href="index.html#cartelera">Cartelera</a>
+      <a href="snacks.html">Snack Bar</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú"><i data-lucide="menu"></i></button>
   </div>
-</div>
+  <nav class="nav-mobile" data-nav-mobile>
+    <a href="index.html#cartelera">Cartelera</a>
+    <a href="snacks.html">Snack Bar</a>
+    <a href="eventos.html">Eventos</a>
+    <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
+  </nav>
+</header>
 
-<!-- =========== NAVBAR =========== -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="32" cy="32" r="29" stroke="#f5b617" stroke-width="1.5" stroke-dasharray="4 3" opacity=".5"/>
-        <path d="M38 20 A14 14 0 1 0 38 44 A10 10 0 1 1 38 20Z" fill="#f5b617"/>
-        <rect x="26" y="26" width="5" height="4" rx="1" fill="#07090f"/>
-        <rect x="33" y="26" width="5" height="4" rx="1" fill="#07090f"/>
-        <rect x="26" y="33" width="5" height="4" rx="1" fill="#07090f"/>
-        <rect x="33" y="33" width="5" height="4" rx="1" fill="#07090f"/>
-        <path d="M52 12 L53.3 15.8 L57.3 15.8 L54.2 18 L55.5 22 L52 19.6 L48.5 22 L49.8 18 L46.7 15.8 L50.7 15.8Z" fill="#f5b617" opacity=".8"/>
-      </svg>
-      <div class="nav-logo-text">
-        <span class="nav-logo-name">AUTOCINE ANTIGUA</span>
-        <span class="nav-logo-sub">Cine bajo las Estrellas</span>
-      </div>
-    </a>
+<!-- Marcá la página activa agregando aria-current="page" al link correspondiente -->
 
-    <div class="nav-links">
-      <a href="index.html"           class="nav-link">Inicio</a>
-      <a href="eventos.html"         class="nav-link">Eventos</a>
-      <a href="snacks.html"          class="nav-link">Snacks</a>
-      <a href="tienda.html"          class="nav-link">Tienda</a>
-      <a href="espacio-fiestas.html" class="nav-link">Fiestas</a>
-      <a href="anuncios.html"        class="nav-link">Anuncios</a>
-      <a href="quienes-somos.html"   class="nav-link">Nosotros</a>
-      <a href="contacto.html"        class="nav-link">Contacto</a>
-    </div>
-
-    <div class="nav-actions">
-      <button class="cart-btn" onclick="openCart()" aria-label="Carrito de compras">
-        <i class="ph ph-shopping-cart" aria-hidden="true" style="font-size:20px"></i>
-        <span class="cart-count hidden" aria-live="polite">0</span>
-      </button>
-      <a href="tickets.html" class="btn-nav-ticket">TICKETS</a>
-      <button class="hamburger" aria-label="Abrir menú" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</nav>
-
-<!-- Mobile Menu -->
-<nav class="nav-mobile" aria-label="Menú móvil">
-  <a href="index.html"           class="nav-link"><i class="ph ph-house" aria-hidden="true"></i> Inicio</a>
-  <a href="eventos.html"         class="nav-link"><i class="ph ph-film-strip" aria-hidden="true"></i> Eventos</a>
-  <a href="snacks.html"          class="nav-link"><i class="ph ph-popcorn" aria-hidden="true"></i> Snacks</a>
-  <a href="tienda.html"          class="nav-link"><i class="ph ph-shopping-bag" aria-hidden="true"></i> Tienda</a>
-  <a href="espacio-fiestas.html" class="nav-link"><i class="ph ph-confetti" aria-hidden="true"></i> Fiestas</a>
-  <a href="anuncios.html"        class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Anuncios</a>
-  <a href="quienes-somos.html"   class="nav-link"><i class="ph ph-users" aria-hidden="true"></i> Nosotros</a>
-  <a href="contacto.html"        class="nav-link"><i class="ph ph-envelope" aria-hidden="true"></i> Contacto</a>
-  <a href="tickets.html"         class="btn-nav-ticket"><i class="ph ph-ticket" aria-hidden="true"></i> COMPRAR TICKETS</a>
-</nav>
-
-<!-- =========== CART OVERLAY + SIDEBAR =========== -->
-<div class="cart-overlay" role="presentation"></div>
-<aside class="cart-sidebar" aria-label="Carrito de compras">
-  <div class="cart-header">
-    <h3>MI CARRITO</h3>
-    <button class="cart-close" onclick="closeCart()" aria-label="Cerrar carrito">
-      <i class="ph ph-x" aria-hidden="true"></i>
-    </button>
-  </div>
-
-  <div class="cart-items" id="cart-items-list" aria-live="polite"></div>
-
-  <div class="cart-empty" id="cart-empty" style="display:flex" aria-label="Carrito vacío">
-    <i class="ph ph-film-slate" style="font-size:3rem;color:var(--text-muted)" aria-hidden="true"></i>
-    <p>Tu carrito está vacío</p>
-    <a href="tickets.html" class="btn btn-outline btn-sm" onclick="closeCart()">Ver Tickets</a>
-  </div>
-
-  <div class="cart-footer" id="cart-footer" style="display:none">
-    <div class="cart-total-row">
-      <span>Total</span>
-      <span class="cart-total-amount" id="cart-total-amount">Q0.00</span>
-    </div>
-    <a href="checkout.html" class="btn btn-primary btn-full">PROCEDER AL PAGO</a>
-  </div>
-</aside>
-
-<!-- =========== FLOATING CART FAB =========== -->
-<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
-  <i class="ph ph-shopping-cart" aria-hidden="true"></i>
-  <span class="cart-fab-count hidden" aria-hidden="true">0</span>
-</button>
-
-<!-- =========== MAIN CONTENT =========== -->
-<main class="page-content">
-  <!-- Contenido de la página aquí -->
-</main>
-
-<!-- =========== FOOTER =========== -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-
-      <div class="footer-about">
-        <a href="index.html" class="nav-logo footer-brand-logo">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px" aria-hidden="true">
-            <circle cx="32" cy="32" r="29" stroke="#f5b617" stroke-width="1.5" stroke-dasharray="4 3" opacity=".5"/>
-            <path d="M38 20 A14 14 0 1 0 38 44 A10 10 0 1 1 38 20Z" fill="#f5b617"/>
-            <rect x="26" y="26" width="5" height="4" rx="1" fill="#07090f"/>
-            <rect x="33" y="26" width="5" height="4" rx="1" fill="#07090f"/>
-            <rect x="26" y="33" width="5" height="4" rx="1" fill="#07090f"/>
-            <rect x="33" y="33" width="5" height="4" rx="1" fill="#07090f"/>
-          </svg>
-          <div class="nav-logo-text">
-            <span class="nav-logo-name">AUTOCINE ANTIGUA</span>
-            <span class="nav-logo-sub">Cine bajo las Estrellas</span>
-          </div>
-        </a>
-        <p>La experiencia cinematográfica más espectacular bajo las estrellas de Guatemala. Desde 2019, creando recuerdos inolvidables.</p>
-        <div class="social-row">
-          <a href="#" class="social-link" aria-label="Instagram"><i class="ph ph-instagram-logo" aria-hidden="true"></i></a>
-          <a href="#" class="social-link" aria-label="Facebook"><i class="ph ph-facebook-logo" aria-hidden="true"></i></a>
-          <a href="#" class="social-link" aria-label="TikTok"><i class="ph ph-tiktok-logo" aria-hidden="true"></i></a>
-          <a href="#" class="social-link" aria-label="YouTube"><i class="ph ph-youtube-logo" aria-hidden="true"></i></a>
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <h4>EXPLORA</h4>
-        <nav class="footer-links" aria-label="Explorar">
-          <a href="index.html"><span class="arrow">›</span> Inicio</a>
-          <a href="eventos.html"><span class="arrow">›</span> Eventos</a>
-          <a href="anuncios.html"><span class="arrow">›</span> Anuncios</a>
-          <a href="snacks.html"><span class="arrow">›</span> Snacks</a>
-          <a href="tienda.html"><span class="arrow">›</span> Tienda</a>
-          <a href="espacio-fiestas.html"><span class="arrow">›</span> Espacio Fiestas</a>
-        </nav>
-      </div>
-
-      <div class="footer-col">
-        <h4>INFORMACIÓN</h4>
-        <nav class="footer-links" aria-label="Información">
-          <a href="quienes-somos.html"><span class="arrow">›</span> Quiénes Somos</a>
-          <a href="contacto.html"><span class="arrow">›</span> Contacto</a>
-          <a href="tickets.html"><span class="arrow">›</span> Comprar Tickets</a>
-          <a href="politica.html"><span class="arrow">›</span> Política de Privacidad</a>
-          <a href="politica.html#terminos"><span class="arrow">›</span> Términos y Condiciones</a>
-        </nav>
-      </div>
-
-      <div class="footer-col">
-        <h4>CONTACTO</h4>
-        <address style="font-style:normal">
-          <div class="footer-contact-item">
-            <i class="ph ph-map-pin footer-contact-icon" aria-hidden="true"></i>
-            <span>Km 15, Carretera a El Salvador, Guatemala City</span>
-          </div>
-          <div class="footer-contact-item">
-            <i class="ph ph-phone footer-contact-icon" aria-hidden="true"></i>
-            <a href="tel:+50223456789">+502 2345-6789</a>
-          </div>
-          <div class="footer-contact-item">
-            <i class="ph ph-envelope footer-contact-icon" aria-hidden="true"></i>
-            <a href="mailto:hola@autocineantiga.gt">hola@autocineantiga.gt</a>
-          </div>
-          <div class="footer-contact-item">
-            <i class="ph ph-clock footer-contact-icon" aria-hidden="true"></i>
-            <span>Jue–Dom: 6:00 PM – 12:00 AM</span>
-          </div>
-        </address>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2025 Autocine Antigua. Todos los derechos reservados.</p>
-      <p>Hecho con pasión en Guatemala &middot; <a href="politica.html">Privacidad</a></p>
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand"><i data-lucide="film"></i> Autocine Antigua · 2026</div>
+    <div class="footer-loc"><i data-lucide="map-pin"></i> Antigua Guatemala</div>
+    <div class="footer-social">
+      <i data-lucide="instagram"></i>
+      <i data-lucide="facebook"></i>
     </div>
   </div>
 </footer>
 
-<script src="global.js"></script>
-</body>
-</html>
+<div class="toast" data-toast>Redirigiendo a boletería…</div>

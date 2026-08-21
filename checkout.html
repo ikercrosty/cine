@@ -1,446 +1,213 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkout — Autocine Antigua</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
-  <link rel="stylesheet" href="global.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout · Autocine Antigua</title>
+  <link rel="stylesheet" href="global.css" />
   <style>
-    .checkout-wrap{max-width:1100px;margin:0 auto;padding:120px 1.5rem 4rem;display:grid;grid-template-columns:1fr 360px;gap:2.5rem;align-items:start}
-    @media(max-width:860px){.checkout-wrap{grid-template-columns:1fr;padding-top:100px}}
-    .checkout-panel{background:var(--glass);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:2rem}
-    .checkout-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);margin-bottom:1.5rem;letter-spacing:.03em}
-    .step-tabs{display:flex;gap:0;margin-bottom:2rem;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
-    .step-tab{flex:1;padding:.75rem;text-align:center;font-size:.78rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;color:var(--text-muted);background:transparent;border:none;transition:.2s}
-    .step-tab.active{background:var(--gold);color:var(--noir)}
-    .step-tab.done{color:var(--gold)}
-    .step-section{display:none}
-    .step-section.active{display:block}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
-    @media(max-width:500px){.form-row{grid-template-columns:1fr}}
-    .form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
-    .form-label{font-size:.82rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
-    .form-input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.75rem 1rem;color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:.95rem;transition:.2s;width:100%;box-sizing:border-box}
-    .form-input:focus{outline:none;border-color:var(--gold);background:rgba(245,182,23,.05)}
-    .form-input::placeholder{color:rgba(255,255,255,.25)}
-    .pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
-    @media(max-width:480px){.pay-methods{grid-template-columns:1fr}}
-    .pay-card{border:2px solid rgba(255,255,255,.1);border-radius:14px;padding:1.2rem;cursor:pointer;transition:.2s;text-align:center}
-    .pay-card:hover{border-color:rgba(245,182,23,.4)}
-    .pay-card.selected{border-color:var(--gold);background:rgba(245,182,23,.07)}
-    .pay-card-icon{font-size:2rem;margin-bottom:.4rem}
-    .pay-card-name{font-size:.85rem;font-weight:600}
-    .card-fields{display:none}
-    .card-fields.show{display:block}
-    .btn-row{display:flex;gap:1rem;margin-top:1.5rem}
-    .btn-row .btn{flex:1}
-    /* ORDER SUMMARY */
-    .summary-panel{position:sticky;top:100px}
-    .summary-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);margin-bottom:1.2rem}
-    .summary-items{display:flex;flex-direction:column;gap:.8rem;max-height:340px;overflow-y:auto;margin-bottom:1.2rem;padding-right:.3rem}
-    .summary-items::-webkit-scrollbar{width:4px}
-    .summary-items::-webkit-scrollbar-thumb{background:rgba(245,182,23,.3);border-radius:4px}
-    .s-item{display:flex;align-items:center;gap:.8rem;padding:.6rem;background:rgba(255,255,255,.03);border-radius:10px}
-    .s-item-emoji{font-size:1.4rem;flex-shrink:0}
-    .s-item-info{flex:1;min-width:0}
-    .s-item-name{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .s-item-qty{font-size:.78rem;color:var(--text-muted)}
-    .s-item-price{font-size:.9rem;font-weight:700;color:var(--gold);flex-shrink:0}
-    .summary-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:.8rem 0}
-    .summary-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;font-size:.9rem}
-    .summary-row.total{font-size:1.1rem;font-weight:700;color:var(--gold);margin-top:.5rem}
-    .empty-cart-msg{text-align:center;padding:3rem 1rem;color:var(--text-muted)}
-    .empty-cart-msg .icon{font-size:3rem;margin-bottom:1rem}
-    /* Success */
-    .success-screen{display:none;text-align:center;padding:2rem 0}
-    .success-screen.show{display:block}
-    .success-icon{font-size:5rem;margin-bottom:1rem}
-    .success-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--gold)}
-    .success-code{background:rgba(245,182,23,.1);border:1px dashed var(--gold);border-radius:12px;padding:1rem 2rem;margin:1.5rem auto;display:inline-block}
-    .success-code span{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);letter-spacing:.1em}
-    .success-detail{color:var(--text-muted);margin:.5rem 0}
+    .checkout-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 860px) {
+      .checkout-grid { grid-template-columns: 1.3fr 1fr; align-items: start; }
+    }
+    .field { margin-top: 1.5rem; }
+    .field label {
+      display: block; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted-dim); margin-bottom: 0.6rem;
+    }
+    .field input, .field select {
+      width: 100%; padding: 0.85rem 1rem; border-radius: 0.9rem;
+      background: var(--glass); border: 1px solid var(--line-strong);
+      color: var(--ink); font-family: inherit; font-size: 0.9rem;
+    }
+    .field input::placeholder { color: var(--muted-dim); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .field-row .field { margin-top: 0; }
+
+    .pay-methods { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+    .pay-method {
+      flex: 1; text-align: center; padding: 0.75rem; border-radius: 0.9rem;
+      border: 1px solid var(--line-strong); background: var(--glass);
+      color: var(--muted); font-size: 0.8rem; cursor: pointer; transition: all 0.3s var(--ease);
+    }
+    .pay-method.active { border-color: rgba(242,182,75,0.5); color: var(--amber); background: var(--amber-soft); }
+
+    .order-summary { padding: 1.75rem; }
+    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--line); }
+    .order-item:last-of-type { border-bottom: none; }
+    .order-item-name { font-size: 0.9rem; color: var(--ink); }
+    .order-item-meta { font-size: 0.75rem; color: var(--muted-dim); margin-top: 0.15rem; }
+    .order-item-price { font-size: 0.9rem; color: var(--muted); }
+
+    .order-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--line-strong); }
+    .order-total span:first-child { color: var(--muted); font-size: 0.9rem; }
+    .order-total span:last-child { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; color: var(--amber); letter-spacing: 0.03em; }
+
+    .secure-note { display: flex; align-items: center; gap: 0.5rem; color: var(--muted-dim); font-size: 0.75rem; margin-top: 1rem; }
+    .secure-note svg { width: 14px; height: 14px; }
   </style>
 </head>
 <body>
 
-<!-- PAGE LOADER -->
-<div id="page-loader">
-  <div class="loader-inner">
-    <div class="loader-logo">AUTOCINE ANTIGUA</div>
-    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-  </div>
-</div>
-
-<!-- NAVBAR -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px">
-        <path d="M38 12C38 23.046 29.046 32 18 32C13.89 32 10.08 30.7 7 28.48C7.9 38.82 16.52 47 27 47C38.046 47 47 38.046 47 27C47 20.64 44.1 14.94 39.56 11.16C38.88 11.42 38.46 11.72 38 12Z" fill="#F5B617"/>
-        <rect x="8" y="48" width="44" height="6" rx="3" fill="#F5B617" opacity=".4"/>
-        <rect x="12" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="20" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="28" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="36" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-        <rect x="44" y="48" width="4" height="8" rx="2" fill="#F5B617"/>
-      </svg>
-      <div class="nav-logo-text">
-        <span class="nav-logo-name">AUTOCINE ANTIGUA</span>
-        <span class="nav-logo-sub">Cine bajo las Estrellas</span>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Inicio</a>
-      <a href="eventos.html" class="nav-link">Eventos</a>
-      <a href="snacks.html" class="nav-link">Snacks</a>
-      <a href="tienda.html" class="nav-link">Tienda</a>
-      <a href="espacio-fiestas.html" class="nav-link">Fiestas</a>
-      <a href="anuncios.html" class="nav-link">Anuncios</a>
-      <a href="quienes-somos.html" class="nav-link">Nosotros</a>
-      <a href="contacto.html" class="nav-link">Contacto</a>
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="brand"><i data-lucide="film"></i> Autocine Antigua</a>
+      <nav class="nav-links">
+        <a href="index.html#cartelera">Cartelera</a>
+        <a href="snacks.html">Snack Bar</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
+      </nav>
+      <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú"><i data-lucide="menu"></i></button>
     </div>
-    <div class="nav-actions">
-      <button class="cart-btn" onclick="openCart()" aria-label="Carrito">
-        <i class="ph ph-shopping-cart" style="font-size:20px"></i>
-        <span class="cart-count hidden">0</span>
-      </button>
-      <a href="tickets.html" class="btn-nav-ticket">TICKETS</a>
-      <button class="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+    <nav class="nav-mobile" data-nav-mobile>
+      <a href="index.html#cartelera">Cartelera</a>
+      <a href="snacks.html">Snack Bar</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="wrap reveal">
+      <span class="eyebrow">Último Paso</span>
+      <h1 class="h1" style="font-size: clamp(2.2rem, 5vw, 3.5rem);">Checkout</h1>
+      <p class="lead" style="max-width: 28rem; margin: 1rem auto 0;">
+        Revisá tu orden y completá el pago. Te enviamos la confirmación al correo.
+      </p>
     </div>
-  </div>
-</nav>
-<div class="nav-mobile">
-  <a href="index.html" class="nav-link">🏠 Inicio</a>
-  <a href="eventos.html" class="nav-link">🎬 Eventos</a>
-  <a href="snacks.html" class="nav-link">🍿 Snacks</a>
-  <a href="tienda.html" class="nav-link">🛍️ Tienda</a>
-  <a href="espacio-fiestas.html" class="nav-link">🎉 Fiestas</a>
-  <a href="anuncios.html" class="nav-link">📢 Anuncios</a>
-  <a href="quienes-somos.html" class="nav-link">⭐ Nosotros</a>
-  <a href="contacto.html" class="nav-link">📬 Contacto</a>
-  <a href="tickets.html" class="btn-nav-ticket">🎟️ COMPRAR TICKETS</a>
-</div>
+  </section>
 
-<!-- CART -->
-<div class="cart-overlay"></div>
-<aside class="cart-sidebar">
-  <div class="cart-header"><h3>MI CARRITO</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
-  <div class="cart-items" id="cart-items-list"></div>
-  <div class="cart-empty" id="cart-empty" style="display:flex">
-    <div class="cart-empty-icon">🎬</div>
-    <p>Tu carrito está vacío</p>
-  </div>
-  <div class="cart-footer" id="cart-footer" style="display:none">
-    <div class="cart-total-row">
-      <span>Total</span>
-      <span class="cart-total-amount" id="cart-total-amount">Q0.00</span>
-    </div>
-    <button class="btn btn-primary btn-full" onclick="closeCart()">VER RESUMEN ABAJO</button>
-  </div>
-</aside>
+  <section class="section">
+    <div class="wrap">
+      <div class="checkout-grid">
 
-<!-- FLOATING CART FAB -->
-<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
-  <i class="ph ph-shopping-cart"></i>
-  <span class="cart-fab-count hidden">0</span>
-</button>
-
-<main class="page-content">
-<div class="checkout-wrap">
-
-  <!-- LEFT: FORM STEPS -->
-  <div>
-    <div class="checkout-panel" id="checkout-form-panel">
-      <div class="checkout-title">CHECKOUT</div>
-
-      <div class="step-tabs">
-        <button class="step-tab active" id="tab1" onclick="goStep(1)">1. Datos</button>
-        <button class="step-tab" id="tab2" onclick="goStep(2)">2. Pago</button>
-        <button class="step-tab" id="tab3" onclick="goStep(3)">3. Confirmar</button>
-      </div>
-
-      <!-- STEP 1: Datos personales -->
-      <div class="step-section active" id="step1">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Nombre *</label>
-            <input class="form-input" id="fn" placeholder="Pedro" type="text"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Apellido *</label>
-            <input class="form-input" id="ln" placeholder="García" type="text"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Correo electrónico *</label>
-          <input class="form-input" id="em" placeholder="pedro@mail.com" type="email"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Teléfono / WhatsApp</label>
-          <input class="form-input" id="ph" placeholder="+502 5555-0000" type="tel"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Placa del vehículo <span style="color:var(--text-muted);font-weight:400">(para tickets)</span></label>
-          <input class="form-input" id="placa" placeholder="P-123 ABC" type="text" style="text-transform:uppercase"/>
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-primary" onclick="goStep(2)">CONTINUAR →</button>
-        </div>
-      </div>
-
-      <!-- STEP 2: Método de pago -->
-      <div class="step-section" id="step2">
-        <p style="color:var(--text-muted);margin-bottom:1.2rem;font-size:.9rem">Selecciona tu método de pago:</p>
-        <div class="pay-methods">
-          <div class="pay-card selected" id="pay-card" onclick="selectPay('card')">
-            <div class="pay-card-icon">💳</div>
-            <div class="pay-card-name">Tarjeta</div>
-          </div>
-          <div class="pay-card" id="pay-transfer" onclick="selectPay('transfer')">
-            <div class="pay-card-icon">🏦</div>
-            <div class="pay-card-name">Transferencia</div>
-          </div>
-          <div class="pay-card" id="pay-cash" onclick="selectPay('cash')">
-            <div class="pay-card-icon">💵</div>
-            <div class="pay-card-name">Efectivo (taquilla)</div>
-          </div>
-          <div class="pay-card" id="pay-paypal" onclick="selectPay('paypal')">
-            <div class="pay-card-icon">🅿️</div>
-            <div class="pay-card-name">PayPal</div>
-          </div>
-        </div>
-
-        <!-- Card fields -->
-        <div class="card-fields show" id="fields-card">
-          <div class="form-group">
-            <label class="form-label">Número de tarjeta</label>
-            <input class="form-input" id="cardnum" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtCard(this)"/>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Vencimiento</label>
-              <input class="form-input" id="cardexp" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this)"/>
+        <!-- Formulario -->
+        <form class="reveal" id="checkout-form">
+          <div class="glass-card" style="padding: 1.75rem;">
+            <span class="eyebrow" style="font-size: 0.7rem;">Datos de Contacto</span>
+            <div class="field-row" style="margin-top: 1rem;">
+              <div class="field">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" placeholder="Tu nombre" required />
+              </div>
+              <div class="field">
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" placeholder="0000-0000" required />
+              </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">CVV</label>
-              <input class="form-input" id="cardcvv" placeholder="•••" maxlength="4" type="password"/>
+            <div class="field">
+              <label for="correo">Correo electrónico</label>
+              <input type="email" id="correo" placeholder="tu@correo.com" required />
+            </div>
+            <div class="field">
+              <label for="placa">Placa del vehículo</label>
+              <input type="text" id="placa" placeholder="P 000 ABC" required />
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Nombre en tarjeta</label>
-            <input class="form-input" id="cardholder" placeholder="PEDRO GARCÍA"/>
+
+          <div class="glass-card" style="padding: 1.75rem; margin-top: 1.5rem;">
+            <span class="eyebrow" style="font-size: 0.7rem;">Método de Pago</span>
+            <div class="pay-methods">
+              <div class="pay-method active" data-pay>Tarjeta</div>
+              <div class="pay-method" data-pay>Transferencia</div>
+              <div class="pay-method" data-pay>Efectivo en Taquilla</div>
+            </div>
+
+            <div id="card-fields">
+              <div class="field">
+                <label for="tarjeta">Número de tarjeta</label>
+                <input type="text" id="tarjeta" placeholder="0000 0000 0000 0000" />
+              </div>
+              <div class="field-row" style="margin-top: 1.5rem;">
+                <div class="field">
+                  <label for="vencimiento">Vencimiento</label>
+                  <input type="text" id="vencimiento" placeholder="MM/AA" />
+                </div>
+                <div class="field">
+                  <label for="cvv">CVV</label>
+                  <input type="text" id="cvv" placeholder="123" />
+                </div>
+              </div>
+            </div>
+
+            <div class="secure-note">
+              <i data-lucide="lock"></i>
+              Pago procesado de forma segura
+            </div>
           </div>
-        </div>
+        </form>
 
-        <!-- Transfer info -->
-        <div class="card-fields" id="fields-transfer">
-          <div style="background:rgba(245,182,23,.07);border:1px solid rgba(245,182,23,.2);border-radius:12px;padding:1.2rem;font-size:.9rem;line-height:1.8">
-            <strong style="color:var(--gold)">Datos de transferencia:</strong><br/>
-            Banco Industrial · Cta. Monetaria<br/>
-            No. <strong>001-012345-6</strong><br/>
-            A nombre de: <strong>Autocine Antigua S.A.</strong><br/>
-            <span style="color:var(--text-muted);font-size:.82rem">Sube tu comprobante al WhatsApp +502 5555-0000</span>
+        <!-- Resumen de orden -->
+        <div class="glass-card order-summary reveal">
+          <span class="eyebrow" style="font-size: 0.7rem;">Tu Orden</span>
+
+          <div class="order-item" style="margin-top: 1rem;">
+            <div>
+              <div class="order-item-name">Cosmos: Fin</div>
+              <div class="order-item-meta">31 Oct · 1 auto</div>
+            </div>
+            <div class="order-item-price">Q45</div>
           </div>
-        </div>
-
-        <!-- Cash info -->
-        <div class="card-fields" id="fields-cash">
-          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1.2rem;font-size:.9rem;line-height:1.8">
-            <strong style="color:var(--gold)">Pago en taquilla:</strong><br/>
-            Reserva tu lugar aquí y paga al llegar.<br/>
-            La reserva se mantiene hasta <strong>30 min</strong> antes de la función.<br/>
-            <span style="color:var(--text-muted);font-size:.82rem">Recuerda traer tu código de confirmación.</span>
+          <div class="order-item">
+            <div>
+              <div class="order-item-name">Combo Estelar</div>
+              <div class="order-item-meta">1 unidad</div>
+            </div>
+            <div class="order-item-price">Q45</div>
           </div>
-        </div>
 
-        <!-- PayPal -->
-        <div class="card-fields" id="fields-paypal">
-          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1.2rem;font-size:.9rem;line-height:1.8">
-            <strong style="color:var(--gold)">PayPal:</strong><br/>
-            Envía pago a: <strong>pagos@autocineantiga.gt</strong><br/>
-            Incluye en el concepto tu nombre y número de entradas.<br/>
-            <span style="color:var(--text-muted);font-size:.82rem">Recibirás confirmación en máx 15 min.</span>
+          <div class="order-total">
+            <span>Total a pagar</span>
+            <span>Q90</span>
           </div>
+
+          <button type="submit" form="checkout-form" class="btn btn-primary" style="width: 100%; margin-top: 1.75rem;" data-buy>
+            Confirmar Compra
+          </button>
+          <a href="tickets.html" class="btn btn-ghost" style="width: 100%; margin-top: 0.75rem;">Volver a editar</a>
         </div>
 
-        <div class="btn-row">
-          <button class="btn btn-outline" onclick="goStep(1)">← VOLVER</button>
-          <button class="btn btn-primary" onclick="goStep(3)">CONTINUAR →</button>
-        </div>
-      </div>
-
-      <!-- STEP 3: Confirmar -->
-      <div class="step-section" id="step3">
-        <div id="confirm-summary" style="margin-bottom:1.5rem"></div>
-        <div style="background:rgba(255,255,255,.03);border-radius:12px;padding:1rem;font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.7">
-          Al confirmar aceptas nuestros <a href="politica.html" style="color:var(--gold)">Términos y Condiciones</a>. 
-          Los tickets serán enviados al correo indicado.
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-outline" onclick="goStep(2)">← VOLVER</button>
-          <button class="btn btn-primary" id="confirm-btn" onclick="confirmPurchase()">✓ CONFIRMAR COMPRA</button>
-        </div>
       </div>
     </div>
+  </section>
 
-    <!-- SUCCESS SCREEN -->
-    <div class="checkout-panel success-screen" id="success-screen">
-      <div class="success-icon">🎉</div>
-      <div class="success-title">¡COMPRA EXITOSA!</div>
-      <p style="color:var(--text-muted);margin:.5rem 0">Tu reserva ha sido confirmada.</p>
-      <div class="success-code">
-        <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem">CÓDIGO DE RESERVA</div>
-        <span id="success-code-val">ACA-00000</span>
-      </div>
-      <p class="success-detail">Hemos enviado los detalles a <strong id="success-email"></strong></p>
-      <p class="success-detail" style="font-size:.85rem">Muestra este código en taquilla o revisa tu correo.</p>
-      <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-        <a href="index.html" class="btn btn-outline">Volver al inicio</a>
-        <a href="snacks.html" class="btn btn-primary">Ver Snacks 🍿</a>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand"><i data-lucide="film"></i> Autocine Antigua · 2026</div>
+      <div class="footer-loc"><i data-lucide="map-pin"></i> Antigua Guatemala</div>
+      <div class="footer-social">
+        <i data-lucide="instagram"></i>
+        <i data-lucide="facebook"></i>
       </div>
     </div>
-  </div>
+  </footer>
 
-  <!-- RIGHT: ORDER SUMMARY -->
-  <div class="summary-panel">
-    <div class="checkout-panel">
-      <div class="summary-title">TU PEDIDO</div>
-      <div class="summary-items" id="summary-items">
-        <div class="empty-cart-msg">
-          <div class="icon">🛒</div>
-          <p>Tu carrito está vacío.<br/>
-          <a href="tickets.html" style="color:var(--gold)">Ver Tickets</a> · <a href="snacks.html" style="color:var(--gold)">Snacks</a></p>
-        </div>
-      </div>
-      <hr class="summary-divider"/>
-      <div class="summary-row"><span>Subtotal</span><span id="s-subtotal">Q0.00</span></div>
-      <div class="summary-row"><span>Cargo por servicio</span><span id="s-service">Q0.00</span></div>
-      <hr class="summary-divider"/>
-      <div class="summary-row total"><span>TOTAL</span><span id="s-total">Q0.00</span></div>
-    </div>
-  </div>
+  <div class="toast" data-toast>Procesando tu compra…</div>
 
-</div>
-</main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="global.js"></script>
+  <script>
+    document.querySelectorAll("[data-pay]").forEach((el) => {
+      el.addEventListener("click", () => {
+        document.querySelectorAll("[data-pay]").forEach((e) => e.classList.remove("active"));
+        el.classList.add("active");
+        document.getElementById("card-fields").style.display =
+          el.textContent.trim() === "Tarjeta" ? "block" : "none";
+      });
+    });
 
-<script src="global.js"></script>
-<script>
-let payMethod = 'card';
-
-function selectPay(m) {
-  payMethod = m;
-  ['card','transfer','cash','paypal'].forEach(k => {
-    document.getElementById('pay-'+k)?.classList.remove('selected');
-    const f = document.getElementById('fields-'+k);
-    if (f) f.classList.remove('show');
-  });
-  document.getElementById('pay-'+m)?.classList.add('selected');
-  document.getElementById('fields-'+m)?.classList.add('show');
-}
-
-function goStep(n) {
-  if (n === 2) {
-    const fn = document.getElementById('fn').value.trim();
-    const em = document.getElementById('em').value.trim();
-    if (!fn || !em) { showToast('Atención', 'Completa nombre y correo', '⚠️'); return; }
-  }
-  [1,2,3].forEach(i => {
-    document.getElementById('step'+i)?.classList.remove('active');
-    const t = document.getElementById('tab'+i);
-    t?.classList.remove('active');
-    if (i < n) t?.classList.add('done');
-    else t?.classList.remove('done');
-  });
-  document.getElementById('step'+n)?.classList.add('active');
-  document.getElementById('tab'+n)?.classList.add('active');
-  if (n === 3) buildConfirmSummary();
-}
-
-function buildConfirmSummary() {
-  const fn = document.getElementById('fn').value;
-  const ln = document.getElementById('ln').value;
-  const em = document.getElementById('em').value;
-  const ph = document.getElementById('ph').value;
-  const placa = document.getElementById('placa').value;
-  const payLabels = {card:'Tarjeta de crédito/débito',transfer:'Transferencia bancaria',cash:'Efectivo en taquilla',paypal:'PayPal'};
-  document.getElementById('confirm-summary').innerHTML = `
-    <div style="background:rgba(255,255,255,.03);border-radius:12px;padding:1rem;font-size:.88rem;line-height:2">
-      <strong style="color:var(--gold)">Datos del comprador</strong><br/>
-      ${fn} ${ln} · ${em}<br/>
-      ${ph ? ph+'<br/>' : ''}
-      ${placa ? '🚗 '+placa+'<br/>' : ''}
-      <strong style="color:var(--gold)">Método de pago</strong><br/>
-      ${payLabels[payMethod]}
-    </div>`;
-}
-
-function fmtCard(el) {
-  let v = el.value.replace(/\D/g,'').slice(0,16);
-  el.value = v.replace(/(.{4})/g,'$1 ').trim();
-}
-function fmtExp(el) {
-  let v = el.value.replace(/\D/g,'').slice(0,4);
-  if (v.length >= 3) v = v.slice(0,2)+'/'+v.slice(2);
-  el.value = v;
-}
-
-function confirmPurchase() {
-  const btn = document.getElementById('confirm-btn');
-  btn.disabled = true;
-  btn.textContent = 'Procesando...';
-  setTimeout(() => {
-    const code = 'ACA-' + Math.random().toString(36).toUpperCase().slice(2,7);
-    document.getElementById('success-code-val').textContent = code;
-    document.getElementById('success-email').textContent = document.getElementById('em').value;
-    document.getElementById('checkout-form-panel').style.display = 'none';
-    document.getElementById('success-screen').classList.add('show');
-    Cart.clear();
-    renderSummary();
-    window.scrollTo({top:0, behavior:'smooth'});
-  }, 1800);
-}
-
-function renderSummary() {
-  const items = Cart.items;
-  const container = document.getElementById('summary-items');
-  if (!items.length) {
-    container.innerHTML = '<div class="empty-cart-msg"><div class="icon">🛒</div><p>Tu carrito está vacío.<br/><a href="tickets.html" style="color:var(--gold)">Ver Tickets</a> · <a href="snacks.html" style="color:var(--gold)">Snacks</a></p></div>';
-    document.getElementById('s-subtotal').textContent = 'Q0.00';
-    document.getElementById('s-service').textContent = 'Q0.00';
-    document.getElementById('s-total').textContent = 'Q0.00';
-    return;
-  }
-  container.innerHTML = items.map(i => `
-    <div class="s-item">
-      <span class="s-item-emoji">${i.emoji||'🎬'}</span>
-      <div class="s-item-info">
-        <div class="s-item-name">${i.name}</div>
-        <div class="s-item-qty">x${i.qty}</div>
-      </div>
-      <span class="s-item-price">Q${(i.price*i.qty).toFixed(2)}</span>
-    </div>`).join('');
-  const sub = Cart.total();
-  const svc = sub > 0 ? Math.ceil(sub * 0.05) : 0;
-  document.getElementById('s-subtotal').textContent = 'Q'+sub.toFixed(2);
-  document.getElementById('s-service').textContent = 'Q'+svc.toFixed(2);
-  document.getElementById('s-total').textContent = 'Q'+(sub+svc).toFixed(2);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  Cart.load();
-  renderSummary();
-  // Re-render on cart changes
-  const origSave = Cart.save.bind(Cart);
-  Cart.save = function() { origSave(); renderSummary(); };
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  if(window.observeReveal) setTimeout(observeReveal, 100);
-});
-</script>
+    document.getElementById("checkout-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const toast = document.querySelector("[data-toast]");
+      toast.textContent = "¡Compra confirmada! Revisá tu correo.";
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2500);
+    });
+  </script>
 </body>
 </html>
