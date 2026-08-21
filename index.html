@@ -95,71 +95,23 @@
     <a href="#cartelera" class="scroll-cue" aria-label="Bajar"><i data-lucide="chevron-down"></i></a>
   </section>
 
-  <!-- ===== Cartelera ===== -->
-  <section class="section" id="cartelera">
-    <div class="wrap">
-      <div class="reveal">
-        <span class="eyebrow">En Pantalla Esta Semana</span>
-        <h2 class="h2">Cartelera</h2>
-      </div>
+ Apply
+<!-- ===== Cartelera Dinámica ===== -->
+<section class="section" id="cartelera">
+  <div class="wrap">
+    <div class="reveal"><h2 class="h2">Ahora en el Autocine</h2></div>
+    <div class="grid grid-3" style="margin-top: 3rem;" id="cartelera-now-playing"></div>
 
-      <div class="grid grid-3" style="margin-top: 3rem;">
-        <article class="glass-card reveal">
-          <div class="movie-poster"
-            style="background: linear-gradient(to bottom right, rgba(49,46,129,0.4), rgba(15,23,42,0.2), transparent);">
-            <i data-lucide="film"></i>
-            <span class="poster-tag left">PG-13</span>
-            <span class="poster-tag right"><i data-lucide="star"></i> 8.7</span>
-          </div>
-          <div class="movie-body">
-            <h3 class="movie-title">Cosmos: Fin</h3>
-            <p class="movie-genre">Ciencia Ficción</p>
-            <div class="movie-meta">
-              <span><i data-lucide="clock"></i> 8:30 PM</span>
-              <span>118 min</span>
-            </div>
-            <button class="card-btn">Reservar</button>
-          </div>
-        </article>
+    <div class="reveal" style="margin-top: 4rem;"><h2 class="h2">Próximos Estrenos</h2></div>
+    <div class="grid grid-3" style="margin-top: 3rem;" id="cartelera-upcoming"></div>
 
-        <article class="glass-card reveal">
-          <div class="movie-poster"
-            style="background: linear-gradient(to bottom right, rgba(6,78,59,0.3), rgba(15,23,42,0.2), transparent);">
-            <i data-lucide="film"></i>
-            <span class="poster-tag left">A</span>
-            <span class="poster-tag right"><i data-lucide="star"></i> 8.2</span>
-          </div>
-          <div class="movie-body">
-            <h3 class="movie-title">Selva Eterna</h3>
-            <p class="movie-genre">Aventura · Drama</p>
-            <div class="movie-meta">
-              <span><i data-lucide="clock"></i> 7:00 PM</span>
-              <span>105 min</span>
-            </div>
-            <button class="card-btn">Reservar</button>
-          </div>
-        </article>
+    <div class="reveal" style="margin-top: 4rem;"><h2 class="h2">Películas populares</h2></div>
+    <div class="grid grid-3" style="margin-top: 3rem;" id="cartelera-popular"></div>
+  </div>
+</section>
 
-        <article class="glass-card reveal">
-          <div class="movie-poster"
-            style="background: linear-gradient(to bottom right, rgba(76,5,25,0.4), rgba(15,23,42,0.2), transparent);">
-            <i data-lucide="film"></i>
-            <span class="poster-tag left">B-15</span>
-            <span class="poster-tag right"><i data-lucide="star"></i> 7.9</span>
-          </div>
-          <div class="movie-body">
-            <h3 class="movie-title">Sombras</h3>
-            <p class="movie-genre">Terror · Suspenso</p>
-            <div class="movie-meta">
-              <span><i data-lucide="clock"></i> 10:15 PM</span>
-              <span>97 min</span>
-            </div>
-            <button class="card-btn">Reservar</button>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
+<!-- Asegúrate de añadir esta línea antes de </body> -->
+<script src="tmdb-integration.js"></script>
 
   <!-- ===== Snack Bar (preview) ===== -->
   <section class="section section-alt">
