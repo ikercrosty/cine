@@ -21,6 +21,27 @@
   --radius-lg: 1.5rem;
   --radius-full: 999px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Nuevos colores modernos para una experiencia fresca */
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #ec4899;
+  --accent: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --success: #10b981;
+  /* Gradientes modernos */
+  --gradient-primary: linear-gradient(135deg, #6366f1, #ec4899);
+  --gradient-dark: linear-gradient(135deg, #020617, #0f172a);
+  --gradient-amber: linear-gradient(135deg, #f2b64b, #fbbf24);
+  /* Sombras modernas */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.3);
+  /* Transiciones suaves */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
 * { box-sizing: border-box; }
@@ -33,6 +54,8 @@ body {
   font-family: 'Manrope', sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
+  /* Mejorar legibilidad con nuevo sistema de color */
+  line-height: 1.6;
 }
 
 img, svg { display: block; max-width: 100%; }
@@ -115,8 +138,9 @@ button { font-family: inherit; cursor: pointer; }
   inset: 0 0 auto 0;
   z-index: 50;
   backdrop-filter: blur(12px);
-  background: rgba(2, 6, 23, 0.6);
-  border-bottom: 1px solid var(--line);
+  background: rgba(2, 6, 23, 0.8);
+  border-bottom: 1px solid var(--line-strong);
+  transition: all var(--transition-normal);
 }
 .navbar-inner {
   max-width: 72rem;
@@ -135,6 +159,10 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 1.15rem;
   letter-spacing: 0.1em;
   color: var(--ink);
+  transition: color var(--transition-fast);
+}
+.brand:hover {
+  color: var(--primary);
 }
 .brand svg { color: var(--amber); width: 20px; height: 20px; }
 
