@@ -1,31 +1,64 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Snack Bar Premium · Autocine Antigua</title>
   <link rel="stylesheet" href="global.css" />
 </head>
+
 <body>
 
-  <header class="navbar">
+  <nav class="navbar" id="navbar">
     <div class="navbar-inner">
       <a href="index.html" class="brand"><i data-lucide="film"></i> Autocine Antigua</a>
-      <nav class="nav-links">
-        <a href="index.html#cartelera">Cartelera</a>
-        <a href="snacks.html" aria-current="page">Snack Bar</a>
+      <div class="nav-links">
+        <a href="index.html">Inicio</a>
         <a href="eventos.html">Eventos</a>
-        <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
-      </nav>
-      <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú"><i data-lucide="menu"></i></button>
+        <a href="snacks.html" class="active">Snacks</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="espacio-fiestas.html">Fiestas</a>
+        <a href="quienes-somos.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+      <div class="nav-actions">
+        <button class="cart-btn" onclick="openCart()"><i data-lucide="shopping-cart"></i><span
+            class="cart-count hidden">0</span></button>
+        <a href="tickets.html" class="btn btn-primary btn-sm" style="padding: 0.5rem 1rem;">TICKETS</a>
+        <button class="nav-toggle" data-nav-toggle><i data-lucide="menu"></i></button>
+      </div>
     </div>
-    <nav class="nav-mobile" data-nav-mobile>
-      <a href="index.html#cartelera">Cartelera</a>
-      <a href="snacks.html" aria-current="page">Snack Bar</a>
-      <a href="eventos.html">Eventos</a>
-      <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
-    </nav>
-  </header>
+  </nav>
+
+  <nav class="nav-mobile" data-nav-mobile>
+    <a href="index.html">Inicio</a>
+    <a href="eventos.html">Eventos</a>
+    <a href="snacks.html">Snacks</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="espacio-fiestas.html">Fiestas</a>
+    <a href="quienes-somos.html">Nosotros</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+
+  <div class="cart-overlay"></div>
+  <aside class="cart-sidebar">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button onclick="closeCart()" style="background:none; border:none; color:white; font-size:1.5rem;">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items-list"></div>
+    <div id="cart-empty" style="text-align:center; padding: 2rem 0;">
+      <p>Tu carrito está vacío</p>
+    </div>
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total-amount">Q0.00</span>
+      </div>
+      <a href="checkout.html" class="btn btn-primary" style="width:100%; margin-top:1rem;">Pagar ahora</a>
+    </div>
+  </aside>
 
   <section class="page-hero">
     <div class="wrap reveal">
@@ -108,4 +141,5 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="global.js"></script>
 </body>
+
 </html>

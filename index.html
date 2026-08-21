@@ -1,41 +1,80 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Autocine Antigua · Cine bajo las Estrellas</title>
-  <meta name="description" content="Autocine Antigua — tecnología de proyección moderna bajo el cielo de Antigua Guatemala." />
+  <meta name="description"
+    content="Autocine Antigua — tecnología de proyección moderna bajo el cielo de Antigua Guatemala." />
   <link rel="stylesheet" href="global.css" />
 </head>
+
 <body>
 
-  <!-- ===== Navbar ===== -->
-  <header class="navbar">
-    <div class="navbar-inner">
+  <!-- ===== HEADER UNIFICADO ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
       <a href="index.html" class="brand"><i data-lucide="film"></i> Autocine Antigua</a>
-      <nav class="nav-links">
-        <a href="index.html#cartelera">Cartelera</a>
-        <a href="snacks.html">Snack Bar</a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Inicio</a>
         <a href="eventos.html">Eventos</a>
-        <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
-      </nav>
-      <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú"><i data-lucide="menu"></i></button>
+        <a href="snacks.html">Snacks</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="espacio-fiestas.html">Fiestas</a>
+        <a href="quienes-somos.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+      <div class="nav-actions">
+        <button class="cart-btn" onclick="openCart()"><i data-lucide="shopping-cart"></i><span
+            class="cart-count hidden">0</span></button>
+        <a href="tickets.html" class="btn btn-primary btn-sm" style="padding: 0.5rem 1rem;">TICKETS</a>
+        <button class="nav-toggle" data-nav-toggle><i data-lucide="menu"></i></button>
+      </div>
     </div>
-    <nav class="nav-mobile" data-nav-mobile>
-      <a href="index.html#cartelera">Cartelera</a>
-      <a href="snacks.html">Snack Bar</a>
-      <a href="eventos.html">Eventos</a>
-      <a href="tickets.html" class="btn btn-primary" data-buy>Comprar Tickets</a>
-    </nav>
-  </header>
+  </nav>
+
+  <!-- Menú Móvil -->
+  <div class="nav-mobile" data-nav-mobile>
+    <a href="index.html">Inicio</a>
+    <a href="eventos.html">Eventos</a>
+    <a href="snacks.html">Snacks</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="espacio-fiestas.html">Fiestas</a>
+    <a href="quienes-somos.html">Nosotros</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+
+  <!-- Carrito Sidebar -->
+  <div class="cart-overlay"></div>
+  <aside class="cart-sidebar">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button onclick="closeCart()" style="background:none; border:none; color:white; font-size:1.5rem;">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items-list"></div>
+    <div id="cart-empty" style="text-align:center; padding: 2rem 0;">
+      <p>Tu carrito está vacío</p>
+    </div>
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total-amount">Q0.00</span>
+      </div>
+      <a href="checkout.html" class="btn btn-primary" style="width:100%; margin-top:1rem;">Pagar ahora</a>
+    </div>
+  </aside>
 
   <!-- ===== Hero ===== -->
   <section class="hero">
     <div class="night-sky" data-night-sky>
       <div class="beam"></div>
       <svg class="arch" viewBox="0 0 400 260" fill="none">
-        <path d="M0 260 L0 160 Q0 60 100 55 L100 40 Q100 10 130 10 L270 10 Q300 10 300 40 L300 55 Q400 60 400 160 L400 260 Z" fill="#020617" />
-        <rect x="178" y="15" width="44" height="44" rx="4" fill="#0a0e1a" stroke="rgba(242,182,75,0.15)" stroke-width="1.5" />
+        <path
+          d="M0 260 L0 160 Q0 60 100 55 L100 40 Q100 10 130 10 L270 10 Q300 10 300 40 L300 55 Q400 60 400 160 L400 260 Z"
+          fill="#020617" />
+        <rect x="178" y="15" width="44" height="44" rx="4" fill="#0a0e1a" stroke="rgba(242,182,75,0.15)"
+          stroke-width="1.5" />
         <circle cx="200" cy="37" r="10" fill="none" stroke="rgba(242,182,75,0.25)" stroke-width="1.2" />
       </svg>
       <div class="hero-fade"></div>
@@ -65,7 +104,8 @@
 
       <div class="grid grid-3" style="margin-top: 3rem;">
         <article class="glass-card reveal">
-          <div class="movie-poster" style="background: linear-gradient(to bottom right, rgba(49,46,129,0.4), rgba(15,23,42,0.2), transparent);">
+          <div class="movie-poster"
+            style="background: linear-gradient(to bottom right, rgba(49,46,129,0.4), rgba(15,23,42,0.2), transparent);">
             <i data-lucide="film"></i>
             <span class="poster-tag left">PG-13</span>
             <span class="poster-tag right"><i data-lucide="star"></i> 8.7</span>
@@ -82,7 +122,8 @@
         </article>
 
         <article class="glass-card reveal">
-          <div class="movie-poster" style="background: linear-gradient(to bottom right, rgba(6,78,59,0.3), rgba(15,23,42,0.2), transparent);">
+          <div class="movie-poster"
+            style="background: linear-gradient(to bottom right, rgba(6,78,59,0.3), rgba(15,23,42,0.2), transparent);">
             <i data-lucide="film"></i>
             <span class="poster-tag left">A</span>
             <span class="poster-tag right"><i data-lucide="star"></i> 8.2</span>
@@ -99,7 +140,8 @@
         </article>
 
         <article class="glass-card reveal">
-          <div class="movie-poster" style="background: linear-gradient(to bottom right, rgba(76,5,25,0.4), rgba(15,23,42,0.2), transparent);">
+          <div class="movie-poster"
+            style="background: linear-gradient(to bottom right, rgba(76,5,25,0.4), rgba(15,23,42,0.2), transparent);">
             <i data-lucide="film"></i>
             <span class="poster-tag left">B-15</span>
             <span class="poster-tag right"><i data-lucide="star"></i> 7.9</span>
@@ -121,7 +163,8 @@
   <!-- ===== Snack Bar (preview) ===== -->
   <section class="section section-alt">
     <div class="wrap">
-      <div class="reveal" style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div class="reveal"
+        style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
         <div>
           <span class="eyebrow">Sabores de la Función</span>
           <h2 class="h2">Snack Bar Premium</h2>
@@ -161,7 +204,8 @@
   <!-- ===== Eventos (preview) ===== -->
   <section class="section">
     <div class="wrap">
-      <div class="reveal" style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div class="reveal"
+        style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
         <div>
           <span class="eyebrow">Funciones Especiales</span>
           <h2 class="h2">Próximos Eventos</h2>
@@ -207,12 +251,13 @@
     <div class="wrap reveal">
       <i data-lucide="ticket" class="ticket-icon"></i>
       <h2 class="h2" style="margin-top:1.25rem;">Tu lugar bajo el cielo te espera</h2>
-      <p class="lead" style="margin-top:1rem;">Cupos limitados por función. Reserva tu espacio en Autocine Antigua y vive el cine como nunca antes.</p>
+      <p class="lead" style="margin-top:1rem;">Cupos limitados por función. Reserva tu espacio en Autocine Antigua y
+        vive el cine como nunca antes.</p>
       <a href="tickets.html" class="btn btn-primary" style="margin-top:2rem;" data-buy>Comprar Tickets</a>
     </div>
   </section>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== FOOTER UNIFICADO ===== -->
   <footer class="site-footer">
     <div class="wrap footer-inner">
       <div class="footer-brand"><i data-lucide="film"></i> Autocine Antigua · 2026</div>
@@ -226,7 +271,7 @@
 
   <div class="toast" data-toast>Redirigiendo a boletería…</div>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="global.js"></script>
 </body>
+
 </html>

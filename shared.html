@@ -1,23 +1,6 @@
-<!--
-  layout.html — Referencia del header y footer compartidos.
-
-  Nota: este proyecto no usa un bundler, así que HTML no puede "incluir"
-  este archivo de forma nativa. Si lo cargás con fetch() desde global.js,
-  funciona perfecto una vez desplegado (Render), pero falla por CORS si
-  abrís los archivos directo con doble clic (file://). Por eso, en
-  index.html / snacks.html / eventos.html / tickets.html el mismo bloque
-  de header y footer está pegado directamente en cada página — así
-  cualquiera puede abrir el sitio local sin servidor y ver todo bien.
-
-  Este archivo queda como la fuente de verdad: si cambiás el menú o el
-  footer, actualizá aquí primero y despues replicá el cambio en cada
-  página. Si en algún momento agregan un build step (Vite, 11ty, etc.)
-  esto se puede convertir en un partial real.
--->
-
 <!-- ===== HEADER UNIFICADO ===== -->
 <nav class="navbar" id="navbar">
-  <div class="nav-inner">
+  <div class="navbar-inner">
     <a href="index.html" class="brand"><i data-lucide="film"></i> Autocine Antigua</a>
     <div class="nav-links">
       <a href="index.html">Inicio</a>
@@ -37,8 +20,7 @@
   </div>
 </nav>
 
-<!-- Menú Móvil -->
-<div class="nav-mobile" data-nav-mobile>
+<nav class="nav-mobile" data-nav-mobile>
   <a href="index.html">Inicio</a>
   <a href="eventos.html">Eventos</a>
   <a href="snacks.html">Snacks</a>
@@ -46,9 +28,8 @@
   <a href="espacio-fiestas.html">Fiestas</a>
   <a href="quienes-somos.html">Nosotros</a>
   <a href="contacto.html">Contacto</a>
-</div>
+</nav>
 
-<!-- Carrito Sidebar -->
 <div class="cart-overlay"></div>
 <aside class="cart-sidebar">
   <div class="cart-header">
