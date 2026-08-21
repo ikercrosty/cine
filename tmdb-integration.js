@@ -5,17 +5,21 @@ const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 async function fetchTMDB(endpoint) {
     const url = `${BASE_URL}${endpoint}?api_key=${TMDB_API_KEY}&language=es-ES&region=GT`;
     const response = await fetch(url);
+    if (!response.ok) throw new Error('Error al conectar con TMDB');
     return await response.json();
 }
 
 function renderMovies(movies, containerId) {
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+        console.error("No se encontró el contenedor con ID: " + containerId);
+        return;
+    }
 
     container.innerHTML = movies.slice(0, 3).map(movie => `
         <article class="glass-card reveal">
             <div class="movie-poster" style="background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8)), url('${IMAGE_BASE_URL}${movie.poster_path}'); background-size: cover; background-position: center; height: 300px;">
-                <span class="poster-tag right"><i data-lucide="star"></i> ${movie.vote_average.toFixed(1)}</span>
+                <span class="poster-tag right"><i data-lucide="star"></i> ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</span>
             </div>
             <div class="movie-body">
                 <h3 class="movie-title">${movie.title}</h3>
@@ -38,7 +42,7 @@ async function initCartelera() {
         const popular = await fetchTMDB('/movie/popular');
         renderMovies(popular.results, 'cartelera-popular');
     } catch (error) {
-        console.error('Error cargando TMDB:', error);
+        console.error('Error en la carga inicial:', error);
     }
 }
 
